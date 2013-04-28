@@ -1,0 +1,5 @@
+#Things git will ignore
+
+*.log
+*~
+doc/**/*.txt
