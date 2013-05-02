@@ -9,3 +9,5 @@ UI is currently **non-functional**
 Function is currently **in progress**
 
 As of this commit, */Source/Functionality/function.py* will take the input from *input.note* and make an *output.html*
+
+Functionality is further explained in *Source/Functionality/functionPlanning.txt*
