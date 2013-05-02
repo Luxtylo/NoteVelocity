@@ -1,0 +1,36 @@
+Main idea
+	Note-taking app with features similar to TeX, syntax like Markdown and Python, and a UI like Zune.
+		Multiple font set options available
+			Use dictionaries to store font sets?
+				One that looks like a scientific paper
+				One more modern-looking one (Use for report)
+				Ability to make new font sets
+		Syntax
+			Short, markdown-like ways of formatting text
+				e.g. *italic*, __underlined__
+			Indentation matters, like Python
+				First level is headings, second is subheadings
+				Curly brackets make a heading into a title
+
+Specific examples
+	*text*
+		Italicises stuff
+	[Link name](URL)
+		Adds a link to the text
+		Needs changing
+	_text_
+		Underlined
+	<text>
+		Bold
+	~text~
+		Strikethrough
+	|text|
+		Box around text
+	* text
+		Bullet point
+	[[x + y]]
+		Equation
+		Changes font
+	#text#
+		Footnote (automatically numbered)
+	

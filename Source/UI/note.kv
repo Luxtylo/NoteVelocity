@@ -1,0 +1,30 @@
+#:kivy 1.6.0
+
+
+# Main Window
+<MainWindow>:
+	dude: push_button
+	# Create main canvas
+	canvas:
+		# Three rectangles for aligning buttons
+		Rectangle:
+			pos: 10, self.height - 31
+			size: 41,21
+		Rectangle:
+			pos: self.width - 51, self.height - 31
+			size: 41,21
+		Rectangle:
+			pos: self.width - 51, 10
+			size: 41,21
+	PushButton:
+		id: push_button
+		center: self.parent.center
+
+<PushButton>:
+	canvas:
+		Color:
+			rgb: (1, 1, 1)
+		Rectangle:
+			texture: self.texture
+			size: self.size
+			pos: self.pos

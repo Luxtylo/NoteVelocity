@@ -3,3 +3,4 @@
 *.log
 *~
 doc/**/*.txt
+output.*
