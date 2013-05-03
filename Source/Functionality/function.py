@@ -1,16 +1,36 @@
 """Building the functionality for note program.
 	Start with the basics."""
 
-def main():
+## Imports
+import os
+
+## Main Function
+def main(filename):
 	# Asks for and gets filename - relative to function.py
-	filename = str(raw_input("Point to file to open\n"))
-	print("")
+	#filename = str(raw_input("Point to file to open\n"))
+	#print("")
 
 	# Open input and output files
 	inputfile = open (filename, "r")
 	outputfile = open ("output.html", "w+")
+
+	# Write HTML header to output file
 	pageHeader = "<html><head><title>Page</title></head><body>\n"
 	outputfile.write(pageHeader)
+
+	# Replacement markup
+	italicMarker = ["<i>","</i>"]
+	boldMarker = ["<b>","</b>"]
+	underlineMarker = ["<ins>","</ins>"]
+	strikethroughMarker = ["<del>","</del>"]
+	equationMarker = ["<b><i>","</i></b>"]
+
+	# Formatting state variables
+	italic = 0
+	bold = 0
+	underlined = 0
+	strikethrough = 0
+	equation = 0
 
 	# Iterate through file, line by line
 	for line in inputfile:
@@ -21,23 +41,9 @@ def main():
 		# Create list with same length as line buffer
 		lineBufferLength = range(len(lineBuffer))
 
-		# Internal markup
-		italicMarker = ["<i>","</i>"]
-		boldMarker = ["<b>","</b>"]
-		underlineMarker = ["<ins>","</ins>"]
-		strikethroughMarker = ["<del>","</del>"]
-		equationMarker = ["<b><i>","</i></b>"]
-
-		# Formatting state variables
-		italic = 0
-		bold = 0
-		underlined = 0
-		strikethrough = 0
-		equation = 0
-
 		## FORMATTING:
 
-		# Iterate through each line - I will need to change how I do this if I want to be able to have multi-line things.
+		# Iterate through each line
 		for n in lineBufferLength:
 
 			## Bullet points
@@ -46,6 +52,7 @@ def main():
 			if lineBuffer[n] == "*" and n == 0:
 				bullet = chr(149)
 				lineBuffer[n] = bullet
+
 			## ITALICS:
 
 			# Check for italicStart, and ignore escaped stars
@@ -144,4 +151,17 @@ def main():
 	inputfile.close()
 	outputfile.close()
 
-main()
+## Get filename
+def getFile():
+	notesDir = str(os.getcwd()) + "/Notes"
+	for dirpath, dirnames, filenames in os.walk(notesDir):
+		print dirpath
+		for f in filenames:
+			print f
+	filename = str(raw_input("\nWhich note would you like to convert?\n"))
+	filename = "Notes/" + filename
+	return filename
+
+# Run getFile, then run main function
+filename = getFile()
+main(filename)
