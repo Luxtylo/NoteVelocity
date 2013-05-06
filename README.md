@@ -8,6 +8,6 @@ UI is currently **non-functional**
 
 Function is currently **WIP**
 
-As of this commit, */Source/Functionality/function.py* will take the input from */Source/Functionality/Notes* and make an *output.html*
+As of 04/05/13, */Source/Functionality/function.py* will take the input from */Source/Functionality/Notes* and make an *output.html*
 
 Functionality is *slightly* further explained in *Source/Functionality/functionPlanning.txt*
