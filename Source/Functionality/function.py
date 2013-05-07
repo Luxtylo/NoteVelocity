@@ -5,14 +5,14 @@
 import os
 
 ## Main Function
-def main(filename):
+def main(inputFilename, outputFilename):
 	# Asks for and gets filename - relative to function.py
 	#filename = str(raw_input("Point to file to open\n"))
 	#print("")
 
 	# Open input and output files
-	inputfile = open (filename, "r")
-	outputfile = open ("output.html", "w+")
+	inputfile = open (inputFilename, "r")
+	outputfile = open (outputFilename, "w+")
 
 	# Write HTML header to output file
 	pageHeader = "<html><head><title>Page</title></head><body>\n"
@@ -151,17 +151,21 @@ def main(filename):
 	inputfile.close()
 	outputfile.close()
 
-## Get filename
-def getFile():
+## Get inputFilename
+def getInputFile():
 	notesDir = str(os.getcwd()) + "/Notes"
 	for dirpath, dirnames, filenames in os.walk(notesDir):
 		print dirpath
 		for f in filenames:
 			print f
-	filename = str(raw_input("\nWhich note would you like to convert?\n"))
-	filename = "Notes/" + filename
-	return filename
+	infilename = "Notes/" + str(raw_input("\nWhich note would you like to convert?\n"))
+	return infilename
+
+def getOutputFile():
+	outfilename = "Notes/" + str(raw_input("\nWhat would you like the output webpage to be called?\n")) + ".html"
+	return outfilename
 
 # Run getFile, then run main function
-filename = getFile()
-main(filename)
+inputFilename = getInputFile()
+outputFilename = getOutputFile()
+main(inputFilename, outputFilename)
