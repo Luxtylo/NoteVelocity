@@ -12,3 +12,4 @@ As of 04/05/13, */Source/Functionality/function.py* will take the input from */S
 
 Functionality is *slightly* further explained in *Source/Functionality/functionPlanning.txt*
 
+Currently working on getting Git and Github working on two computers
