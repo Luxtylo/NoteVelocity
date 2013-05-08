@@ -1,16 +1,15 @@
 """Building the functionality for note program.
 	Start with the basics."""
 
+
 ## Imports
 import os
+import getThe
+
 
 ## Main Function
 def main(inputFilename, outputFilename, tempFilename):
-	# Asks for and gets filename - relative to function.py
-	#filename = str(raw_input("Point to file to open\n"))
-	#print("")
-
-	# Open input and output files
+	# Opens temporary and output files.
 	tempfile = open (tempFilename, "r")
 	outputfile = open ("Notes/" + outputFilename, "w+")
 
@@ -153,43 +152,13 @@ def main(inputFilename, outputFilename, tempFilename):
 	# Delete temp file
 	os.remove(tempFilename)
 
-## Get Input filename
-def getInFile():
-	notesDir = str(os.getcwd()) + "/Notes"
-	for dirpath, dirnames, filenames in os.walk(notesDir):
-		print dirpath
-		for f in filenames:
-			print f
-	filename = str(raw_input("\nWhich note would you like to convert?\n"))
-	return filename
-
-## Get Output filename
-def getOutFile():
-	filename = str(raw_input("\nWhat would you like to save the note as?\n"))
-	return filename
-
-## Make temp file, copy input file into temp file.
-def makeTempFile(inFilename):
-	# Open input file, and create/open temp file
-	inputfile = open ("Notes/" + inFilename, "r")
-	filename = inFilename + ".temp"
-	tempfile = open (filename, "w+")
-
-	# Iterate through inputfile, writing lines to tempfile.
-	for line in inputfile:
-		tempfile.write(line)
-
-	# Close files
-	inputfile.close()
-	tempfile.close()
-	return filename
 
 ## Get filenames, then run main function
 # Get input filename
-inFilename = getInFile()
+inFilename = getThe.inputFile()
 # Get output filename
-outFilename = getOutFile()
-#Get temporary filename
-tempFilename = makeTempFile(inFilename)
+outFilename = getThe.outputFile()
+#Get temporary filename, and initialise temporary file
+tempFilename = getThe.tempFile(inFilename)
 # Run main function
 main(inFilename, outFilename, tempFilename)
