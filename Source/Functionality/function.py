@@ -5,14 +5,14 @@
 import os
 
 ## Main Function
-def main(inputFilename, outputFilename):
+def main(inputFilename, outputFilename, tempFilename):
 	# Asks for and gets filename - relative to function.py
 	#filename = str(raw_input("Point to file to open\n"))
 	#print("")
 
 	# Open input and output files
-	inputfile = open (inputFilename, "r")
-	outputfile = open (outputFilename, "w+")
+	tempfile = open (tempFilename, "r")
+	outputfile = open ("Notes/" + outputFilename, "w+")
 
 	# Write HTML header to output file
 	pageHeader = "<html><head><title>Page</title></head><body>\n"
@@ -33,7 +33,7 @@ def main(inputFilename, outputFilename):
 	equation = 0
 
 	# Iterate through file, line by line
-	for line in inputfile:
+	for line in tempfile:
 
 		# Turn line string into list
 		lineBuffer = list(line)
@@ -49,21 +49,21 @@ def main(inputFilename, outputFilename):
 			## Bullet points
 
 			# Check for bulletPointPlacement
-			if lineBuffer[n] == "*" and n == 0:
+			if lineBuffer[n] == "*" and n == 0 and lineBuffer[n+1] == " ":
 				bullet = chr(149)
 				lineBuffer[n] = bullet
 
 			## ITALICS:
 
 			# Check for italicStart, and ignore escaped stars
-			if lineBuffer[n] == "*" and lineBuffer[n-1] != "\\" and italic == 0 and n != 0:
+			if lineBuffer[n] == "*" and lineBuffer[n-1] != "\\" and italic == 0:
 
 				# Make current character into an italic start marker, and set italic to 1
 				lineBuffer[n] = italicMarker[0]
 				italic = 1
 
 			# Check for italicEnd, and ignore escaped stars
-			elif lineBuffer[n] == "*" and lineBuffer[n-1] != "\\" and italic == 1 and n != 0:
+			elif lineBuffer[n] == "*" and lineBuffer[n-1] != "\\" and italic == 1:
 
 				# Make current character into an italic end marker, and set italic to 1
 				lineBuffer[n] = italicMarker[1]
@@ -148,8 +148,10 @@ def main(inputFilename, outputFilename):
 	# Add HTML footer
 	outputfile.write("\n</body></html>")
 	# Close files
-	inputfile.close()
+	tempfile.close()
 	outputfile.close()
+	# Delete temp file
+	os.remove(tempFilename)
 
 ## Get Input filename
 def getInFile():
@@ -159,17 +161,35 @@ def getInFile():
 		for f in filenames:
 			print f
 	filename = str(raw_input("\nWhich note would you like to convert?\n"))
-	filename = "Notes/" + filename
 	return filename
 
 ## Get Output filename
 def getOutFile():
-	notesDir = str(os.getcwd()) + "/Notes"
 	filename = str(raw_input("\nWhat would you like to save the note as?\n"))
-	filename = "Notes/" + filename
 	return filename
 
-# Run getFile, then run main function
+## Make temp file, copy input file into temp file.
+def makeTempFile(inFilename):
+	# Open input file, and create/open temp file
+	inputfile = open ("Notes/" + inFilename, "r")
+	filename = inFilename + ".temp"
+	tempfile = open (filename, "w+")
+
+	# Iterate through inputfile, writing lines to tempfile.
+	for line in inputfile:
+		tempfile.write(line)
+
+	# Close files
+	inputfile.close()
+	tempfile.close()
+	return filename
+
+## Get filenames, then run main function
+# Get input filename
 inFilename = getInFile()
-outFileName = getOutFile()
-main(inFilename, outFileName)
+# Get output filename
+outFilename = getOutFile()
+#Get temporary filename
+tempFilename = makeTempFile(inFilename)
+# Run main function
+main(inFilename, outFilename, tempFilename)

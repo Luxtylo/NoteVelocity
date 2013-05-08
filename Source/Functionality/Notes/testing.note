@@ -1,18 +1,6 @@
-This is an *input*. Find the italic text.
+<TEST THINGY>
 
-Escaped asterisk: \*
-
-This part is <bold>
-
-This bit is _underlined_
-
-\\ \<-- Escaped backslash and "\<"
-
-* Bullet point
-
-This text has been ~struck through~
-
-Equation: [x + y]
-
-Multiple line *italics
-Should now be working*
+*Italic*
+* Bullet point with <*Bold italic*>
+_underlined_
+_<*Bold italic underlined?*>_
