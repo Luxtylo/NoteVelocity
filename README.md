@@ -8,7 +8,7 @@ UI is currently **non-functional**
 
 Function is currently **WIP**
 
-As of 04/05/13, */Source/Functionality/function.py* will take the input from */Source/Functionality/Notes* and make an *output.html*
+As of 2013/05/08, */Source/Functionality/function.py* will take the input from */Source/Functionality/Notes* and make the file specified. *.html* extension is recommended, although anything which can contain html tags and be opened by a browser will work.
 
 Functionality is *slightly* further explained in *Source/Functionality/functionPlanning.txt*
 
