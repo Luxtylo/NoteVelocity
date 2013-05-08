@@ -5,17 +5,18 @@
 import os
 
 ## Main Function
-def main(filename):
+def main(inputFilename, outputFilename):
 	# Asks for and gets filename - relative to function.py
 	#filename = str(raw_input("Point to file to open\n"))
 	#print("")
 
 	# Open input and output files
-	inputfile = open (filename, "r")
-	outputfile = open ("output.html", "w+")
+	inputfile = open ("Notes/" + inputFilename, "r")
+	outputfile = open ("Notes/" + outputFilename, "w+")
+	tempfile = open (inputFilename + ".temp", "w+")
 
 	# Write HTML header to output file
-	pageHeader = "<html><head><title>Page</title></head><body>\n"
+	pageHeader = "<html>\n\n<head>\n<link rel='stylesheet' type='text/css' href='../style.css'>\n<title>Page</title>\n</head>\n\n<body>\n"
 	outputfile.write(pageHeader)
 
 	# Replacement markup
@@ -32,8 +33,12 @@ def main(filename):
 	strikethrough = 0
 	equation = 0
 
-	# Iterate through file, line by line
+	# Iterate through input file and copy to temp file
 	for line in inputfile:
+		tempfile.write(line + "\n")
+
+	# Iterate through temp file, line by line
+	for line in tempfile:
 
 		# Turn line string into list
 		lineBuffer = list(line)
@@ -146,22 +151,30 @@ def main(filename):
 		outputfile.write("<br />")
 
 	# Add HTML footer
-	outputfile.write("\n</body></html>")
+	outputfile.write("\n</body>\n\n</html>")
 	# Close files
 	inputfile.close()
 	outputfile.close()
+	tempfile.close()
+	#os.remove(inputFilename + ".temp")
 
-## Get filename
-def getFile():
+## Get Input filename
+def getInFile():
 	notesDir = str(os.getcwd()) + "/Notes"
 	for dirpath, dirnames, filenames in os.walk(notesDir):
 		print dirpath
 		for f in filenames:
 			print f
 	filename = str(raw_input("\nWhich note would you like to convert?\n"))
-	filename = "Notes/" + filename
+	return filename
+
+## Get Output filename
+def getOutFile():
+	notesDir = str(os.getcwd()) + "/Notes"
+	filename = str(raw_input("\nWhat would you like to save the note as?\n"))
 	return filename
 
 # Run getFile, then run main function
-filename = getFile()
-main(filename)
+inFilename = getInFile()
+outFileName = getOutFile()
+main(inFilename, outFileName)
