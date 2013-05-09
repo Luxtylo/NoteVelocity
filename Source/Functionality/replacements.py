@@ -18,7 +18,6 @@ def markItUp(tempfile, outputfile):
 	superscript = 0
 	subscript = 0
 	tabbed = 0
-	 # Currently redundant, but may be useful in future for making indented bullet points.
 
 	# Iterate through file, line by line
 	for line in tempfile:
