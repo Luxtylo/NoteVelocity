@@ -12,25 +12,38 @@ Main idea
 				First level is headings, second is subheadings
 				Curly brackets make a heading into a title
 
-Specific examples
+Currently implemented syntax
 	*text*
 		Italicises stuff
-	[Link name](URL)
-		Adds a link to the text
-		Needs changing
 	_text_
 		Underlined
+		Does not work in equations
+			Can be worked around by putting underscores outside equation tags
 	<text>
 		Bold
 	~text~
 		Strikethrough
-	|text|
-		Box around text
 	* text
 		Bullet point
-	[[x + y]]
+	[x + y]
 		Equation
-		Changes font
+		Changes font (currently makes bold and italic)
+	[x^(y)]
+		Superscript
+		Only works in equations
+	[x_(y)]
+		Subscript
+		Only works in equations
+
+Planned syntax
+	[Link name](URL)
+		Adds a link to the text
+	|text|
+		Box around text
 	#text#
 		Footnote (automatically numbered)
-	
+		Could also be some sort of inline note
+	Tab detection to keep indentation
+		Using "\t"
+	(Numerator)/(Denominator)
+		Fraction

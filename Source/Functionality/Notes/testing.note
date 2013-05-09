@@ -1,6 +1,11 @@
-<TEST THINGY>
+TEST THINGY
 
-*Italic*
-* Bullet point with <*Bold italic*>
-_underlined_
-_<*Bold italic underlined?*>_
+This is not^(superscript)
+[y = x^(superscript)]
+
+This is not\_(subscript)
+[E = m_(e)c^(2)]
+
+[(Brackets)^(\(Brackets\))]
+
+[Script^(superscript)script_(subscript)script^(superscript)script_(subscript)script^(superscript)script_(subscript)script^(superscript)script_(subscript)]

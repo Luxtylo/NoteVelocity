@@ -23,6 +23,8 @@ def main(inputFilename, outputFilename, tempFilename):
 	underlineMarker = ["<ins>","</ins>"]
 	strikethroughMarker = ["<del>","</del>"]
 	equationMarker = ["<b><i>","</i></b>"]
+	superscriptMarker = ["<sup>","</sup>"]
+	subscriptMarker = ["<sub>","</sub> "]
 
 	# Formatting state variables
 	italic = 0
@@ -30,6 +32,8 @@ def main(inputFilename, outputFilename, tempFilename):
 	underlined = 0
 	strikethrough = 0
 	equation = 0
+	superscript = 0
+	subscript = 0
 
 	# Iterate through file, line by line
 	for line in tempfile:
@@ -87,14 +91,14 @@ def main(inputFilename, outputFilename, tempFilename):
 			## UNDERLINED:
 
 			# Check for underlineStart, and ignore escaped "_"s
-			if lineBuffer[n] == "_" and lineBuffer[n-1] != "\\" and underlined == 0:
+			if lineBuffer[n] == "_" and lineBuffer[n-1] != "\\" and underlined == 0 and equation != 1:
 
 				# Make current character into a underline start marker, and set underlined to 1
 				lineBuffer[n] = underlineMarker[0]
 				underlined = 1
 
 			# Check for underlineEnd, and ignore escaped "_"s
-			elif lineBuffer[n] == "_" and lineBuffer[n-1] != "\\" and underlined == 1:
+			elif lineBuffer[n] == "_" and lineBuffer[n-1] != "\\" and underlined == 1 and equation != 1:
 
 				# Make current character into a underline end marker, and set underlined to 0
 				lineBuffer[n] = underlineMarker[1]
@@ -132,12 +136,52 @@ def main(inputFilename, outputFilename, tempFilename):
 				lineBuffer[n] = equationMarker[1]
 				equation = 0
 
+			## SUPERSCRIPT (only in equations)
+
+			# Check for superscriptStart, and ignore escaped "^"s, only when equation == 1 and there is an opening bracket.
+			if lineBuffer[n] == "^"and lineBuffer[n-1] != "\\" and equation == 1 and superscript == 0 and lineBuffer[n+1] == "(":
+
+				# Make current character into a superscript start marker, remove opening bracket and set superscript to 1
+				lineBuffer[n] = superscriptMarker[0]
+				lineBuffer[n+1] = None
+				superscript = 1
+
+			# Check for superscriptEnd, and ignore escaped "^"s, only when equation == 1 and there is a closing bracket.
+			if lineBuffer[n] == ")"and lineBuffer[n-1] != "\\" and equation == 1 and superscript == 1:
+
+				# Make current character into a superscript end marker and set superscript to 0
+				lineBuffer[n] = superscriptMarker[1]
+				superscript = 0
+
+			## SUBSCRIPT (only in equations)
+
+			# Check for subscriptStart, and ignore escaped "_"s, only when equation == 1 and there is an opening bracket.
+			if lineBuffer[n] == "_"and lineBuffer[n-1] != "\\" and equation == 1 and subscript == 0 and lineBuffer[n+1] == "(":
+
+				# Make current character into a subscript start marker, remove opening bracket and set subscript to 1
+				lineBuffer[n] = subscriptMarker[0]
+				lineBuffer[n+1] = None
+				subscript = 1
+
+			# Check for subscriptEnd, and ignore escaped ")"s, only when equation == 1 and there is a closing bracket.
+			if lineBuffer[n] == ")"and lineBuffer[n-1] != "\\" and equation == 1 and subscript == 1:
+
+				# Make current character into a subscript end marker and set superscript to 0
+				lineBuffer[n] = subscriptMarker[1]
+				subscript = 0
+
+			# Make charBuffer
+			charBuffer = lineBuffer[n]
+
 			# Write output file, ignoring non-escaped backslashes
 			# Check for \\, and write \
 			if lineBuffer[n] == "\\" and lineBuffer[n+1] == "\\":
 				outputfile.write(lineBuffer[n])
 			# Check for \, and ignore
 			elif lineBuffer[n] == "\\" and lineBuffer[n+1] != "\\":
+				pass
+			# Ignore nulls
+			elif lineBuffer[n] is None:
 				pass
 			# Otherwise write
 			else:
