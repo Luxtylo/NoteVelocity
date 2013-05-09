@@ -36,7 +36,8 @@ Currently implemented syntax
 		Only works in equations
 	\\t (Tab)
 		Indents text
-		Current solution is an inelegant HTML "&nbsp;&nbsp;&nbsp;&nbsp;"
+		Current solution is inelegant HTML, and will not work for multiple lines
+			Will eventually replace with CSS
 
 Planned syntax
 	\[Link name\](URL)

@@ -22,6 +22,7 @@ def markItUp(tempfile, outputfile):
 
 	# Iterate through file, line by line
 	for line in tempfile:
+		outputfile.write("\t\t")
 
 		# Turn line string into list
 		lineBuffer = list(line)
@@ -183,7 +184,7 @@ def markItUp(tempfile, outputfile):
 			# Otherwise write
 			else:
 				outputfile.write(lineBuffer[n])
-		outputfile.write("<br />")
+		outputfile.write("\t\t<br />\n")
 
 	# Add HTML footer
-	outputfile.write("\n</body></html>")
+	outputfile.write("\n\t</body>\n</html>")

@@ -1,7 +1,7 @@
 """File for storing markup. Changing this file should change the whole project's markup."""
 
 # HTML page header
-pageHeader = "<html><head><title>Page</title></head><body>\n"
+pageHeader = "<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<title>Page</title>\n\t</head>\n\t<body>\n"
 
 # HTML markup
 italicMarker = ["<i>","</i>"]
