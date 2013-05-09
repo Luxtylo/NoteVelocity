@@ -25,6 +25,8 @@ def main(inputFilename, outputFilename, tempFilename):
 	equationMarker = ["<b><i>","</i></b>"]
 	superscriptMarker = ["<sup>","</sup>"]
 	subscriptMarker = ["<sub>","</sub> "]
+	tabMarker = "&nbsp;&nbsp;&nbsp;&nbsp;"
+	bulletMarker = chr(149)
 
 	# Formatting state variables
 	italic = 0
@@ -34,6 +36,8 @@ def main(inputFilename, outputFilename, tempFilename):
 	equation = 0
 	superscript = 0
 	subscript = 0
+	tabbed = 0
+	 # Currently redundant, but may be useful in future for making indented bullet points.
 
 	# Iterate through file, line by line
 	for line in tempfile:
@@ -49,12 +53,15 @@ def main(inputFilename, outputFilename, tempFilename):
 		# Iterate through each line
 		for n in lineBufferLength:
 
+			## Tabs
+			if lineBuffer[n] == "\t":
+				lineBuffer[n] = tabMarker
+
 			## Bullet points
 
 			# Check for bulletPointPlacement
 			if lineBuffer[n] == "*" and n == 0 and lineBuffer[n+1] == " ":
-				bullet = chr(149)
-				lineBuffer[n] = bullet
+				lineBuffer[n] = bulletMarker
 
 			## ITALICS:
 

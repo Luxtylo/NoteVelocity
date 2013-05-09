@@ -34,6 +34,9 @@ Currently implemented syntax
 	[x_(y)]
 		Subscript
 		Only works in equations
+	\t (Tab)
+		Indents text
+		Current solution is an inelegant HTML "&nbsp;&nbsp;&nbsp;&nbsp;"
 
 Planned syntax
 	[Link name](URL)
@@ -43,7 +46,5 @@ Planned syntax
 	#text#
 		Footnote (automatically numbered)
 		Could also be some sort of inline note
-	Tab detection to keep indentation
-		Using "\t"
 	(Numerator)/(Denominator)
 		Fraction
