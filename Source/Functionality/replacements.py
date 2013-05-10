@@ -19,13 +19,12 @@ def markItUp(tempfile, outputfile):
 	subscript = 0
 	tabbed = 0
 
-	outputfile.write("\t")
-
 	# Iterate through file, line by line
 	for line in tempfile:
+
+		# Indent by correct amount
 		outputfile.write("\t\t")
 
-		outputfile.write("\t\t")
 		# Turn line string into list
 		lineBuffer = list(line)
 
@@ -42,8 +41,8 @@ def markItUp(tempfile, outputfile):
 			# Check for bulletPointPlacement
 			if lineBuffer[n] == "*" and n == 0 and lineBuffer[n+1] == " ":
 				lineBuffer[n] = markup.bulletMarker
-			# Check for bulletPointPlacement when tabbed = 1
-			if lineBuffer[n] == "*" and tabbed == 1 and lineBuffer[n+1] == " ":
+			# Check for bulletPointPlacement when tabbed != 0
+			if lineBuffer[n] == "*" and tabbed != 0 and lineBuffer[n+1] == " ":
 				lineBuffer[n] = markup.bulletMarker
 
 			## TABS
@@ -186,7 +185,7 @@ def markItUp(tempfile, outputfile):
 			# Otherwise write
 			else:
 				outputfile.write(lineBuffer[n])
-		outputfile.write("\t\t<br />\n")
+		outputfile.write(markup.lineBreak)
 
 	# Add HTML footer
-	outputfile.write("\n\t</body>\n</html>")
+	outputfile.write(markup.pageFooter)
