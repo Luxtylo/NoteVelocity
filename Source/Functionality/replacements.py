@@ -18,12 +18,12 @@ def markItUp(tempfile, outputfile):
 	superscript = 0
 	subscript = 0
 	tabbed = 0
-	 # Currently redundant, but may be useful in future for making indented bullet points.
 
 	outputfile.write("\t")
 
 	# Iterate through file, line by line
 	for line in tempfile:
+		outputfile.write("\t\t")
 
 		outputfile.write("\t\t")
 		# Turn line string into list
@@ -186,7 +186,7 @@ def markItUp(tempfile, outputfile):
 			# Otherwise write
 			else:
 				outputfile.write(lineBuffer[n])
-		outputfile.write("<br />")
+		outputfile.write("\t\t<br />\n")
 
 	# Add HTML footer
 	outputfile.write("\n\t</body>\n</html>")
