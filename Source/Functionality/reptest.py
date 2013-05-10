@@ -40,7 +40,7 @@ def markItUp(tempfile, outputfile):
 			if lineBuffer[n] == "*" and n == 0 and lineBuffer[n+1] == " ":
 				lineBuffer[n] = markup.bulletMarker
 			# Check for bulletPointPlacement when tabbed = 1
-			if lineBuffer[n] == "*" and tabbed == 1 and lineBuffer[n+1] == " ":
+			if lineBuffer[n] == "*" and tabbed != 0 and lineBuffer[n+1] == " ":
 				lineBuffer[n] = markup.bulletMarker
 
 			## TABS
@@ -50,7 +50,7 @@ def markItUp(tempfile, outputfile):
 
 				#Replace tab with tabMarker and set tabbed to 1
 				lineBuffer[n] = markup.tabMarker
-				tabbed = 1
+				tabbed = tabbed + 1
 
 			# If there is no tab, set tabbed to 0
 			elif lineBuffer[n] != "\t":
