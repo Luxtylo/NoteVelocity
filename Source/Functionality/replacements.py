@@ -18,12 +18,10 @@ def markItUp(tempfile, outputfile):
 	superscript = 0
 	subscript = 0
 	tabbed = 0
+	 # Currently redundant, but may be useful in future for making indented bullet points.
 
 	# Iterate through file, line by line
 	for line in tempfile:
-
-		# Indent by correct amount
-		outputfile.write("\t\t")
 
 		# Turn line string into list
 		lineBuffer = list(line)
@@ -41,7 +39,7 @@ def markItUp(tempfile, outputfile):
 			# Check for bulletPointPlacement
 			if lineBuffer[n] == "*" and n == 0 and lineBuffer[n+1] == " ":
 				lineBuffer[n] = markup.bulletMarker
-			# Check for bulletPointPlacement when tabbed != 0
+			# Check for bulletPointPlacement when tabbed = 1
 			if lineBuffer[n] == "*" and tabbed != 0 and lineBuffer[n+1] == " ":
 				lineBuffer[n] = markup.bulletMarker
 
@@ -52,7 +50,7 @@ def markItUp(tempfile, outputfile):
 
 				#Replace tab with tabMarker and set tabbed to 1
 				lineBuffer[n] = markup.tabMarker
-				tabbed = 1
+				tabbed = tabbed + 1
 
 			# If there is no tab, set tabbed to 0
 			elif lineBuffer[n] != "\t":
@@ -185,7 +183,7 @@ def markItUp(tempfile, outputfile):
 			# Otherwise write
 			else:
 				outputfile.write(lineBuffer[n])
-		outputfile.write(markup.lineBreak)
+		outputfile.write("<br />")
 
 	# Add HTML footer
-	outputfile.write(markup.pageFooter)
+	outputfile.write("\n</body></html>")

@@ -5,7 +5,7 @@
 import os
 import getThe
 import markup
-import reptest
+import replacements
 
 ## Main Function
 def main(inputFilename, outputFilename, tempFilename):
@@ -15,7 +15,7 @@ def main(inputFilename, outputFilename, tempFilename):
 	outputfile = open ("Notes/" + outputFilename, "w+")
 
 	# Call markup to convert file
-	reptest.markItUp(tempfile, outputfile)
+	replacements.markItUp(tempfile, outputfile)
 
 	# Close files
 	tempfile.close()
