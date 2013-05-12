@@ -2,7 +2,7 @@ Note-taking project
 ===================
 
 An EPQ project for designing and making a note-taking program for university and A-level students. My aim is to have syntax like markdown and Python, but functionality like LaTeX.
-Made using *Python* and *Kivy*, although this may be changed to us a *Python* backend and an *HTML and CSS* frontend for ease of programming.
+Made using *Python* and *Tkinter*.
 
 UI is currently **non-functional**
 
@@ -18,3 +18,4 @@ Input is corrected if no file extension is given (or currently, if there's no ex
 
 **Dependencies:**
 * *Python* >= *2.7*
+* Tkinter *(Included with Python on Windows and Mac)*
