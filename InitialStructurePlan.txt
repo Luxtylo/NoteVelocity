@@ -1,0 +1,22 @@
+Main folder 
+	Main Python file 
+		Starts UI, and periodically runs text formatter (once every half a second or so?) 
+	File handling Python file 
+		Gets the name of file needed, and opens a temporary file if necessary. 
+	UI folder 
+		UI Python file 
+			Starts all parts of UI, showing any image from UI images folder 
+		Images folder 
+			Contains all images needed for the UI 
+	Text formatting folder 
+		Formatting Python file 
+			Calls other formatting files 
+		Definitions file 
+			Defines how to replace the note-taking program's syntax with whatever syntax is needed for display - ie " *italic* " to "<i>italic</i> 
+		Replacements file 
+			Actually makes the replacements defined in the definitions file 
+		Export definitions file 
+			Does the same as the definitions file, but for exports 
+	Export folder 
+		Export file 
+			Uses the export definitions file to change the syntax for the selected export format, and exports it. 
