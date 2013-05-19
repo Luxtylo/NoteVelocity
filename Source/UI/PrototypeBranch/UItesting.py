@@ -2,6 +2,8 @@
 
 ## Imports
 from Tkinter import *
+from tkFileDialog import askopenfilename
+import makeThe
 
 ## Initialise NoteApp class
 class NoteApp:
@@ -10,8 +12,16 @@ class NoteApp:
 	def __init__ (self, master):
 
 		# Initialise variables
+		self.openLocation = None
+		self.inputFile = None
+		self.outputFile = None
+
+		# Initialise show variables
 		self.showFormFrame = True
 		self.showMenuBar = True
+
+		# Initialise tab stuff
+		tabs = list()
 
 		# Create upper level 2 frame (Text + Formatting)
 		self.textFormFrame = Frame(bg = "#FF0000")
@@ -31,8 +41,12 @@ class NoteApp:
 			self.fileOpsFrame = Frame()
 			self.fileOpsFrame.pack(fill = X, side = BOTTOM)
 
+			# Create tabs frame to go inside level 2 frame
+			self.tabFrame = Frame(self.fileOpsFrame)
+			self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
+
 		# Create text box in textFrame
-		self.textBox = Text(self.textFrame, bg = "#000000", fg = "#FFFFFF", padx = 5, pady = 5)
+		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5)
 		self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
 
 		# Create scrollbar in textFrame
@@ -62,8 +76,40 @@ class NoteApp:
 
 		if self.showMenuBar == True:
 			# Create file operation buttons in fileOpsFrame
-			self.exampleButton = Button(self.fileOpsFrame, text = "Example", font = ("DejaVu Sans", "8", "normal"))
-			self.exampleButton.pack(side = LEFT)
+
+			self.quitButton = Button(self.fileOpsFrame, text = "Quit", font = ("DejaVu Sans", "8", "normal"), command = master.quit)
+			self.quitButton.pack(side = RIGHT)
+
+			self.openButton = Button(self.fileOpsFrame, text = "Open", font = ("DejaVu Sans", "8", "normal"), command = self.askLocation)
+			self.openButton.pack(side = RIGHT)
+
+			self.saveButton = Button(self.fileOpsFrame, text = "Save", font = ("DejaVu Sans", "8", "normal"), command = self.saveFile)
+			self.saveButton.pack(side = RIGHT)
+
+			# Tabs
+			self.tabLeftButton = Button(self.tabFrame, text = "<", width = 0, font = ("DejaVu Sans", "8", "normal"))
+			self.tabLeftButton.pack(side = LEFT)
+
+			## TABS GO HERE
+
+			self.tabRightButton = Button(self.tabFrame, text = ">", width = 0, font = ("DejaVu Sans", "8", "normal"))
+			self.tabRightButton.pack(side = RIGHT)
+
+	# Ask for location and open file
+	def askLocation(self):
+		# Run open dialog box to get filename
+		self.openLocation = askopenfilename(filetypes = [("Note files","*.note"),("Text files","*.txt")])
+
+		# If the filename is a blank string
+		if self.openLocation == "":
+			# Return exception here - new window saying "No file selected"
+			print ("Open Location Empty")
+		else:
+			# Open inputFile
+			self.inputFile = open (self.openLocation, "r")
+
+	def saveFile(self):
+		pass
 
 ## STARTING
 
@@ -72,8 +118,23 @@ root = Tk()
 
 # Root widget properties
 root.title("Note") # Title in window title bar
-root.minsize(640,480) # Minimum size of window
-root.geometry("800x600") # Initial size of window
+root.minsize(640,400) # Minimum size of window
+root.grid_columnconfigure(0, weight = 1)
+root.grid_columnconfigure(2, weight = 0)
+
+# Set initial size to take up 3/4 of the screen for resolutions up to 1024x768
+screenWidth = root.winfo_screenwidth()
+screenHeight = root.winfo_screenheight()
+
+if screenWidth <= 1024 and screenHeight <= 768:
+	windowWidth = 3 * screenWidth / 4
+	windowHeight = 3 * screenHeight / 4
+	windowSizeString = str(windowWidth) + "x" + str(windowHeight)
+	root.geometry(windowSizeString)
+
+# Otherwise window size is 800x600
+else:
+	root.geometry("800x600")
 
 # New instance of NoteApp
 app = NoteApp(root)

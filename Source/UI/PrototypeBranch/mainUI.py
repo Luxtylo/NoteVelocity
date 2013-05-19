@@ -20,6 +20,9 @@ class NoteApp:
 		self.showFormFrame = True
 		self.showMenuBar = True
 
+		# Initialise tab stuff
+		tabs = list()
+
 		# Create upper level 2 frame (Text + Formatting)
 		self.textFormFrame = Frame(bg = "#FF0000")
 		self.textFormFrame.pack(fill = BOTH, side = TOP, expand = 1)
@@ -37,6 +40,10 @@ class NoteApp:
 		if self.showMenuBar == True:
 			self.fileOpsFrame = Frame()
 			self.fileOpsFrame.pack(fill = X, side = BOTTOM)
+
+			# Create tabs frame to go inside level 2 frame
+			self.tabFrame = Frame(self.fileOpsFrame)
+			self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
 
 		# Create text box in textFrame
 		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5)
@@ -69,14 +76,24 @@ class NoteApp:
 
 		if self.showMenuBar == True:
 			# Create file operation buttons in fileOpsFrame
-			self.openButton = Button(self.fileOpsFrame, text = "Open", font = ("DejaVu Sans", "8", "normal"), command = self.askLocation)
-			self.openButton.pack(side = LEFT)
-
-			self.saveButton = Button(self.fileOpsFrame, text = "Save", font = ("DejaVu Sans", "8", "normal"), command = self.saveFile)
-			self.saveButton.pack(side = LEFT)
 
 			self.quitButton = Button(self.fileOpsFrame, text = "Quit", font = ("DejaVu Sans", "8", "normal"), command = master.quit)
 			self.quitButton.pack(side = RIGHT)
+
+			self.openButton = Button(self.fileOpsFrame, text = "Open", font = ("DejaVu Sans", "8", "normal"), command = self.askLocation)
+			self.openButton.pack(side = RIGHT)
+
+			self.saveButton = Button(self.fileOpsFrame, text = "Save", font = ("DejaVu Sans", "8", "normal"), command = self.saveFile)
+			self.saveButton.pack(side = RIGHT)
+
+			# Tabs
+			self.tabLeftButton = Button(self.tabFrame, text = "<", width = 0, font = ("DejaVu Sans", "8", "normal"))
+			self.tabLeftButton.pack(side = LEFT)
+
+			## TABS GO HERE
+
+			self.tabRightButton = Button(self.tabFrame, text = ">", width = 0, font = ("DejaVu Sans", "8", "normal"))
+			self.tabRightButton.pack(side = RIGHT)
 
 	# Ask for location and open file
 	def askLocation(self):
@@ -101,10 +118,23 @@ root = Tk()
 
 # Root widget properties
 root.title("Note") # Title in window title bar
-root.minsize(640,480) # Minimum size of window
-root.geometry("800x600") # Initial size of window
+root.minsize(640,400) # Minimum size of window
 root.grid_columnconfigure(0, weight = 1)
 root.grid_columnconfigure(2, weight = 0)
+
+# Set initial size to take up 3/4 of the screen for resolutions up to 1024x768
+screenWidth = root.winfo_screenwidth()
+screenHeight = root.winfo_screenheight()
+
+if screenWidth <= 1024 and screenHeight <= 768:
+	windowWidth = 3 * screenWidth / 4
+	windowHeight = 3 * screenHeight / 4
+	windowSizeString = str(windowWidth) + "x" + str(windowHeight)
+	root.geometry(windowSizeString)
+
+# Otherwise window size is 800x600
+else:
+	root.geometry("800x600")
 
 # New instance of NoteApp
 app = NoteApp(root)
