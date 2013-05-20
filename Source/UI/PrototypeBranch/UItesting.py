@@ -3,7 +3,6 @@
 ## Imports
 from Tkinter import *
 from tkFileDialog import askopenfilename
-import makeThe
 
 ## Initialise NoteApp class
 class NoteApp:
@@ -48,6 +47,9 @@ class NoteApp:
 		# Create text box in textFrame
 		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5)
 		self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
+
+		# Run function to initialise text tags
+		initialiseTags()
 
 		# Create scrollbar in textFrame
 		self.textScrollBar = Scrollbar(self.textFrame, width = 16)
@@ -108,8 +110,20 @@ class NoteApp:
 			# Open inputFile
 			self.inputFile = open (self.openLocation, "r")
 
+	# Save current file
 	def saveFile(self):
 		pass
+	
+	# Initialise textBox's tage
+	def initialiseTags(self):
+		#textBox.tag_config()
+		text.tag_config("a", foreground="blue", underline=1)
+	    text.tag_bind("Enter>", show_hand_cursor)
+	    text.tag_bind("Leave>", show_arrow_cursor)
+	    text.tag_bind("Button-1>", click)
+    	text.config(cursor="arrow")
+
+    	text.insert(INSERT, "click here!", "a")
 
 ## STARTING
 

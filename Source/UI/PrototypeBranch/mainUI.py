@@ -3,7 +3,6 @@
 ## Imports
 from Tkinter import *
 from tkFileDialog import askopenfilename
-import makeThe
 
 ## Initialise NoteApp class
 class NoteApp:
