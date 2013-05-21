@@ -3,12 +3,17 @@
 ## Imports
 from Tkinter import *
 from tkFileDialog import askopenfilename
+import tkMessageBox
+import datetime
 
 ## Initialise NoteApp class
 class NoteApp:
 
 	## Constructor
 	def __init__ (self, master):
+
+		# Initialise log
+		Log.init(self)
 
 		# Initialise variables
 		self.openLocation = None
@@ -18,6 +23,8 @@ class NoteApp:
 		# Initialise show variables
 		self.showFormFrame = True
 		self.showMenuBar = True
+
+		Log.write(self,"\tInitialised variables")
 
 		# Initialise tab stuff
 		tabs = list()
@@ -48,6 +55,9 @@ class NoteApp:
 		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5)
 		self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
 
+		# Run function to initialise text tags
+		#initialiseTags()
+
 		# Create scrollbar in textFrame
 		self.textScrollBar = Scrollbar(self.textFrame, width = 16)
 		self.textScrollBar.pack(fill = Y, side = RIGHT)
@@ -76,7 +86,7 @@ class NoteApp:
 		if self.showMenuBar == True:
 			# Create file operation buttons in fileOpsFrame
 
-			self.quitButton = Button(self.fileOpsFrame, text = "Quit", font = ("DejaVu Sans", "8", "normal"), command = master.quit)
+			self.quitButton = Button(self.fileOpsFrame, text = "Quit", font = ("DejaVu Sans", "8", "normal"), command = self.Quit)
 			self.quitButton.pack(side = RIGHT)
 
 			self.openButton = Button(self.fileOpsFrame, text = "Open", font = ("DejaVu Sans", "8", "normal"), command = self.askLocation)
@@ -96,19 +106,113 @@ class NoteApp:
 
 	# Ask for location and open file
 	def askLocation(self):
-		# Run open dialog box to get filename
-		self.openLocation = askopenfilename(filetypes = [("Note files","*.note"),("Text files","*.txt")])
 
-		# If the filename is a blank string
-		if self.openLocation == "":
-			# Return exception here - new window saying "No file selected"
-			print ("Open Location Empty")
+		# Function to write contents of input file to textBox
+		def openFile(self):
+
+			# Run open dialog box to get filename
+			openLocation = askopenfilename(filetypes = [("Note files","*.note"),("Text files","*.txt")])
+
+			# If the filename is a blank string
+			if openLocation == "":
+				# Return exception here - new window saying "No file selected"
+				Log.write(self, "\tNo location selected to open")
+
+			else:
+				# Open inputFile
+				self.inputFile = open (openLocation, "r")
+
+				logString = "\tOpening " + openLocation
+				Log.write(self, logString)
+
+				# Clear self.textBox
+				self.textBox.delete(1.0,END)
+
+				# Initialise lineNumber
+				lineNumber = 1
+
+				# Reset logString
+				logString = ""
+
+				# Iterate through self.inputFile, adding to self.textBox
+				for line in self.inputFile:
+
+					# Create lineBuffer and lineBufferLen
+					lineBuffer = list(line)
+					lineBufferLen = range(len(lineBuffer))
+
+					for n in lineBufferLen:
+						index = str(lineNumber) + "." + str(lineBufferLen[n])
+						self.textBox.insert(index,lineBuffer[n])
+
+					logString = logString + "\n\tWrote line " + str(lineNumber) + " to self.textBox"
+
+					lineNumber += 1
+
+				Log.write(self, logString)
+				logString = "\tCompleted writing contents of " + openLocation + " to self.textBox"
+				Log.write(self, logString)
+
+		# Check to see whether contents of self.textBox are "\n" - ie empty
+		if self.textBox.get(1.0,END) == "\n":
+
+			openFile(self)
+
 		else:
-			# Open inputFile
-			self.inputFile = open (self.openLocation, "r")
+			saveyn = tkMessageBox.askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
 
+			if saveyn == True:
+
+				# Run self.saveFile, then open file
+				self.saveFile(self)
+				openFile(self)
+
+			else:
+				# Open file
+				openFile(self)
+
+	# Save current file
 	def saveFile(self):
 		pass
+	
+	# Initialise textBox's tage
+	def initialiseTags(self):
+		#textBox.tag_config()
+		pass
+
+	def Quit(self):
+		Quit(self)
+
+## Log function
+def Log():
+	# Initialise function
+	def init(self):
+		self.logFile = open("log.txt", "w+")
+		now = datetime.datetime.now()
+		self.logFile.write("Time of log creation: " + str(now))
+
+	# Write function
+	def write(self, string):
+		now = datetime.datetime.now()
+		self.logFile.write("\n\nAt " + str(now) + ":\n" + string)
+
+	# Close function
+	def close(self):
+		now = datetime.datetime.now()
+		self.logFile.write("\n\nAt " + str(now) + ":\n\t" + "Closing log file")
+
+	# Return stuff
+	Log.init = init
+	Log.write = write
+	Log.close = close
+	return Log
+
+Log = Log()
+
+## Quit function - does anything needed before quitting
+def Quit(self):
+	Log.close(self)
+	root.quit()
 
 ## STARTING
 
@@ -116,7 +220,7 @@ class NoteApp:
 root = Tk()
 
 # Root widget properties
-root.title("Note") # Title in window title bar
+root.title("New Note") # Title in window title bar
 root.minsize(640,400) # Minimum size of window
 root.grid_columnconfigure(0, weight = 1)
 root.grid_columnconfigure(2, weight = 0)

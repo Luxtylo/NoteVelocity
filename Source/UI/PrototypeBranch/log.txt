@@ -1,0 +1,21 @@
+Time of log creation: 2013-05-21 06:54:59.886363
+
+At 2013-05-21 06:54:59.886666:
+	Initialised variables
+
+At 2013-05-21 06:55:04.436704:
+	Opening /home/george/note-epq/Source/UI/PrototypeBranch/test.note
+
+At 2013-05-21 06:55:04.447984:
+
+	Wrote line 1 to self.textBox
+	Wrote line 2 to self.textBox
+	Wrote line 3 to self.textBox
+	Wrote line 4 to self.textBox
+	Wrote line 5 to self.textBox
+
+At 2013-05-21 06:55:04.448325:
+	Completed writing contents of /home/george/note-epq/Source/UI/PrototypeBranch/test.note to self.textBox
+
+At 2013-05-21 06:55:15.105832:
+	Closing log file
