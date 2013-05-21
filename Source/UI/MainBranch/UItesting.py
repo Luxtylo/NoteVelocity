@@ -1,9 +1,8 @@
 """The main UI file of my note-taking program"""
 
 ## Imports
-from Tkinter import *
-from tkFileDialog import askopenfilename
-import tkMessageBox
+from tkinter import *
+from tkinter import filedialog
 import datetime
 
 ## Initialise NoteApp class
@@ -111,7 +110,7 @@ class NoteApp:
 		def openFile(self):
 
 			# Run open dialog box to get filename
-			openLocation = askopenfilename(filetypes = [("Note files","*.note"),("Text files","*.txt")])
+			openLocation = filedialog.askopenfilename(filetypes = (("Note files","*.note"),("Text files","*.txt")))
 
 			# If the filename is a blank string
 			if openLocation == "":
@@ -159,7 +158,7 @@ class NoteApp:
 			openFile(self)
 
 		else:
-			saveyn = tkMessageBox.askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
+			saveyn = askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
 
 			if saveyn == True:
 
@@ -232,8 +231,8 @@ screenHeight = root.winfo_screenheight()
 if screenWidth <= 1024 and screenHeight <= 768:
 	windowWidth = 3 * screenWidth / 4
 	windowHeight = 3 * screenHeight / 4
-	windowSizeString = str(windowWidth) + "x" + str(windowHeight)
-	root.geometry(windowSizeString)
+	# windowSizeString = str(windowWidth) + "x" + str(windowHeight)
+	root.geometry("+%d+%d" % (windowWidth, windowHeight))
 
 # Otherwise window size is 800x600
 else:
