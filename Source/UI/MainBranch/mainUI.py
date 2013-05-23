@@ -3,6 +3,7 @@
 ## Imports
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 import datetime
 
 ## Initialise NoteApp class
@@ -11,8 +12,9 @@ class NoteApp:
 	## Constructor
 	def __init__ (self, master):
 
-		# Initialise log
-		Log.init(self)
+		# Initialise log at log.txt
+		self.logLocation = "log.txt"
+		self.Log = logFile(self.logLocation)
 
 		# Initialise variables
 		self.openLocation = None
@@ -22,8 +24,9 @@ class NoteApp:
 		# Initialise show variables
 		self.showFormFrame = True
 		self.showMenuBar = True
+		self.showTabBar = False
 
-		Log.write(self,"\tInitialised variables")
+		self.Log.write(self.logLocation, "\tInitialised variables")
 
 		# Initialise tab stuff
 		tabs = list()
@@ -46,16 +49,15 @@ class NoteApp:
 			self.fileOpsFrame = Frame()
 			self.fileOpsFrame.pack(fill = X, side = BOTTOM)
 
-			# Create tabs frame to go inside level 2 frame
-			self.tabFrame = Frame(self.fileOpsFrame)
-			self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
+			if self.showTabBar == True:		
+				# Create tabs frame to go inside level 2 frame
+				self.tabFrame = Frame(self.fileOpsFrame)
+				self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
 
 		# Create text box in textFrame
-		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5)
+		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5, wrap = "word")
 		self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
-
-		# Run function to initialise text tags
-		#initialiseTags()
+		self.textBox.focus_set()
 
 		# Create scrollbar in textFrame
 		self.textScrollBar = Scrollbar(self.textFrame, width = 16)
@@ -88,20 +90,24 @@ class NoteApp:
 			self.quitButton = Button(self.fileOpsFrame, text = "Quit", font = ("DejaVu Sans", "8", "normal"), command = self.Quit)
 			self.quitButton.pack(side = RIGHT)
 
+			self.newButton = Button(self.fileOpsFrame, text = "New", font = ("DejaVu Sans", "8", "normal"), command = self.New)
+			self.newButton.pack(side = RIGHT)
+
 			self.openButton = Button(self.fileOpsFrame, text = "Open", font = ("DejaVu Sans", "8", "normal"), command = self.askLocation)
 			self.openButton.pack(side = RIGHT)
 
 			self.saveButton = Button(self.fileOpsFrame, text = "Save", font = ("DejaVu Sans", "8", "normal"), command = self.saveFile)
 			self.saveButton.pack(side = RIGHT)
 
-			# Tabs
-			self.tabLeftButton = Button(self.tabFrame, text = "<", width = 0, font = ("DejaVu Sans", "8", "normal"))
-			self.tabLeftButton.pack(side = LEFT)
+			if self.showTabBar == True:
+				# Tabs
+				self.tabLeftButton = Button(self.tabFrame, text = "<", width = 0, font = ("DejaVu Sans", "8", "normal"))
+				self.tabLeftButton.pack(side = LEFT)
 
-			## TABS GO HERE
+				## TABS GO HERE
 
-			self.tabRightButton = Button(self.tabFrame, text = ">", width = 0, font = ("DejaVu Sans", "8", "normal"))
-			self.tabRightButton.pack(side = RIGHT)
+				self.tabRightButton = Button(self.tabFrame, text = ">", width = 0, font = ("DejaVu Sans", "8", "normal"))
+				self.tabRightButton.pack(side = RIGHT)
 
 	# Ask for location and open file
 	def askLocation(self):
@@ -115,14 +121,14 @@ class NoteApp:
 			# If the filename is a blank string
 			if openLocation == "":
 				# Return exception here - new window saying "No file selected"
-				Log.write(self, "\tNo location selected to open")
+				self.Log.write(self.logLocation, "\tNo location selected to open")
 
 			else:
 				# Open inputFile
 				self.inputFile = open (openLocation, "r")
 
 				logString = "\tOpening " + openLocation
-				Log.write(self, logString)
+				self.Log.write(self.logLocation, logString)
 
 				# Clear self.textBox
 				self.textBox.delete(1.0,END)
@@ -144,13 +150,12 @@ class NoteApp:
 						index = str(lineNumber) + "." + str(lineBufferLen[n])
 						self.textBox.insert(index,lineBuffer[n])
 
-					logString = logString + "\n\tWrote line " + str(lineNumber) + " to self.textBox"
-
 					lineNumber += 1
 
-				Log.write(self, logString)
+				logString = "\tWrote lines 1-" + str(lineNumber-1) + " to self.textBox"
+				self.Log.write(self.logLocation, logString)
 				logString = "\tCompleted writing contents of " + openLocation + " to self.textBox"
-				Log.write(self, logString)
+				self.Log.writeNoTimestamp(self.logLocation, logString)
 
 		# Check to see whether contents of self.textBox are "\n" - ie empty
 		if self.textBox.get(1.0,END) == "\n":
@@ -158,7 +163,7 @@ class NoteApp:
 			openFile(self)
 
 		else:
-			saveyn = askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
+			saveyn = messagebox.askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
 
 			if saveyn == True:
 
@@ -173,44 +178,76 @@ class NoteApp:
 	# Save current file
 	def saveFile(self):
 		pass
-	
-	# Initialise textBox's tage
-	def initialiseTags(self):
-		#textBox.tag_config()
+
+	# Create new note
+	def New(self):
 		pass
 
+	# Hide and show tab bar
+	def tabHideShow(self):
+		if self.showTabBar == True:
+			self.showTabBar = False
+		elif self.showTabBar == False:
+			self.showTabBar = True
+		else:
+			logString = "\tself.showTabBar was not True or False."
+			self.Log.write(self.logLocation, logString)
+
+		if self.showTabBar == True:
+
+			# Create tabs frame to go inside level 2 frame
+			self.tabFrame = Frame(self.fileOpsFrame)
+			self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
+
+			# Tabs
+			self.tabLeftButton = Button(self.tabFrame, text = "<", width = 0, font = ("DejaVu Sans", "8", "normal"))
+			self.tabLeftButton.pack(side = LEFT)
+
+			## TABS GO HERE
+
+			self.tabRightButton = Button(self.tabFrame, text = ">", width = 0, font = ("DejaVu Sans", "8", "normal"))
+			self.tabRightButton.pack(side = RIGHT)
+		else:
+			# Remove/hide self.tabFrame
+			self.tabFrame.destroy()
+
+
+	# Quit
 	def Quit(self):
+		self.Log.close(self.logLocation)
 		Quit(self)
 
 ## Log function
-def Log():
+class logFile:
 	# Initialise function
-	def init(self):
-		self.logFile = open("log.txt", "w+")
+	def __init__(self, logLocation):
+		self.logFileFile = open(logLocation, "w+")
 		now = datetime.datetime.now()
-		self.logFile.write("Time of log creation: " + str(now))
+		self.logFileFile.write("Time of log creation: " + str(now))
+		self.logFileFile.close()
 
 	# Write function
-	def write(self, string):
+	def write(self, logLocation, string):
+		self.logFileFile = open(logLocation, "a")
 		now = datetime.datetime.now()
-		self.logFile.write("\n\nAt " + str(now) + ":\n" + string)
+		self.logFileFile.write("\n\nAt " + str(now) + ":\n" + string)
+		self.logFileFile.close()
+
+	# WriteNoTimestamp function
+	def writeNoTimestamp(self, logLocation, string):
+		self.logFileFile = open(logLocation, "a")
+		self.logFileFile.write("\n\n" + string)
+		self.logFileFile.close()
 
 	# Close function
-	def close(self):
+	def close(self, logLocation):
+		self.logFileFile = open(logLocation, "a")
 		now = datetime.datetime.now()
-		self.logFile.write("\n\nAt " + str(now) + ":\n\t" + "Closing log file")
-
-	# Return stuff
-	Log.init = init
-	Log.write = write
-	Log.close = close
-	return Log
-
-Log = Log()
+		self.logFileFile.write("\n\nAt " + str(now) + ":\n\t" + "Closing log file and exiting")
+		self.logFileFile.close()
 
 ## Quit function - does anything needed before quitting
 def Quit(self):
-	Log.close(self)
 	root.quit()
 
 ## STARTING
