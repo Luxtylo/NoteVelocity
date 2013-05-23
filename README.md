@@ -1,12 +1,14 @@
-Note-taking project
+NoteVelocity
 ===================
+A note-taking program
+---------------------
 
-An EPQ project for designing and making a note-taking program for university and A-level students. My aim is to have syntax like markdown and Python, but functionality like LaTeX.
+This is an EPQ (Extended Project Qualification) project for designing and making a note-taking program for university and A-level students. My aim is to have syntax like markdown and Python, but functionality like LaTeX.
 Made using *Python* and *Tkinter*.
 
-UI is currently **less than semi-functional**
+UI is currently **not particularly good in looks or function**
 
-Function is currently **WIP**
+Function is currently **Good, but needs to be updated to work with UI**
 
 *Source/Functionality/Syntax.txt* describes syntax. It is also available in *Source/Functionality/Notes/Syntax.note*
 
