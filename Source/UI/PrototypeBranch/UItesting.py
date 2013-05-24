@@ -19,24 +19,24 @@ class NoteApp:
 		# Initialise variables
 		self.openLocation = None
 		self.inputFile = None
-		self.outputFile = None
+		self.outputFilename = None
 
 		# Initialise show variables
 		self.showFormFrame = True
 		self.showMenuBar = True
 		self.showTabBar = False
 
-		self.Log.write(self.logLocation, "\tInitialised variables")
+		self.Log.write("\tInitialised variables")
 
 		# Initialise tab stuff
 		tabs = list()
 
 		# Create upper level 2 frame (Text + Formatting)
-		self.textFormFrame = Frame(bg = "#FF0000")
+		self.textFormFrame = Frame()
 		self.textFormFrame.pack(fill = BOTH, side = TOP, expand = 1)
 
 		# Create left level 3 frame (Text)
-		self.textFrame = Frame(self.textFormFrame, bg = "#FF8800")
+		self.textFrame = Frame(self.textFormFrame)
 		self.textFrame.pack(fill = BOTH, expand = 1, side = LEFT)
 
 		if self.showFormFrame == True:
@@ -119,19 +119,23 @@ class NoteApp:
 			openLocation = filedialog.askopenfilename(filetypes = (("Note files","*.note"),("Text files","*.txt")))
 
 			# If the filename is a blank string
-			if openLocation == "":
+			if openLocation == "" or str(openLocation) == "()":
 				# Return exception here - new window saying "No file selected"
-				self.Log.write(self.logLocation, "\tNo location selected to open")
+				self.Log.write("\tNo location selected to open")
 
 			else:
 				# Open inputFile
 				self.inputFile = open (openLocation, "r")
+				root.title(openLocation + " - NoteVelocity")
 
 				logString = "\tOpening " + openLocation
-				self.Log.write(self.logLocation, logString)
+				self.Log.write(logString)
 
 				# Clear self.textBox
 				self.textBox.delete(1.0,END)
+
+				# Set self.outputFilename to openLocation
+				self.outputFilename = openLocation
 
 				# Initialise lineNumber
 				lineNumber = 1
@@ -152,10 +156,11 @@ class NoteApp:
 
 					lineNumber += 1
 
+				# Log insertions
 				logString = "\tWrote lines 1-" + str(lineNumber-1) + " to self.textBox"
-				self.Log.write(self.logLocation, logString)
+				self.Log.write(logString)
 				logString = "\tCompleted writing contents of " + openLocation + " to self.textBox"
-				self.Log.writeNoTimestamp(self.logLocation, logString)
+				self.Log.writeNoTimestamp(logString)
 
 		# Check to see whether contents of self.textBox are "\n" - ie empty
 		if self.textBox.get(1.0,END) == "\n":
@@ -177,11 +182,71 @@ class NoteApp:
 
 	# Save current file
 	def saveFile(self):
-		pass
+		# Will probably need elaboration after replacements have been added
+		# If outputFilename hasn't been set, use saveAsFile instead, and log
+		if self.outputFilename is None:
+			self.saveAsFile()
+			self.Log.write("\tNo output file set. Using save as instead.")
+
+		# Otherwise get textBox contents, open outputFile, write, close and log
+		else:
+			textToSave = self.textBox.get(1.0, END)
+			outputFile = open(self.outputFilename, "w+")
+			outputFile.write(textToSave)
+			outputFile.close()
+			self.Log.write("\tWrote contents of self.textBox to " + outputFilename)
+
+	def saveAsFile(self):
+		# Get save filename
+		self.outputFilename = filedialog.asksaveasfilename(defaultextension = "*.note", filetypes = (("Note File","*.note"), ("Text File", "*.txt")))
+
+		# Catch empty outputFilenames
+		if self.outputFilename == "" or str(self.outputFilename) == "()":
+			self.Log.write("\tNo save location selected")
+
+		# Otherwise save textbox
+		else:
+			# Get textbox contents
+			textToSave = self.textBox.get(1.0, END)
+
+			# Open outputfile, write, close and log
+			outputFile = open(self.outputFilename, "w+")
+			outputFile.write(textToSave)
+			outputFile.close()
+			self.Log.write("\tFile saved at " + self.outputFilename)
 
 	# Create new note
 	def New(self):
-		pass
+
+		def newFile(self):
+			# Set new window title
+			root.title("New Note - NoteVelocity")
+
+			# Delete contents of self.textbox, and write new note to log
+			self.textBox.delete(1.0, END)
+			self.Log.write("\tNew note")
+
+			# Reset input and output files
+			self.inputFile = None
+			self.outputFilename = None
+
+		# Check to see whether contents of self.textBox are "\n" - ie empty
+		if self.textBox.get(1.0, END) == "\n":
+
+			newFile(self)
+
+		else:
+			saveyn = messagebox.askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
+
+			if saveyn == True:
+
+				# Run self.saveFile, then make a new file
+				self.saveFile(self)
+				newFile(self)
+
+			else:
+				# Open file
+				newFile(self)
 
 	# Hide and show tab bar
 	def tabHideShow(self):
@@ -191,7 +256,7 @@ class NoteApp:
 			self.showTabBar = True
 		else:
 			logString = "\tself.showTabBar was not True or False."
-			self.Log.write(self.logLocation, logString)
+			self.Log.write(logString)
 
 		if self.showTabBar == True:
 
@@ -214,34 +279,36 @@ class NoteApp:
 
 	# Quit
 	def Quit(self):
-		self.Log.close(self.logLocation)
+		self.Log.close()
 		Quit(self)
 
 ## Log function
 class logFile:
+
 	# Initialise function
 	def __init__(self, logLocation):
 		self.logFileFile = open(logLocation, "w+")
 		now = datetime.datetime.now()
 		self.logFileFile.write("Time of log creation: " + str(now))
 		self.logFileFile.close()
+		self.location = logLocation
 
 	# Write function
-	def write(self, logLocation, string):
-		self.logFileFile = open(logLocation, "a")
+	def write(self, string):
+		self.logFileFile = open(self.location, "a")
 		now = datetime.datetime.now()
 		self.logFileFile.write("\n\nAt " + str(now) + ":\n" + string)
 		self.logFileFile.close()
 
 	# WriteNoTimestamp function
-	def writeNoTimestamp(self, logLocation, string):
-		self.logFileFile = open(logLocation, "a")
+	def writeNoTimestamp(self, string):
+		self.logFileFile = open(self.location, "a")
 		self.logFileFile.write("\n\n" + string)
 		self.logFileFile.close()
 
 	# Close function
-	def close(self, logLocation):
-		self.logFileFile = open(logLocation, "a")
+	def close(self):
+		self.logFileFile = open(self.location, "a")
 		now = datetime.datetime.now()
 		self.logFileFile.write("\n\nAt " + str(now) + ":\n\t" + "Closing log file and exiting")
 		self.logFileFile.close()
@@ -256,7 +323,7 @@ def Quit(self):
 root = Tk()
 
 # Root widget properties
-root.title("New Note") # Title in window title bar
+root.title("New Note - NoteVelocity") # Title in window title bar
 root.minsize(640,400) # Minimum size of window
 root.grid_columnconfigure(0, weight = 1)
 root.grid_columnconfigure(2, weight = 0)
