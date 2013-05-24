@@ -1,27 +1,7 @@
-Time of log creation: 2013-05-24 16:50:52.952992
+Time of log creation: 2013-05-24 19:47:55.233155
 
-At 2013-05-24 16:50:52.953686:
+At 2013-05-24 19:47:55.234442:
 	Initialised variables
 
-At 2013-05-24 16:50:55.474367:
-	Opening /home/george/NoteVelocity/Source/UI/PrototypeBranch/ExampleNote.note
-
-At 2013-05-24 16:50:55.481472:
-	Wrote lines 1-7 to self.textBox
-
-	Completed writing contents of /home/george/NoteVelocity/Source/UI/PrototypeBranch/ExampleNote.note to self.textBox
-
-At 2013-05-24 16:51:16.641179:
-	Wrote contents of self.textBox to /home/george/NoteVelocity/Source/UI/PrototypeBranch/ExampleNote.note
-
-At 2013-05-24 16:51:34.260338:
-	New note
-
-At 2013-05-24 16:54:00.622371:
-	File saved at /home/george/NoteVelocity/Source/UI/PrototypeBranch/test.txt
-
-At 2013-05-24 16:54:00.622948:
-	No output file set. Using save as instead.
-
-At 2013-05-24 16:54:03.323647:
+At 2013-05-24 19:51:53.009549:
 	Closing log file and exiting
