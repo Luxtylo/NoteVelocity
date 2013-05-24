@@ -173,7 +173,7 @@ class NoteApp:
 			if saveyn == True:
 
 				# Run self.saveFile, then open file
-				self.saveFile(self)
+				self.saveFile()
 				openFile(self)
 
 			else:
@@ -194,7 +194,7 @@ class NoteApp:
 			outputFile = open(self.outputFilename, "w+")
 			outputFile.write(textToSave)
 			outputFile.close()
-			self.Log.write("\tWrote contents of self.textBox to " + outputFilename)
+			self.Log.write("\tWrote contents of self.textBox to " + self.outputFilename)
 
 	def saveAsFile(self):
 		# Get save filename

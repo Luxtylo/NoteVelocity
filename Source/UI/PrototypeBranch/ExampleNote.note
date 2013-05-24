@@ -1,12 +1,5 @@
-<This is a note>
-	At the moment, the formatting *will not work*
-
-	So this is a _thing_.
-
-	More lines needed to show off
-	Shall I try to get to double digit line numbers?
-
-Top level thing again
-	* Lower level
-		* Even lower level
-	Well, that was interesting.
+<This is an example>
+	* Bullet point
+	*Italic? Italic.*
+Back to the main level.
+	_Underlined text_ is <very important>
