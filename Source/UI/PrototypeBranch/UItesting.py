@@ -4,6 +4,9 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import ttk
+from tkinter.font import Font
+import os
 import datetime
 
 ## Initialise NoteApp class
@@ -26,41 +29,53 @@ class NoteApp:
 		self.showMenuBar = True
 		self.showTabBar = False
 
-		self.Log.write("\tInitialised variables")
+		# Initialise styles
+		self.styleMode = 0
+		self.initStyles()
 
 		# Initialise tab stuff
 		tabs = list()
 
+		# Initialise key bindings
+		self.keyBindings(master)
+
+		self.Log.write("\tInitialised variables, styles and keybindings")		
+
 		# Create upper level 2 frame (Text + Formatting)
-		self.textFormFrame = Frame()
+		self.textFormFrame = ttk.Frame()
 		self.textFormFrame.pack(fill = BOTH, side = TOP, expand = 1)
 
 		# Create left level 3 frame (Text)
-		self.textFrame = Frame(self.textFormFrame)
+		self.textFrame = ttk.Frame(self.textFormFrame)
 		self.textFrame.pack(fill = BOTH, expand = 1, side = LEFT)
 
 		if self.showFormFrame == True:
 			# Create right level 3 frame (Formatting)
-			self.formFrame = Frame(self.textFormFrame)
+			self.formFrame = ttk.Frame(self.textFormFrame, style = "FS.TFrame")
 			self.formFrame.pack(fill = Y, side = RIGHT)
 
 		# Create lower level 2 frame (File ops)
 		if self.showMenuBar == True:
-			self.fileOpsFrame = Frame()
+			self.fileOpsFrame = ttk.Frame(style = "FS.TFrame")
 			self.fileOpsFrame.pack(fill = X, side = BOTTOM)
 
 			if self.showTabBar == True:		
 				# Create tabs frame to go inside level 2 frame
-				self.tabFrame = Frame(self.fileOpsFrame)
+				self.tabFrame = ttk.Frame(self.fileOpsFrame, style = "FS.TFrame")
 				self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
 
 		# Create text box in textFrame
-		self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5, wrap = "word")
-		self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
-		self.textBox.focus_set()
+		if self.styleMode == 0:
+			self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5, wrap = "word")
+			self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
+			self.textBox.focus_set()
+		elif self.styleMode == 1:
+			self.textBox = Text(self.textFrame, bg = "#404040", fg = "#FFFFFF", insertbackground = "#DDDDDD", padx = 5, pady = 5, wrap = "word")
+			self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
+			self.textBox.focus_set()
 
 		# Create scrollbar in textFrame
-		self.textScrollBar = Scrollbar(self.textFrame, width = 16)
+		self.textScrollBar = ttk.Scrollbar(self.textFrame, style = "SB.Vertical.TScrollbar")
 		self.textScrollBar.pack(fill = Y, side = RIGHT)
 
 		# Link scrollbar and text box
@@ -69,45 +84,48 @@ class NoteApp:
 
 		if self.showFormFrame == True:
 			# Create formatting buttons in formFrame
-			self.boldButton = Button(self.formFrame, text = "<B>", width = 1, font = ("DejaVu Sans", "8", "normal"))
-			self.boldButton.pack(side = TOP)
-			self.boldButton.bind('<Enter>', lambda event: self.boldButton.configure(text = "B", font = ("DejaVu Sans", "8", "bold")))
-			self.boldButton.bind('<Leave>', lambda event: self.boldButton.configure(text = "<B>", font = ("DejaVu Sans", "8", "normal")))
+			self.boldButton = ttk.Button(self.formFrame, text = "<B>", width = 4, style = "FB.TButton")
+			self.boldButton.pack(side = TOP, expand = 0, fill = X)
+			self.boldButton.bind("<Enter>", lambda event: self.boldButton.configure(style = "FOB.TButton"))
+			self.boldButton.bind("<Leave>", lambda event: self.boldButton.configure(style = "FB.TButton"))
 
-			self.italicButton = Button(self.formFrame, text = "*I*", width = 1, font = ("DejaVu Sans", "8", "normal"))
-			self.italicButton.pack(side = TOP)
-			self.italicButton.bind('<Enter>', lambda event: self.italicButton.configure(text = "I", font = ("DejaVu Sans", "8", "italic")))
-			self.italicButton.bind('<Leave>', lambda event: self.italicButton.configure(text = "*I*", font = ("DejaVu Sans", "8", "normal")))
+			self.italicButton = ttk.Button(self.formFrame, text = "*I*", width = 4, style = "FB.TButton")
+			self.italicButton.pack(side = TOP, expand = 0, fill = X)
 
-			self.underlineButton = Button(self.formFrame, text = "_U_", width = 1, font = ("DejaVu Sans", "8", "normal"))
-			self.underlineButton.pack(side = TOP)
-			self.underlineButton.bind('<Enter>', lambda event: self.underlineButton.configure(text = "U", font = ("DejaVu Sans", "8", "underline")))
-			self.underlineButton.bind('<Leave>', lambda event: self.underlineButton.configure(text = "_U_", font = ("DejaVu Sans", "8", "normal")))
+			self.underlineButton = ttk.Button(self.formFrame, text = "_U_", width = 4, style = "FB.TButton")
+			self.underlineButton.pack(side = TOP, expand = 0, fill = X)
 
 		if self.showMenuBar == True:
 			# Create file operation buttons in fileOpsFrame
 
-			self.quitButton = Button(self.fileOpsFrame, text = "Quit", font = ("DejaVu Sans", "8", "normal"), command = self.Quit)
+			self.quitButton = ttk.Button(self.fileOpsFrame, text = "Quit", width = 6, command = self.Quit, style = "FOB.TButton")
 			self.quitButton.pack(side = RIGHT)
 
-			self.newButton = Button(self.fileOpsFrame, text = "New", font = ("DejaVu Sans", "8", "normal"), command = self.New)
-			self.newButton.pack(side = RIGHT)
-
-			self.openButton = Button(self.fileOpsFrame, text = "Open", font = ("DejaVu Sans", "8", "normal"), command = self.askLocation)
+			self.openButton = ttk.Button(self.fileOpsFrame, text = "Open", width = 6, command = self.askLocation, style = "FOB.TButton")
 			self.openButton.pack(side = RIGHT)
+			self.openButton.bind("<Shift-Enter>", lambda event: self.openButton.configure(text = "New", command = self.New))
+			self.openButton.bind("<Shift-Leave>", lambda event: self.openButton.configure(text = "Open", command = self.askLocation))
+			self.openButton.bind("<Enter>", lambda event: self.openButton.configure(text = "Open", command = self.askLocation))
+			self.openButton.bind("<Leave>", lambda event: self.openButton.configure(text = "Open", command = self.askLocation))
 
-			self.saveButton = Button(self.fileOpsFrame, text = "Save", font = ("DejaVu Sans", "8", "normal"), command = self.saveFile)
+			self.saveButton = ttk.Button(self.fileOpsFrame, text = "Save", width = 6, command = self.saveFile, style = "FOB.TButton")
 			self.saveButton.pack(side = RIGHT)
+			self.saveButton.bind("<Shift-Enter>", lambda event: self.saveButton.configure(text = "Save As", command = self.saveAsFile))
+			self.saveButton.bind("<Shift-Leave>", lambda event: self.saveButton.configure(text = "Save", command = self.saveFile))
+			self.saveButton.bind("<Alt-Enter>", lambda event: self.saveButton.configure(text = "Rename", command = self.renameFile))
+			self.saveButton.bind("<Alt-Leave>", lambda event: self.saveButton.configure(text = "Save", command = self.saveFile))
+			self.saveButton.bind("<Enter>", lambda event: self.saveButton.configure(text = "Save", command = self.saveFile))
+			self.saveButton.bind("<Leave>", lambda event: self.saveButton.configure(text = "Save", command = self.saveFile))
 
 			if self.showTabBar == True:
 				# Tabs
-				self.tabLeftButton = Button(self.tabFrame, text = "<", width = 0, font = ("DejaVu Sans", "8", "normal"))
+				self.tabLeftButton = ttk.Button(self.tabFrame, text = "<", width = 0)
 				self.tabLeftButton.pack(side = LEFT)
 
 				## TABS GO HERE
 
-				self.tabRightButton = Button(self.tabFrame, text = ">", width = 0, font = ("DejaVu Sans", "8", "normal"))
-				self.tabRightButton.pack(side = RIGHT)
+				self.tabRightButton = ttk.Button(self.tabFrame, text = ">", width = 0)
+				self.tabRightButton.pack(side = RIGHT)#
 
 	# Ask for location and open file
 	def askLocation(self):
@@ -116,26 +134,26 @@ class NoteApp:
 		def openFile(self):
 
 			# Run open dialog box to get filename
-			openLocation = filedialog.askopenfilename(filetypes = (("Note files","*.note"),("Text files","*.txt")))
+			self.openLocation = filedialog.askopenfilename(filetypes = (("Note files","*.note"),("Text files","*.txt")))
 
 			# If the filename is a blank string
-			if openLocation == "" or str(openLocation) == "()":
+			if self.openLocation == "" or str(self.openLocation) == "()":
 				# Return exception here - new window saying "No file selected"
 				self.Log.write("\tNo location selected to open")
 
 			else:
 				# Open inputFile
-				self.inputFile = open (openLocation, "r")
-				root.title(openLocation + " - NoteVelocity")
+				self.inputFile = open (self.openLocation, "r")
+				root.title(self.openLocation + " - NoteVelocity")
 
-				logString = "\tOpening " + openLocation
+				logString = "\tOpening " + self.openLocation
 				self.Log.write(logString)
 
 				# Clear self.textBox
 				self.textBox.delete(1.0,END)
 
 				# Set self.outputFilename to openLocation
-				self.outputFilename = openLocation
+				self.outputFilename = self.openLocation
 
 				# Initialise lineNumber
 				lineNumber = 1
@@ -159,15 +177,17 @@ class NoteApp:
 				# Log insertions
 				logString = "\tWrote lines 1-" + str(lineNumber-1) + " to self.textBox"
 				self.Log.write(logString)
-				logString = "\tCompleted writing contents of " + openLocation + " to self.textBox"
+				logString = "\tCompleted writing contents of " + self.openLocation + " to self.textBox"
 				self.Log.writeNoTimestamp(logString)
 
 		# Check to see whether contents of self.textBox are "\n" - ie empty
-		if self.textBox.get(1.0,END) == "\n":
+		textBoxContents = self.textBox.get(1.0,END)
+		if textBoxContents == "\n" or textBoxContents == "" or textBoxContents == "\n\n" or textBoxContents == "\n\n":
 
 			openFile(self)
 
 		else:
+			print(textBoxContents)
 			saveyn = messagebox.askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
 
 			if saveyn == True:
@@ -184,7 +204,7 @@ class NoteApp:
 	def saveFile(self):
 		# Will probably need elaboration after replacements have been added
 		# If outputFilename hasn't been set, use saveAsFile instead, and log
-		if self.outputFilename is None:
+		if self.outputFilename is None or self.outputFilename == "" or str(self.outputFilename) == "()":
 			self.saveAsFile()
 			self.Log.write("\tNo output file set. Using save as instead.")
 
@@ -196,6 +216,7 @@ class NoteApp:
 			outputFile.close()
 			self.Log.write("\tWrote contents of self.textBox to " + self.outputFilename)
 
+	# Save current file as
 	def saveAsFile(self):
 		# Get save filename
 		self.outputFilename = filedialog.asksaveasfilename(defaultextension = "*.note", filetypes = (("Note File","*.note"), ("Text File", "*.txt")))
@@ -214,6 +235,28 @@ class NoteApp:
 			outputFile.write(textToSave)
 			outputFile.close()
 			self.Log.write("\tFile saved at " + self.outputFilename)
+
+	# Rename current file
+	def renameFile(self):
+		# Get save filename
+		self.outputFilename = filedialog.asksaveasfilename(defaultextension = "*.note", filetypes = (("Note File","*.note"), ("Text File", "*.txt")))
+
+		# Catch empty outputFilenames
+		if self.outputFilename == "" or str(self.outputFilename) == "()":
+			self.Log.write("\tNo save location selected")
+
+		# Otherwise rename file
+		else:
+			# Get textbox contents
+			textToSave = self.textBox.get(1.0, END)
+
+			# Open outputfile, write, close and log
+			outputFile = open(self.outputFilename, "w+")
+			outputFile.write(textToSave)
+			outputFile.close()
+			self.Log.write("\tFile renamed to " + self.outputFilename)
+			root.title(self.outputFilename + " - NoteVelocity")
+			os.remove(self.openLocation)
 
 	# Create new note
 	def New(self):
@@ -276,6 +319,73 @@ class NoteApp:
 			# Remove/hide self.tabFrame
 			self.tabFrame.destroy()
 
+	# Initialise styles
+	def initStyles(self):
+		
+		if self.styleMode == 0:
+			# Formatting buttons
+			self.formButtonFont = Font(family = "DejaVu Sans", size = 8)
+			self.formatButtonStyle = ttk.Style()
+			self.formatButtonStyle.configure("FB.TButton", font = self.formButtonFont, foreground = "#202020", background = "#EEEEEE")
+
+			# FileOps buttons
+			self.fileButtonFont = Font(family = "DejaVu Sans", size = 8)
+			self.fileOpsButtonStyle = ttk.Style()
+			self.fileOpsButtonStyle.configure("FOB.TButton", font = self.fileButtonFont, foreground = "#202020", background = "#EEEEEE")
+
+			# Frames
+			self.frameStyle = ttk.Style()
+			self.frameStyle.configure("FS.TFrame", background = "#DDDDDD")
+
+			# ScrollBar
+			self.scrollBarStyle = ttk.Style()
+			self.scrollBarStyle.configure("SB.Vertical.TScrollbar", background = "#DDDDDD", arrowsize = 12)
+
+		elif self.styleMode == 1:
+			# Formatting buttons
+			self.formButtonFont = Font(family = "DejaVu Sans", size = 8)
+			self.formatButtonStyle = ttk.Style()
+			self.formatButtonStyle.configure("FB.TButton", font = self.formButtonFont, foreground = "#EEEEEE", background = "#202020")
+
+			# FileOps buttons
+			self.fileButtonFont = Font(family = "DejaVu Sans", size = 8)
+			self.fileOpsButtonStyle = ttk.Style()
+			self.fileOpsButtonStyle.configure("FOB.TButton", font = self.fileButtonFont, foreground = "#EEEEEE", background = "#202020")
+
+			# Frames
+			self.frameStyle = ttk.Style()
+			self.frameStyle.configure("FS.TFrame", background = "#101010")
+
+			# ScrollBar
+			self.scrollBarStyle = ttk.Style()
+			self.scrollBarStyle.configure("SB.Vertical.TScrollbar", background = "#151515", arrowsize = 12)
+
+		else:
+			self.Log.write("Style initialisation mode out of expected range")
+
+	# Initialise keybindings
+	def keyBindings(self, master):
+		# Bind Control-O to Open
+		master.bind("<Control-o>", lambda event: self.askLocation())
+
+		# Bind Control-Shift-O and Control-N to New
+		master.bind("<Control-O>", lambda event: self.New())
+		master.bind("<Control-N>", lambda event: self.New())
+
+		# Bind Control-S to Save
+		master.bind("<Control-s>", lambda event: self.saveFile())
+
+		# Bind Control-Shift-S to Save As
+		master.bind("<Control-S>", lambda event: self.saveAsFile())
+
+		# Bind Control-Alt-S to Rename
+		master.bind("<Control-Alt-s>", lambda event: self.renameFile())
+
+		# Bind Control-Alt-T to TabHideShow
+		master.bind("<Control-Alt-t>", lambda event: self.tabHideShow())
+
+		# Bind Control-w and Control-q to root.quit
+		master.bind("<Control-q>", lambda event: self.Quit())
 
 	# Quit
 	def Quit(self):
