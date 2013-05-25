@@ -32,13 +32,13 @@ class NoteApp:
 		# Initialise styles
 		self.initStyles()
 
-		# Initialise keybindings
-		self.keyBindings()
-
-		self.Log.write("\tInitialised variables")
-
 		# Initialise tab stuff
 		tabs = list()
+
+		# Initialise key bindings
+		self.keyBindings(master)
+
+		self.Log.write("\tInitialised variables, styles and keybindings")		
 
 		# Create upper level 2 frame (Text + Formatting)
 		self.textFormFrame = Frame()
@@ -119,7 +119,7 @@ class NoteApp:
 				## TABS GO HERE
 
 				self.tabRightButton = ttk.Button(self.tabFrame, text = ">", width = 0)
-				self.tabRightButton.pack(side = RIGHT)
+				self.tabRightButton.pack(side = RIGHT)#
 
 	# Ask for location and open file
 	def askLocation(self):
@@ -138,7 +138,7 @@ class NoteApp:
 			else:
 				# Open inputFile
 				self.inputFile = open (self.openLocation, "r")
-				root.title(openLocation + " - NoteVelocity")
+				root.title(self.openLocation + " - NoteVelocity")
 
 				logString = "\tOpening " + self.openLocation
 				self.Log.write(logString)
@@ -175,11 +175,13 @@ class NoteApp:
 				self.Log.writeNoTimestamp(logString)
 
 		# Check to see whether contents of self.textBox are "\n" - ie empty
-		if self.textBox.get(1.0,END) == "\n":
+		textBoxContents = self.textBox.get(1.0,END)
+		if textBoxContents == "\n" or textBoxContents == "" or textBoxContents == "\n\n" or textBoxContents == "\n\n":
 
 			openFile(self)
 
 		else:
+			print(textBoxContents)
 			saveyn = messagebox.askyesno("File Open","There is text entered.\nWould you like to save it before opening another?")
 
 			if saveyn == True:
@@ -324,8 +326,29 @@ class NoteApp:
 		self.fileOpsButtonStyle.configure("FOB.TButton", font = self.fileButtonFont, foreground = "#202020", background = "#EEEEEE")
 
 	# Initialise keybindings
-	def keyBindings(self):
-		pass
+	def keyBindings(self, master):
+		# Bind Control-O to Open
+		master.bind("<Control-o>", lambda event: self.askLocation())
+
+		# Bind Control-Shift-O and Control-N to New
+		master.bind("<Control-O>", lambda event: self.New())
+		master.bind("<Control-N>", lambda event: self.New())
+
+		# Bind Control-S to Save
+		master.bind("<Control-s>", lambda event: self.SaveFile())
+
+		# Bind Control-Shift-S to Save As
+		master.bind("<Control-S>", lambda event: self.SaveAsFile())
+
+		# Bind Control-Alt-S to Rename
+		master.bind("<Control-Alt-s>", lambda event: self.renameFile())
+
+		# Bind Control-Alt-T to TabHideShow
+		master.bind("<Control-Alt-t>", lambda event: self.tabHideShow())
+
+		# Bind Control-w and Control-q to root.quit
+		master.bind("<Control-w>", lambda event: self.Quit())
+		master.bind("<Control-q>", lambda event: self.Quit())
 
 	# Quit
 	def Quit(self):
