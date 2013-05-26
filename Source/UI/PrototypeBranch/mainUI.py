@@ -66,11 +66,11 @@ class NoteApp:
 
 		# Create text box in textFrame
 		if self.styleMode == 0:
-			self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 5, pady = 5, wrap = "word")
+			self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 10, pady = 10, wrap = "word")
 			self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
 			self.textBox.focus_set()
 		elif self.styleMode == 1:
-			self.textBox = Text(self.textFrame, bg = "#404040", fg = "#FFFFFF", insertbackground = "#DDDDDD", padx = 5, pady = 5, wrap = "word")
+			self.textBox = Text(self.textFrame, bg = "#404040", fg = "#FFFFFF", insertbackground = "#DDDDDD", padx = 10, pady = 10, wrap = "word")
 			self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
 			self.textBox.focus_set()
 
@@ -118,13 +118,14 @@ class NoteApp:
 			self.saveButton.bind("<Leave>", lambda event: self.saveButton.configure(text = "Save", command = self.saveFile))
 
 			if self.showTabBar == True:
-				# Tabs
-				self.tabLeftButton = ttk.Button(self.tabFrame, text = "<", width = 0)
+				# Tab left button
+				self.tabLeftButton = ttk.Button(self.tabFrame, text = "<", width = 0, style = "FOB.TButton")
 				self.tabLeftButton.pack(side = LEFT)
 
-				## TABS GO HERE
+				# Tabs go here
 
-				self.tabRightButton = ttk.Button(self.tabFrame, text = ">", width = 0)
+				# Tab right button
+				self.tabRightButton = ttk.Button(self.tabFrame, text = ">", width = 0, style = "FOB.TButton")
 				self.tabRightButton.pack(side = RIGHT)#
 
 	# Ask for location and open file
@@ -392,7 +393,7 @@ class NoteApp:
 		self.Log.close()
 		Quit(self)
 
-## Log function
+## Log class
 class logFile:
 
 	# Initialise function
