@@ -15,35 +15,21 @@ class NoteApp:
 	## Constructor
 	def __init__ (self, master):
 
-		# Ttk Notebook code:
-		"""self.tabList = []
-
-		self.noteBook = ttk.Notebook(master, height = 20)
-		self.noteBook.enable_traversal()
-
-		fileName = "blob.txt"
-		self.nextTab = "Tab(master, \"" + fileName + "\")"
-		self.tabList.append(eval(self.nextTab))
-
-		fileName = "Test.note"
-		self.nextTab = "Tab(master, \"" + fileName + "\")"
-		self.tabList.append(eval(self.nextTab))
-
-		self.counter = range(len(self.tabList))
-		for i in self.counter:
-			self.noteBook.add(self.tabList[i], text = self.tabList[i].name)
-
-		self.noteBook.pack(side = TOP, expand = 1, fill = BOTH)"""
-
-		self.upperBox = Frame(master, bg = "#FFFF00")
-		self.upperBox.pack(expand = 1, fill = BOTH)
-
 		self.tabBar = TabBar(master)
 
 		self.tabBar.add("PlaceNameDoodymajig.py")
 		self.tabBar.add("Thingy.py")
+
+		self.updateTextBoxes()
 		
 		self.tabBar.show()
+
+	def updateTextBoxes(self):
+		currentTab = self.tabBar.currentTab
+		previousTab = self.tabBar.previousTab
+
+		self.tabBar.tabList[previousTab].textBox.pack_forget()
+		self.tabBar.tabList[currentTab].textBox.pack(side = TOP, expand = 1, fill = X)		
 
 
 # TabContents class for adding to Tab
@@ -59,12 +45,18 @@ class TabContents(Text):
 class Tab(Frame):
 
 	# Constructor
-	def __init__(self, master, title):
+	def __init__(self, master, title, number):
 
 		# Initialise frame and internal frame
-		Frame.__init__(self, master, bg = "#00FF00", width = "200", height = 24)
+		Frame.__init__(self, master, bg = "#000000", width = "200", height = 24)
 		self.subFrame = Frame()
-		self.subFrame.pack(side = LEFT, padx = 5)
+		self.subFrame.pack(side = LEFT, padx = 5, ipadx = 0, ipady = 2)
+		self.subSubFrame = Frame(self.subFrame)
+		self.subSubFrame.pack(side = LEFT, padx = 2)
+		self.subSubFrame.bind("<Button-1>", lambda event: master.switchToTab(self.Num))
+
+		# Set tab number
+		self.Num = number
 
 		# Set location and title
 		self.location = title
@@ -80,15 +72,17 @@ class Tab(Frame):
 
 		# Create tab's widgets, overlaying them using the place manager
 		# Tab Label
-		self.Label = Label(self.subFrame, text = self.title)
-		self.Label.pack(side = LEFT, expand = 0, fill = X)
+		self.Label = Label(self.subSubFrame, text = self.title)
+		self.Label.pack(side = LEFT, expand = 0, fill = X, padx = 5)
+		self.Label.bind("<Button-1>", lambda event: master.switchToTab(self.Num))
 
 		# Tab close button
-		self.CloseButton = ttk.Button(self.subFrame, text = "X", width = 0)
+		self.CloseButton = ttk.Button(self.subSubFrame, text = "X", width = 0)
 		self.CloseButton.pack(side = RIGHT, expand = 0)
+		self.CloseButton.bind("<Button-1>", lambda event: master.close(self.Num))
 
 		# Tab unsaved indicator
-		self.tabSaved = Frame(self.subFrame, width = 8, height = 8, bg = "#0000FF")
+		self.tabSaved = Frame(self.subSubFrame, width = 8, height = 8, bg = "#00FF00")
 		self.tabSaved.pack(side = RIGHT, padx = 5)
 
 # TabBar Class
@@ -98,7 +92,7 @@ class TabBar(Frame):
 	def __init__(self, master):
 
 		# Initialise frame
-		Frame.__init__(self, master, bg = '#FF0000')
+		Frame.__init__(self, master)
 
 		# Initialise tab list
 		# want to set it so that when you put in the tab number, you get the tab out
@@ -107,22 +101,78 @@ class TabBar(Frame):
 
 		# Initialise other variables
 		self.currentTab = 0
+		self.previousTab = 0
 
 	def show(self):
 		# Pack to bottom. For integration in actual thing, fill should be change to XY.
 		self.pack(side = BOTTOM, expand = 0, fill = X)
 
+		self.currentTab = 0
+		self.switchToTab(0)
+
 	def add(self, tabLocation):
-		# Initialise variable newTab as added Tab instance
-		newTab = Tab(self, tabLocation)
 
 		# Set currentTab to be the last one
 		# New tab will always be at the end
+		self.previousTab = self.currentTab
 		self.currentTab = len(self.tabList)
+
+		# Initialise variable newTab as added Tab instance
+		newTab = Tab(self, tabLocation, self.currentTab)
 
 		# Append tabList with new tab
 		self.tabList.append(newTab)
 
+		self.switchToTab(self.currentTab)
+
+	def switchBy(self, number):
+		check = self.currentTab + number
+		if check != 1 and check != -1:
+			# Throw error here - this should not happen
+			pass
+		else:
+			currentTab = self.currentTab + number
+			self.switchToTab(currentTab)
+
+	def switchToTab(self, index):
+		# Set old tab to previous tab and new to index
+		self.previousTab = self.currentTab
+		self.currentTab = index
+
+		# Make aesthetic changes 
+		self.tabList[self.previousTab].subFrame.config(bg = "#FFFFFF")
+		self.tabList[self.currentTab].subFrame.config(bg = "#FF0000")
+
+		# Update text box showing
+		self.updateTextBoxes
+
+	def close(self, index):
+		# If it's not the current tab
+		if index != self.currentTab:
+			self.tabList[index].pack_forget()
+			self.tabList[index].textBox.pack_forget()
+
+		# If it is the current tab, and it's not the 0th tab
+		elif len(self.tabList) > 1 and index != 0:
+			self.switchToTab(index - 1)
+			self.tabList[index].pack_forget()
+			self.tabList[index].textBox.pack_forget()
+
+		# If it is the current tab, and it is the 0th tab
+		elif len(self.tabList) > 1 and index == 0:
+			self.switchToTab(index + 1)
+			self.tabList[index].pack_forget()
+			self.tabList[index].textBox.pack_forget()
+
+		# If it's the only tab
+		else:
+			self.add(self, "New Note")
+			self.tabList[index].pack_forget()
+			self.tabList[index].textBox.pack_forget()
+
+	def updateTextBoxes(self):
+		self.tabBar.tabList[self.previousTab].textBox.pack_forget()
+		self.tabBar.tabList[self.currentTab].textBox.pack(side = TOP, expand = 1, fill = X)	
 
 ## STARTING
 
