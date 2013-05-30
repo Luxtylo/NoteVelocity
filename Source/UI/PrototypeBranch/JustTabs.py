@@ -14,30 +14,114 @@ class NoteApp:
 
 	## Constructor
 	def __init__ (self, master):
-		self.tabList = []
+
+		# Ttk Notebook code:
+		"""self.tabList = []
 
 		self.noteBook = ttk.Notebook(master, height = 20)
 		self.noteBook.enable_traversal()
 
 		fileName = "blob.txt"
-		nextTab = "Tab(master, \"" + fileName + "\")"
-		self.tabList.append(eval(nextTab))
+		self.nextTab = "Tab(master, \"" + fileName + "\")"
+		self.tabList.append(eval(self.nextTab))
 
 		fileName = "Test.note"
-		nextTab = "Tab(master, \"" + fileName + "\")"
-		self.tabList.append(eval(nextTab))
+		self.nextTab = "Tab(master, \"" + fileName + "\")"
+		self.tabList.append(eval(self.nextTab))
 
 		self.counter = range(len(self.tabList))
 		for i in self.counter:
-			self.noteBook.add(self.tabList[i])
+			self.noteBook.add(self.tabList[i], text = self.tabList[i].name)
 
-		self.noteBook.pack(side = TOP, expand = 1, fill = BOTH)
+		self.noteBook.pack(side = TOP, expand = 1, fill = BOTH)"""
 
-# Tab class for adding to notebook
-class Tab(Text):
-	def __init__(self, master, title):
+		self.upperBox = Frame(master, bg = "#FFFF00")
+		self.upperBox.pack(expand = 1, fill = BOTH)
+
+		self.tabBar = TabBar(master)
+
+		self.tabBar.add("PlaceNameDoodymajig.py")
+		self.tabBar.add("Thingy.py")
+		
+		self.tabBar.show()
+
+
+# TabContents class for adding to Tab
+class TabContents(Text):
+
+	# Constructor
+	def __init__(self, master):
+
+		# Initialise text area
 		Text.__init__(self, master, bg = '#FFFFFF', fg = '#404040', padx = 10, pady = 10, wrap = 'word')
-		self.name = title
+
+# Tab class for adding to TabBar
+class Tab(Frame):
+
+	# Constructor
+	def __init__(self, master, title):
+
+		# Initialise frame and internal frame
+		Frame.__init__(self, master, bg = "#00FF00", width = "200", height = 24)
+		self.subFrame = Frame()
+		self.subFrame.pack(side = LEFT, padx = 5)
+
+		# Set location and title
+		self.location = title
+		splitName = title.split("/")
+		self.title = splitName[-1]
+
+		# If title is longer than 15 chars, shorten it. Otherwise do nothing
+		if len(self.title) > 15:
+			self.title = self.title[:15]
+
+		# Create instance of TabContents
+		self.textBox = TabContents(master)
+
+		# Create tab's widgets, overlaying them using the place manager
+		# Tab Label
+		self.Label = Label(self.subFrame, text = self.title)
+		self.Label.pack(side = LEFT, expand = 0, fill = X)
+
+		# Tab close button
+		self.CloseButton = ttk.Button(self.subFrame, text = "X", width = 0)
+		self.CloseButton.pack(side = RIGHT, expand = 0)
+
+		# Tab unsaved indicator
+		self.tabSaved = Frame(self.subFrame, width = 8, height = 8, bg = "#0000FF")
+		self.tabSaved.pack(side = RIGHT, padx = 5)
+
+# TabBar Class
+class TabBar(Frame):
+
+	# Constructor
+	def __init__(self, master):
+
+		# Initialise frame
+		Frame.__init__(self, master, bg = '#FF0000')
+
+		# Initialise tab list
+		# want to set it so that when you put in the tab number, you get the tab out
+		# eg self.tabList[0] = tab
+		self.tabList = []
+
+		# Initialise other variables
+		self.currentTab = 0
+
+	def show(self):
+		# Pack to bottom. For integration in actual thing, fill should be change to XY.
+		self.pack(side = BOTTOM, expand = 0, fill = X)
+
+	def add(self, tabLocation):
+		# Initialise variable newTab as added Tab instance
+		newTab = Tab(self, tabLocation)
+
+		# Set currentTab to be the last one
+		# New tab will always be at the end
+		self.currentTab = len(self.tabList)
+
+		# Append tabList with new tab
+		self.tabList.append(newTab)
 
 
 ## STARTING

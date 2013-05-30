@@ -1,7 +1,16 @@
-Time of log creation: 2013-05-26 19:08:28.153824
+Time of log creation: 2013-05-30 12:31:18.010143
 
-At 2013-05-26 19:08:28.156039:
+At 2013-05-30 12:31:18.012107:
 	Initialised variables, styles and keybindings
 
-At 2013-05-26 19:08:34.214684:
-	Closing log file and exiting
+At 2013-05-30 12:31:26.568796:
+	No save location selected
+
+At 2013-05-30 12:31:26.569785:
+	No output file set. Using save as instead.
+
+At 2013-05-30 12:46:08.877933:
+	No save location selected
+
+At 2013-05-30 12:46:08.878565:
+	No output file set. Using save as instead.
