@@ -19,6 +19,7 @@ class NoteApp:
 
 		self.tabBar.add("PlaceNameDoodymajig.py")
 		self.tabBar.add("Thingy.py")
+		self.tabBar.add("Boop.nom")
 
 		self.updateTextBoxes()
 		
@@ -29,7 +30,7 @@ class NoteApp:
 		previousTab = self.tabBar.previousTab
 
 		self.tabBar.tabList[previousTab].textBox.pack_forget()
-		self.tabBar.tabList[currentTab].textBox.pack(side = TOP, expand = 1, fill = X)		
+		self.tabBar.tabList[currentTab].textBox.pack(side = TOP, expand = 1, fill = X)
 
 
 # TabContents class for adding to Tab
@@ -37,6 +38,8 @@ class TabContents(Text):
 
 	# Constructor
 	def __init__(self, master):
+
+		lastCharacters = None
 
 		# Initialise text area
 		Text.__init__(self, master, bg = '#FFFFFF', fg = '#404040', padx = 10, pady = 10, wrap = 'word')
@@ -61,7 +64,8 @@ class Tab(Frame):
 		# Set location and title
 		self.location = title
 		splitName = title.split("/")
-		self.title = splitName[-1]
+		self.longTitle = splitName[-1]
+		self.title = self.longTitle
 
 		# If title is longer than 15 chars, shorten it. Otherwise do nothing
 		if len(self.title) > 15:
@@ -77,7 +81,7 @@ class Tab(Frame):
 		self.Label.bind("<Button-1>", lambda event: master.switchToTab(self.Num))
 
 		# Tab close button
-		self.CloseButton = ttk.Button(self.subSubFrame, text = "X", width = 0)
+		self.CloseButton = ttk.Button(self.subSubFrame, text = "X", width = 0, takefocus = 0)
 		self.CloseButton.pack(side = RIGHT, expand = 0)
 		self.CloseButton.bind("<Button-1>", lambda event: master.close(self.Num))
 
@@ -103,6 +107,12 @@ class TabBar(Frame):
 		self.currentTab = 0
 		self.previousTab = 0
 
+		# Initialise keybindings
+		self.keyBindings()
+
+		# Initialise focus taker
+		self.makeDummyFocuser()
+
 	def show(self):
 		# Pack to bottom. For integration in actual thing, fill should be change to XY.
 		self.pack(side = BOTTOM, expand = 0, fill = X)
@@ -115,23 +125,30 @@ class TabBar(Frame):
 		# Set currentTab to be the last one
 		# New tab will always be at the end
 		self.previousTab = self.currentTab
-		self.currentTab = len(self.tabList)
+		"""self.currentTab = len(self.tabList)"""
+		newTabNum = len(self.tabList)
 
 		# Initialise variable newTab as added Tab instance
-		newTab = Tab(self, tabLocation, self.currentTab)
+		newTab = Tab(self, tabLocation, newTabNum)
 
 		# Append tabList with new tab
 		self.tabList.append(newTab)
 
-		self.switchToTab(self.currentTab)
+		self.switchToTab(newTabNum)
 
 	def switchBy(self, number):
-		check = self.currentTab + number
-		if check != 1 and check != -1:
+		if number != 1 and number != -1:
 			# Throw error here - this should not happen
 			pass
 		else:
-			currentTab = self.currentTab + number
+
+			if number == 1 and self.currentTab == len(self.tabList) - 1:
+				currentTab = 0
+			elif number == -1 and self.currentTab == 0:
+				currentTab = len(self.tabList) - 1
+			else:
+				currentTab = self.currentTab + number
+ 
 			self.switchToTab(currentTab)
 
 	def switchToTab(self, index):
@@ -139,12 +156,15 @@ class TabBar(Frame):
 		self.previousTab = self.currentTab
 		self.currentTab = index
 
-		# Make aesthetic changes 
+		# Make aesthetic changes to show selectedness
 		self.tabList[self.previousTab].subFrame.config(bg = "#FFFFFF")
 		self.tabList[self.currentTab].subFrame.config(bg = "#FF0000")
 
+		# Update root.title
+		root.title(self.tabList[self.currentTab].longTitle)
+
 		# Update text box showing
-		self.updateTextBoxes
+		self.updateTextBoxes()
 
 	def close(self, index):
 		# If it's not the current tab
@@ -171,8 +191,23 @@ class TabBar(Frame):
 			self.tabList[index].textBox.pack_forget()
 
 	def updateTextBoxes(self):
-		self.tabBar.tabList[self.previousTab].textBox.pack_forget()
-		self.tabBar.tabList[self.currentTab].textBox.pack(side = TOP, expand = 1, fill = X)	
+		# Change focus to invisible entry, and store last 2 characters of textBox
+		self.focusTake.focus()
+
+		self.tabList[self.previousTab].textBox.pack_forget()
+		self.tabList[self.currentTab].textBox.pack(side = TOP, expand = 1, fill = X)
+
+		# Change focus back to tab's textBox
+		self.tabList[self.currentTab].textBox.focus()
+
+	def keyBindings(self):
+
+		root.bind("<Control-t>", lambda event: app.tabBar.switchBy(1))
+		root.bind("<Control-T>", lambda event: app.tabBar.switchBy(-1))
+
+	def makeDummyFocuser(self):
+		self.focusTake = Label	(self, text = "", takefocus = 1)
+		self.focusTake.pack()
 
 ## STARTING
 

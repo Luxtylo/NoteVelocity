@@ -1,6 +1,7 @@
 #Things git will ignore
 
 *.log
+log.*
 *~
 doc/**/*.txt
 output.*
