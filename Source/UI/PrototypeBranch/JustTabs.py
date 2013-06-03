@@ -32,6 +32,9 @@ class NoteApp:
 		self.tabBar.tabList[previousTab].textBox.pack_forget()
 		self.tabBar.tabList[currentTab].textBox.pack(side = TOP, expand = 1, fill = X)
 
+	def doNothing(self):
+		pass
+
 
 # TabContents class for adding to Tab
 class TabContents(Text):
@@ -202,8 +205,8 @@ class TabBar(Frame):
 
 	def keyBindings(self):
 
-		root.bind("<Control-t>", lambda event: app.tabBar.switchBy(1))
-		root.bind("<Control-T>", lambda event: app.tabBar.switchBy(-1))
+		root.bind("<Control-Tab>", lambda event: app.tabBar.switchBy(1))
+		root.bind("<Control-Shift-Tab>", lambda event: app.tabBar.switchBy(-1))
 
 	def makeDummyFocuser(self):
 		self.focusTake = Label	(self, text = "", takefocus = 1)
@@ -219,6 +222,9 @@ root.title("New Note - NoteVelocity") # Title in window title bar
 root.minsize(640,400) # Minimum size of window
 root.grid_columnconfigure(0, weight = 1)
 root.grid_columnconfigure(2, weight = 0)
+
+# Disable focus changing
+root.bind("<Control-Tab>", lambda event: app.doNothing())
 
 # Set initial size to take up 3/4 of the screen for resolutions up to 1024x768
 screenWidth = root.winfo_screenwidth()
