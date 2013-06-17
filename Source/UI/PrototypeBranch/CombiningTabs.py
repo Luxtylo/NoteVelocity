@@ -42,11 +42,11 @@ class NoteApp:
 		self.Log.write("\tInitialised variables, styles and keybindings")		
 
 		# Create upper level 2 frame (Text + Formatting)
-		self.textFormFrame = ttk.Frame()
+		self.textFormFrame = ttk.Frame(root, name = "textFormFrame")
 		self.textFormFrame.pack(fill = BOTH, side = TOP, expand = 1)
 
 		# Create left level 3 frame (Text)
-		self.textFrame = ttk.Frame(self.textFormFrame)
+		self.textFrame = ttk.Frame(self.textFormFrame, name = "textFrame")
 		self.textFrame.pack(fill = BOTH, expand = 1, side = LEFT)
 
 		if self.showFormFrame == True:
@@ -56,15 +56,15 @@ class NoteApp:
 
 		# Create lower level 2 frame (File ops)
 		if self.showMenuBar == True:
-			self.fileOpsFrame = ttk.Frame(style = "FS.TFrame")
+			self.fileOpsFrame = ttk.Frame(root, style = "FS.TFrame", name = "fileOpsFrame")
 			self.fileOpsFrame.pack(fill = X, side = BOTTOM)
 
 			if self.showTabBar == True:		
 				# Create tabFrame to go inside level 2 frame
-				self.tabFrame = Frame(self.fileOpsFrame)
+				self.tabFrame = Frame(self.fileOpsFrame, name = "tabFrame")
 				self.tabBar = TabBar(self.tabFrame)
 
-		# Create text box in textFrame
+		"""# Create text box in textFrame
 		if self.styleMode == 0:
 			self.textBox = Text(self.textFrame, bg = "#FFFFFF", fg = "#404040", padx = 10, pady = 10, wrap = "word")
 			self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
@@ -72,43 +72,43 @@ class NoteApp:
 		elif self.styleMode == 1:
 			self.textBox = Text(self.textFrame, bg = "#404040", fg = "#FFFFFF", insertbackground = "#DDDDDD", padx = 10, pady = 10, wrap = "word")
 			self.textBox.pack(fill = BOTH, expand = 1, side = LEFT)
-			self.textBox.focus_set()
+			self.textBox.focus_set()"""
 
-		# Create scrollbar in textFrame
+		"""# Create scrollbar in textFrame
 		self.textScrollBar = ttk.Scrollbar(self.textFrame, style = "SB.Vertical.TScrollbar")
 		self.textScrollBar.pack(fill = Y, side = RIGHT)
 
 		# Link scrollbar and text box
 		self.textBox.config(yscrollcommand = self.textScrollBar.set)
-		self.textScrollBar.config(command = self.textBox.yview)
+		self.textScrollBar.config(command = self.textBox.yview)"""
 
 		if self.showFormFrame == True:
 			# Create formatting buttons in formFrame
-			self.boldButton = ttk.Button(self.formFrame, text = "<B>", width = 4, style = "FB.TButton")
+			self.boldButton = ttk.Button(self.formFrame, text = "<B>", width = 4, style = "FB.TButton", takefocus = 0)
 			self.boldButton.pack(side = TOP, expand = 0, fill = X)
 			self.boldButton.bind("<Enter>", lambda event: self.boldButton.configure(style = "FOB.TButton"))
 			self.boldButton.bind("<Leave>", lambda event: self.boldButton.configure(style = "FB.TButton"))
 
-			self.italicButton = ttk.Button(self.formFrame, text = "*I*", width = 4, style = "FB.TButton")
+			self.italicButton = ttk.Button(self.formFrame, text = "*I*", width = 4, style = "FB.TButton", takefocus = 0)
 			self.italicButton.pack(side = TOP, expand = 0, fill = X)
 
-			self.underlineButton = ttk.Button(self.formFrame, text = "_U_", width = 4, style = "FB.TButton")
+			self.underlineButton = ttk.Button(self.formFrame, text = "_U_", width = 4, style = "FB.TButton", takefocus = 0)
 			self.underlineButton.pack(side = TOP, expand = 0, fill = X)
 
 		if self.showMenuBar == True:
 			# Create file operation buttons in fileOpsFrame
 
-			self.quitButton = ttk.Button(self.fileOpsFrame, text = "Quit", width = 6, command = self.Quit, style = "FOB.TButton")
+			self.quitButton = ttk.Button(self.fileOpsFrame, text = "Quit", width = 6, command = self.Quit, style = "FOB.TButton", takefocus = 0)
 			self.quitButton.pack(side = RIGHT)
 
-			self.openButton = ttk.Button(self.fileOpsFrame, text = "Open", width = 6, command = self.askLocation, style = "FOB.TButton")
+			self.openButton = ttk.Button(self.fileOpsFrame, text = "Open", width = 6, command = self.askLocation, style = "FOB.TButton", takefocus = 0)
 			self.openButton.pack(side = RIGHT)
 			self.openButton.bind("<Shift-Enter>", lambda event: self.openButton.configure(text = "New", command = self.New))
 			self.openButton.bind("<Shift-Leave>", lambda event: self.openButton.configure(text = "Open", command = self.askLocation))
 			self.openButton.bind("<Enter>", lambda event: self.openButton.configure(text = "Open", command = self.askLocation))
 			self.openButton.bind("<Leave>", lambda event: self.openButton.configure(text = "Open", command = self.askLocation))
 
-			self.saveButton = ttk.Button(self.fileOpsFrame, text = "Save", width = 6, command = self.saveFile, style = "FOB.TButton")
+			self.saveButton = ttk.Button(self.fileOpsFrame, text = "Save", width = 6, command = self.saveFile, style = "FOB.TButton", takefocus = 0)
 			self.saveButton.pack(side = RIGHT)
 			self.saveButton.bind("<Shift-Enter>", lambda event: self.saveButton.configure(text = "Save As", command = self.saveAsFile))
 			self.saveButton.bind("<Shift-Leave>", lambda event: self.saveButton.configure(text = "Save", command = self.saveFile))
@@ -119,16 +119,16 @@ class NoteApp:
 
 			if self.showTabBar == True:
 				# Tab left button
-				self.tabLeftButton = ttk.Button(self.tabFrame, text = "<", width = 0, style = "FOB.TButton")
-				self.tabLeftButton.pack(side = LEFT)
+				"""self.tabLeftButton = ttk.Button(self.tabFrame, text = "<", width = 0, style = "FOB.TButton")
+				self.tabLeftButton.pack(side = LEFT)"""
 
 				self.tabBar.add("PlaceNameDoodymajig.py")
 				self.tabBar.add("Thingy.py")
 				self.tabBar.add("Boop.nom")
 
 				# Tab right button
-				self.tabRightButton = ttk.Button(self.tabFrame, text = ">", width = 0, style = "FOB.TButton")
-				self.tabRightButton.pack(side = RIGHT)#
+				"""self.tabRightButton = ttk.Button(self.tabFrame, text = ">", width = 0, style = "FOB.TButton")
+				self.tabRightButton.pack(side = RIGHT)#"""
 
 	# Ask for location and open file
 	def askLocation(self):
@@ -307,7 +307,7 @@ class NoteApp:
 		if self.showTabBar == True:
 
 			# Create tabs frame to go inside level 2 frame
-			self.tabFrame = Frame(self.fileOpsFrame)
+			#self.tabFrame = Frame(self.fileOpsFrame)
 			self.tabFrame.pack(fill = X, side = LEFT, expand = 1)
 
 			"""# Tabs
@@ -320,7 +320,7 @@ class NoteApp:
 			self.tabRightButton.pack(side = RIGHT)"""
 		else:
 			# Remove/hide self.tabFrame
-			self.tabFrame.destroy()
+			self.tabFrame.pack_forget()
 
 	# Initialise styles
 	def initStyles(self):
@@ -368,6 +368,11 @@ class NoteApp:
 
 	# Initialise keybindings
 	def keyBindings(self, master):
+
+		# Unbind Control-Tab from cycling focus
+		root.bind("<Control-Tab>", lambda event: self.doNothing())
+		root.bind("<Control-Shift-Tab>", lambda event: self.doNothing())
+
 		# Bind Control-O to Open
 		master.bind("<Control-o>", lambda event: self.askLocation())
 
@@ -394,6 +399,9 @@ class NoteApp:
 	def Quit(self):
 		self.Log.close()
 		Quit(self)
+
+	def doNothing(self):
+		pass
 
 ## Log class
 class logFile:
@@ -442,7 +450,11 @@ class TabContents(Text):
 		lastCharacters = None
 
 		# Initialise text area
-		Text.__init__(self, master.master.master.master.textFrame, bg = '#FFFFFF', fg = '#404040', padx = 10, pady = 10, wrap = 'word')
+		Text.__init__(self, master, bg = '#FFFFFF', fg = '#404040', padx = 10, pady = 10, wrap = 'word')
+		"""for k in master.configure().keys():
+			print(k, ":", master.cget(k))"""
+		masterStack = master
+		print(str(masterStack))
 
 # Tab class for adding to TabBar
 class Tab(Frame):
@@ -451,10 +463,10 @@ class Tab(Frame):
 	def __init__(self, master, title, number):
 
 		# Initialise frame and internal frame
-		Frame.__init__(self, master, bg = "#000000", width = "200", height = 24)
-		self.subFrame = Frame()
+		Frame.__init__(self, master, bg = "#000000", width = "200", height = 24, name = "tab")
+		self.subFrame = Frame(self, name = "tab subframe")
 		self.subFrame.pack(side = LEFT, padx = 5, ipadx = 0, ipady = 2)
-		self.subSubFrame = Frame(self.subFrame)
+		self.subSubFrame = Frame(self.subFrame, name = "tab sub-subframe")
 		self.subSubFrame.pack(side = LEFT, padx = 2)
 		self.subSubFrame.bind("<Button-1>", lambda event: master.switchToTab(self.Num))
 
@@ -469,10 +481,11 @@ class Tab(Frame):
 
 		# If title is longer than 15 chars, shorten it. Otherwise do nothing
 		if len(self.title) > 15:
-			self.title = self.title[:15]
+			self.title = self.title[:12] + "..."
 
 		# Create instance of TabContents
 		self.textBox = TabContents(master)
+		
 
 		# Create tab's widgets, overlaying them using the place manager
 		# Tab Label
@@ -483,7 +496,7 @@ class Tab(Frame):
 		# Tab close button
 		self.CloseButton = ttk.Button(self.subSubFrame, text = "X", width = 0, takefocus = 0)
 		self.CloseButton.pack(side = RIGHT, expand = 0)
-		self.CloseButton.bind("<Button-1>", lambda event: master.close(self.Num))
+		self.CloseButton.bind("<Button-1>", lambda event: app.tabBar.close(self.Num))
 
 		# Tab unsaved indicator
 		self.tabSaved = Frame(self.subSubFrame, width = 8, height = 8, bg = "#00FF00")
@@ -496,7 +509,7 @@ class TabBar(Frame):
 	def __init__(self, master):
 
 		# Initialise frame
-		Frame.__init__(self, master)
+		Frame.__init__(self, master, name = "tab bar")
 
 		# Initialise tab list
 		# want to set it so that when you put in the tab number, you get the tab out
@@ -509,9 +522,6 @@ class TabBar(Frame):
 
 		# Initialise keybindings
 		self.keyBindings()
-
-		# Initialise focus taker
-		self.makeDummyFocuser()
 
 	def show(self):
 		# Pack to bottom. For integration in actual thing, fill should be change to XY.
@@ -534,7 +544,7 @@ class TabBar(Frame):
 		# Append tabList with new tab
 		self.tabList.append(newTab)
 
-		self.switchToTab(newTabNum)
+		self.switchToTab(-1)
 
 	def switchBy(self, number):
 		if number != 1 and number != -1:
@@ -551,10 +561,15 @@ class TabBar(Frame):
  
 			self.switchToTab(currentTab)
 
+		return "break"
+
 	def switchToTab(self, index):
 		# Set old tab to previous tab and new to index
 		self.previousTab = self.currentTab
-		self.currentTab = index
+		if index == -1:
+			self.currentTab = len(self.tabList) - 1
+		else:
+			self.currentTab = index
 
 		# Make aesthetic changes to show selectedness
 		self.tabList[self.previousTab].subFrame.config(bg = "#FFFFFF")
@@ -566,7 +581,11 @@ class TabBar(Frame):
 		# Update text box showing
 		self.updateTextBoxes()
 
+		return "break"
+
 	def close(self, index):
+
+		print("Closing tab " + str(index))
 		# If it's not the current tab
 		if index != self.currentTab:
 			self.tabList[index].pack_forget()
@@ -586,29 +605,32 @@ class TabBar(Frame):
 
 		# If it's the only tab
 		else:
-			self.add(self, "New Note")
+			self.add("New Note")
 			self.tabList[index].pack_forget()
 			self.tabList[index].textBox.pack_forget()
 
 	def updateTextBoxes(self):
-		# Change focus to invisible entry, and store last 2 characters of textBox
-		self.focusTake.focus()
-
 		self.tabList[self.previousTab].textBox.pack_forget()
-		self.tabList[self.currentTab].textBox.pack(side = TOP, expand = 1, fill = X)
+		#self.tabList[self.currentTab].textBox.pack(side = TOP, expand = 1, fill = X)
 
 		# Change focus back to tab's textBox
-		self.tabList[self.currentTab].textBox.focus()
+		#self.tabList[self.currentTab].textBox.focus()
+		
 
 	def keyBindings(self):
 
-		root.bind("<Control-Tab>", lambda event: app.tabBar.switchBy(1))
-		root.bind("<Control-Shift-Tab>", lambda event: app.tabBar.switchBy(-1))
+		root.bind("<Control-t>", lambda event: self.switchBy(1))
+		root.bind("<Control-T>", lambda event: self.switchBy(-1))
 
-	def makeDummyFocuser(self):
-		self.focusTake = Label	(self, text = "", takefocus = 1)
-		self.focusTake.pack()
-
+		root.bind("<Control-1>", lambda event: self.switchToTab(0))
+		root.bind("<Control-2>", lambda event: self.switchToTab(1))
+		root.bind("<Control-3>", lambda event: self.switchToTab(2))
+		root.bind("<Control-4>", lambda event: self.switchToTab(3))
+		root.bind("<Control-5>", lambda event: self.switchToTab(4))
+		root.bind("<Control-6>", lambda event: self.switchToTab(5))
+		root.bind("<Control-7>", lambda event: self.switchToTab(6))
+		root.bind("<Control-8>", lambda event: self.switchToTab(7))
+		root.bind("<Control-9>", lambda event: self.switchToTab(8))
 
 ## STARTING
 
@@ -620,6 +642,7 @@ root.title("New Note - NoteVelocity") # Title in window title bar
 root.minsize(640,400) # Minimum size of window
 root.grid_columnconfigure(0, weight = 1)
 root.grid_columnconfigure(2, weight = 0)
+
 
 # Set initial size to take up 3/4 of the screen for resolutions up to 1024x768
 screenWidth = root.winfo_screenwidth()
