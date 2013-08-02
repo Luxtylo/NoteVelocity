@@ -1,7 +1,0 @@
-Time of log creation: 2013-06-10 11:58:20.783134
-
-At 2013-06-10 11:58:20.785318:
-	Initialised variables, styles and keybindings
-
-At 2013-06-10 12:11:29.252046:
-	Closing log file and exiting

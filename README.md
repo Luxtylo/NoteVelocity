@@ -6,18 +6,8 @@ A note-taking program
 This is an EPQ (Extended Project Qualification) project for designing and making a note-taking program for university and A-level students. My aim is to have syntax like markdown and Python, but functionality like LaTeX.
 Made using *Python* and *Tkinter*.
 
-UI is currently **not particularly good in looks or function**
+The OldSource folder shows my progress when messing around with Python and Tkinter, before I did the research to actually find out what the project needs. Now that I have I'll be restarting the coding, using what I learned when writing the OldSource to guide me. The OldSource folder will be removed in several commits, as it will only be cluttering the project.
 
-Function is currently **Good, but needs to be updated to work with UI**
-
-*Source/Functionality/Syntax.txt* describes syntax. It is also available in *Source/Functionality/Notes/Syntax.note*
-
-*InitialStructurePlan.txt* contains my initial plan of the structure of the program. It will change as I code the program.
-
-As of 2013/05/08, */Source/Functionality/function.py* will take the input from */Source/Functionality/Notes* and make the file specified. *.html* extension is recommended, although anything which can contain html tags and be opened by a browser will work.
-Input is corrected if no file extension is given (or currently, if there's no extension less than 5 characters long. This currently stops it working with filenames of less than 5 characters.)
-
-
-**Dependencies:**
+**Dependencies (for OldSource):**
 * *Python* >= *3.3*, as of commit 47
 * tkinter *(Included with Python on Windows and Mac)*
