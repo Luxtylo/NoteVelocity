@@ -8,4 +8,4 @@ output.*
 test.*
 *.temp
 *.pyc
-Source/UI/Kivy_Old/
+*.swp
