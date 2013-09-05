@@ -11,3 +11,26 @@ You should have received a copy of the GNU General Public License along with thi
 
 """
 
+## Imports
+import tkinter
+
+## Main loop
+# Initialise Tk instance
+root = tkinter.Tk()
+
+# Set root window properties
+root.title("NoteVelocity - New Note")
+root.minsize(640,480)
+
+screenWidth = root.winfo_screenwidth()
+screenHeight = root.winfo_screenheight()
+
+if screenWidth <=1024 or screenHeight <= 768:
+	windowWidth = screenWidth * 3 / 4
+	windowHeight = screenHeight * 3 / 4
+	root.geometry("%dx%d",(windowWidth,windowHeight))
+else:
+	root.geometry("800x600")
+
+## Start main loop
+root.mainloop()
