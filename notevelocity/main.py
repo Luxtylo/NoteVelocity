@@ -15,10 +15,18 @@ You should have received a copy of the GNU General Public License along with thi
 import tkinter
 
 ## Main loop
-# Initialise Tk instance
-root = tkinter.Tk()
+def App(Frame):
+	def __init__(self, parent):
+		self.parent = parent
+
+		self.initUI()
+
+	def initUI():
+		print("Hello!")
 
 # Set root window properties
+root = tkinter.Tk()
+
 root.title("NoteVelocity - New Note")
 root.minsize(640,480)
 
@@ -33,4 +41,5 @@ else:
 	root.geometry("800x600")
 
 ## Start main loop
+app = App(root)
 root.mainloop()
