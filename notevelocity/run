@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /home/george/Documents/EPQ/NoteVelocity/notevelocity
+python3 main.py
