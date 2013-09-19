@@ -30,8 +30,20 @@ class AppFrame(Frame):
 
 		# Custom title bar
 		self.titleBar = Frame(self.master)
-		self.titleBar.pack(side = TOP, expand = True, fill = Y)
-		self.titleBar.pack(ipadx = 2, ipady = 2)
+		self.titleBar.config(background = "#AAA")
+		self.titleBar.pack(side = TOP, expand = False, fill = X, ipadx = 2)
+
+		self.closeFrame = Frame(self.titleBar)
+		self.closeFrame.config(background = "#EEE", width = 24, height = 24)
+		self.closeFrame.pack(side = RIGHT, padx = 2, pady = 4)
+
+		self.maxFrame = Frame(self.titleBar)
+		self.maxFrame.config(background = "#EEE", width = 24, height = 24)
+		self.maxFrame.pack(side = RIGHT, padx = 2, pady = 4)
+
+		self.minFrame = Frame(self.titleBar)
+		self.minFrame.config(background = "#EEE", width = 24, height = 24)
+		self.minFrame.pack(side = RIGHT, padx = 2, pady = 4)
 
 		# Main text box and scrollbar
 		self.textBoxContainer = Frame(self.master)
@@ -57,7 +69,7 @@ class AppFrame(Frame):
 		pass
 
 	def quit(self):
-		pass
+		root.quit()
 
 	def log(mode):
 		if mode == 0:
