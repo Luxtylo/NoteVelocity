@@ -13,6 +13,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 ## Imports
 from tkinter import *
+import frames
 
 ## Main loop
 class AppFrame(Frame):
@@ -28,36 +29,13 @@ class AppFrame(Frame):
 	def initUI(self):
 		print("Initialising UI...")
 
-		# Custom title bar
-		self.titleBar = Frame(self.master)
-		self.titleBar.config(background = "#AAA")
-		self.titleBar.pack(side = TOP, expand = False, fill = X, ipadx = 2)
+		## Top level frames
+		self.titleBar = frames.titleBar(self)
 
-		self.closeFrame = Frame(self.titleBar)
-		self.closeFrame.config(background = "#EEE", width = 24, height = 24)
-		self.closeFrame.pack(side = RIGHT, padx = 2, pady = 4)
-
-		self.maxFrame = Frame(self.titleBar)
-		self.maxFrame.config(background = "#EEE", width = 24, height = 24)
-		self.maxFrame.pack(side = RIGHT, padx = 2, pady = 4)
-
-		self.minFrame = Frame(self.titleBar)
-		self.minFrame.config(background = "#EEE", width = 24, height = 24)
-		self.minFrame.pack(side = RIGHT, padx = 2, pady = 4)
-
-		# Main text box and scrollbar
-		self.textBoxContainer = Frame(self.master)
-		self.textBoxContainer.pack(side = LEFT, expand = True, fill = BOTH)
-
-		self.mainTextBox = Text(self.textBoxContainer)
-		self.mainTextBox.pack(side=LEFT, expand = True, fill = BOTH)
-
-		self.scrollBar = Scrollbar(self.textBoxContainer)
-		self.scrollBar.pack(side = LEFT, expand = False, fill = Y)
-
-		# Attach scrollbar to text box
-		self.mainTextBox.config(yscrollcommand = self.scrollBar.set)
-		self.scrollBar.config(command=self.mainTextBox.yview)
+		try:
+			print(self.titleBar.test)
+		except:
+			print("titleBar was not initialised properly")
 
 	def saveFile(self, rename):
 		if rename == True:
@@ -90,7 +68,7 @@ if screenWidth <=1024 or screenHeight <= 768:
 	windowWidth = int(screenWidth * 3 / 4)
 	windowHeight = int(screenHeight * 3 / 4)
 	root.geometry(str(windowWidth) + "x" + str(windowHeight))
-	print(str(windowWidth) + "x" + str(windowHeight))
+	print("%dx%d" % (windowWidth, windowHeight))
 else:
 	root.geometry("800x600")
 
