@@ -21,9 +21,9 @@ class titleBar(Frame):
 
 		self.master = master
 
-		self.test = "titleBar is initialised"
+		self.testMessage = "titleBar is initialised"
 
-		self.Frame = Frame(background = "#F00")
+		self.Frame = Frame()
 		self.Frame.pack(fill = X, side = TOP, expand = 1, ipadx = 2, ipady = 2)
 
 		self.icon = Frame(self.Frame)

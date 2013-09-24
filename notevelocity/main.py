@@ -30,12 +30,18 @@ class AppFrame(Frame):
 		print("Initialising UI...")
 
 		## Top level frames
-		self.titleBar = frames.titleBar(self)
-
 		try:
-			print(self.titleBar.test)
+			self.titleBar = frames.titleBar(self)
+			print(self.titleBar.testMessage)
 		except:
 			print("titleBar was not initialised properly")
+			self.quit()
+
+		try:
+			self.formatBar = frames.formatBar(self)
+		except:
+			print("formatBar was not initialised properly")
+			self.quit()
 
 	def saveFile(self, rename):
 		if rename == True:
@@ -47,6 +53,7 @@ class AppFrame(Frame):
 		pass
 
 	def quit(self):
+		print("Closing NoteVelocity...")
 		root.quit()
 
 	def log(mode):
