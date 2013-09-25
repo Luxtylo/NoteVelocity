@@ -100,7 +100,7 @@ else:
 	root.geometry("800x600")
 
 # Remove title bar
-root.overrideredirect(1)
+#root.overrideredirect(1)
 
 # Make window centred on startup
 windowXPos = (screenWidth - windowWidth) / 2
