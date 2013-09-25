@@ -31,7 +31,7 @@ class AppFrame(Frame):
 
 		## Top level frames
 		try:
-			self.titleBar = frames.titleBar(self)
+			self.titleBar = frames.titleBar(self, root)
 			print(self.titleBar.testMessage)
 		except:
 			print("titleBar was not initialised properly")
@@ -39,8 +39,16 @@ class AppFrame(Frame):
 
 		try:
 			self.formatBar = frames.formatBar(self)
+			print(self.formatBar.testMessage)
 		except:
 			print("formatBar was not initialised properly")
+			self.quit()
+
+		try:
+			self.textFrame = frames.text(self)
+			print(self.textFrame.testMessage)
+		except:
+			print("textFrame was not initialised properly")
 			self.quit()
 
 	def saveFile(self, rename):
@@ -52,9 +60,18 @@ class AppFrame(Frame):
 	def open(self):
 		pass
 
+	def max(self):
+		pass
+
+	def min(self):
+		pass
+
 	def quit(self):
 		print("Closing NoteVelocity...")
-		root.quit()
+
+		global root
+		root.destroy()
+		raise SystemExit
 
 	def log(mode):
 		if mode == 0:
@@ -70,14 +87,27 @@ root.minsize(640,480)
 
 screenWidth = root.winfo_screenwidth()
 screenHeight = root.winfo_screenheight()
+windowWidth = int(screenWidth * 3 / 4)
+windowHeight = int(screenHeight * 3 / 4)
 
 if screenWidth <=1024 or screenHeight <= 768:
-	windowWidth = int(screenWidth * 3 / 4)
-	windowHeight = int(screenHeight * 3 / 4)
 	root.geometry(str(windowWidth) + "x" + str(windowHeight))
-	print("%dx%d" % (windowWidth, windowHeight))
+	print("Resolution set to %dx%d" % (windowWidth, windowHeight))
+elif screenWidth == 1024 and screenHeight == 768:
+	root.geometry(str(windowWidth) + "x" + str(windowHeight))
+	print("Resolution set to %dx%d" % (windowWidth, windowHeight))
 else:
 	root.geometry("800x600")
+
+# Remove title bar
+root.overrideredirect(1)
+
+# Make window centred on startup
+windowXPos = (screenWidth - windowWidth) / 2
+windowYPos = (screenHeight - windowHeight) / 2
+root.geometry("+%d+%d" % (windowXPos, windowYPos))
+
+root.focus()
 
 ## Start main loop
 app = AppFrame(root)
