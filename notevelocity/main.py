@@ -51,11 +51,18 @@ class AppFrame(Frame):
 			print("textFrame was not initialised properly")
 			self.quit()
 
-	def saveFile(self, rename):
-		if rename == True:
-			pass
+	def saveFile(self, mode):
+		if mode == 1:
+			# Save file
+			print("Saving file")
+		elif mode == 2:
+			# Save file as
+			print("Saving file as <filename>")
+		elif mode == 3:
+			# Rename
+			print("Renaming file to <filename>")
 		else:
-			pass
+			print("saveFile index out of range")
 
 	def open(self):
 		pass
@@ -73,16 +80,19 @@ class AppFrame(Frame):
 		root.destroy()
 		raise SystemExit
 
-	def log(mode):
+	def log(self, mode):
 		if mode == 0:
 			pass
 		elif mode == 1:
 			pass
 
+	def initStyles(self):
+		s = Style()
+
 # Set root window properties
 root = Tk()
 
-root.title("NoteVelocity - New Note")
+root.title("NoteVelocity")
 root.minsize(640,480)
 
 screenWidth = root.winfo_screenwidth()
@@ -91,23 +101,22 @@ windowWidth = int(screenWidth * 3 / 4)
 windowHeight = int(screenHeight * 3 / 4)
 
 if screenWidth <=1024 or screenHeight <= 768:
-	root.geometry(str(windowWidth) + "x" + str(windowHeight))
+	root.geometry("%dx%d" % (windowWidth, windowHeight))
 	print("Resolution set to %dx%d" % (windowWidth, windowHeight))
 elif screenWidth == 1024 and screenHeight == 768:
-	root.geometry(str(windowWidth) + "x" + str(windowHeight))
+	root.geometry("%dx%d" % (windowWidth, windowHeight))
 	print("Resolution set to %dx%d" % (windowWidth, windowHeight))
 else:
 	root.geometry("800x600")
-
-# Remove title bar
-#root.overrideredirect(1)
+	print("Resolution set to default 800x600")
 
 # Make window centred on startup
 windowXPos = (screenWidth - windowWidth) / 2
 windowYPos = (screenHeight - windowHeight) / 2
 root.geometry("+%d+%d" % (windowXPos, windowYPos))
 
-root.focus()
+# Make sure window is focused at startup
+root.focus_set()
 
 ## Start main loop
 app = AppFrame(root)

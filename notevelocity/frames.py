@@ -13,6 +13,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 ## Imports
 from tkinter import *
+from tkinter.ttk import *
 
 ## Main
 # Title bar
@@ -36,19 +37,10 @@ class titleBar(Frame):
 		self.buttonB = Button(self.Frame, text = "Open")
 		self.buttonB.pack(expand = 0, side = LEFT)
 
-		self.title = Label(self.Frame, text = "NoteVelocity")
+		self.title = Label(self.Frame, text = "New note")
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
-		self.close = Button(self.Frame, text = "X", command = self.master.quit)
-		self.close.pack(expand = 0, side = RIGHT)
-
-		self.max = Button(self.Frame, text = "+")
-		self.max.pack(expand = 0, side = RIGHT)
-
-		self.min = Button(self.Frame, text = "_")
-		self.min.pack(expand = 0, side = RIGHT)
-
-		self.dragBindings()
+		self.Bindings()
 
 	def buttonAChange(self, changeTo):
 		if changeTo == 0:
@@ -63,26 +55,27 @@ class titleBar(Frame):
 		else:
 			print("buttonAChange was given an index which was out of range")
 
-	def dragBindings(self):
+	def Bindings(self):
+		self.buttonA.bind("<Enter>", lambda event: self.buttonASave())
+		self.buttonA.bind("<Leave>", lambda event: self.buttonASave())
+		self.buttonA.bind("<Control-s>", lambda event: self.master.saveFile(1))
 
-		self.title.bind("<ButtonPress-1>", self.startMove)
-		self.title.bind("<ButtonRelease-1>", self.stopMove)
-		self.title.bind("<B1-Motion>", self.onMotion)
+		self.buttonA.bind("<Shift-Enter>", lambda event: self.buttonASaveAs())
+		self.buttonA.bind("<Shift-Leave>", lambda event: self.buttonASave())
+		self.buttonA.bind("<Control-S>", lambda event: self.master.saveFile(2))
 
-	def startMove(self, event):
-		self.root.x = event.x
-		self.root.y = event.y
+		self.buttonA.bind("<Control-Enter>", lambda event: self.buttonARename())
+		self.buttonA.bind("<Control-Leave>", lambda event: self.buttonASave())
+		# Not working on Linux - self.buttonA.bind("<Control-Alt-s>", lambda event: self.master.saveFile(3))
 
-	def stopMove(self, event):
-		self.root.x = None
-		self.root.y = None
+	def buttonASave(self):
+		self.buttonA.config(text = "Save", command = lambda: self.master.saveFile(1))
 
-	def onMotion(self, event):
-		deltax = event.x - self.root.x
-		deltay = event.y - self.root.y
-		x = self.root.winfo_x() + deltax
-		y = self.root.winfo_y() + deltay
-		self.root.geometry("+%s+%s" % (x, y))
+	def buttonASaveAs(self):
+		self.buttonA.config(text = "Save As", command = lambda: self.master.saveFile(2))
+
+	def buttonARename(self):
+		self.buttonA.config(text = "Rename", command = lambda: self.master.saveFile(3))
 
 # Formatting bar
 class formatBar(Frame):
