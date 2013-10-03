@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License along with thi
 ## Imports
 from tkinter import *
 import frames
+import bindings
 
 ## Main loop
 class AppFrame(Frame):
@@ -49,6 +50,12 @@ class AppFrame(Frame):
 			print(self.textFrame.testMessage)
 		except:
 			print("textFrame was not initialised properly")
+			self.quit()
+
+		try:
+			bindings.init(self, root)
+		except:
+			print("bindings were not initialised properly")
 			self.quit()
 
 	def saveFile(self, mode):

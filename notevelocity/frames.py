@@ -37,36 +37,20 @@ class titleBar(Frame):
 		self.buttonB = Button(self.Frame, text = "Open")
 		self.buttonB.pack(expand = 0, side = LEFT)
 
-		self.title = Label(self.Frame, text = "New note")
+		self.title = Label(self.Frame, text = "New note                            ", anchor = CENTER)
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
 		self.Bindings()
 
-	def buttonAChange(self, changeTo):
-		if changeTo == 0:
-			self.buttonA.config(text = "Save")
-
-		elif changeTo == 1:
-			self.buttonA.config(text = "Save As")
-
-		elif changeTo == 2:
-			self.buttonA.config(text = "Rename")
-
-		else:
-			print("buttonAChange was given an index which was out of range")
-
 	def Bindings(self):
 		self.buttonA.bind("<Enter>", lambda event: self.buttonASave())
 		self.buttonA.bind("<Leave>", lambda event: self.buttonASave())
-		self.buttonA.bind("<Control-s>", lambda event: self.master.saveFile(1))
 
 		self.buttonA.bind("<Shift-Enter>", lambda event: self.buttonASaveAs())
 		self.buttonA.bind("<Shift-Leave>", lambda event: self.buttonASave())
-		self.buttonA.bind("<Control-S>", lambda event: self.master.saveFile(2))
 
 		self.buttonA.bind("<Control-Enter>", lambda event: self.buttonARename())
 		self.buttonA.bind("<Control-Leave>", lambda event: self.buttonASave())
-		# Not working on Linux - self.buttonA.bind("<Control-Alt-s>", lambda event: self.master.saveFile(3))
 
 	def buttonASave(self):
 		self.buttonA.config(text = "Save", command = lambda: self.master.saveFile(1))
