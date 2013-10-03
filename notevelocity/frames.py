@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License along with thi
 ## Imports
 from tkinter import *
 from tkinter.ttk import *
+import bindings
 
 ## Main
 # Title bar
@@ -83,7 +84,7 @@ class formatBar(Frame):
 
 # Text Frame
 class text(Frame):
-	def __init__(self, master):
+	def __init__(self, master, root):
 
 		self.master = master
 
@@ -97,7 +98,57 @@ class text(Frame):
 
 		self.textBox = Text(self.Frame)
 		self.textBox.pack(expand = 1, fill = BOTH, side = LEFT)
+		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"))
 
 		# Link self.textBox and self.scrollbar
 		self.textBox.config(yscrollcommand = self.scrollbar.set)
 		self.scrollbar.config(command = self.textBox.yview)
+
+		# Bind Enter to newLine
+		self.textBox.bind("<Return>", lambda event: self.newLine())
+
+		# Bind Shift-tab to decreaseIndent
+		self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
+
+	# Make new lines keep the same indentation
+	def newLine(self):
+		self.tabbed = 0
+
+		# Get current line
+		lineNum, columnNum = self.textBox.index("insert").split(".")
+		line = self.textBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
+
+		for char in line:
+			if char == "\t":
+				self.tabbed += 1
+
+			else:
+				break
+
+		if self.tabbed != 0:
+			insertIndex = str(int(lineNum) + 1) + ".0"
+			insertTabs = "\n" + "\t" * self.tabbed
+			self.textBox.insert(insertIndex, insertTabs)
+
+		return "break"
+
+	def decreaseIndent(self, event):
+		self.tabbed = 0
+
+		# Get current line
+		lineNum, columnNum = self.textBox.index("insert").split(".")
+		line = self.textBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
+
+		for char in line:
+			if char == "\t":
+				self.tabbed += 1
+
+			else:
+				break
+
+		if self.tabbed != 0:
+			deleteStart = lineNum + ".0"
+			deleteEnd = lineNum + ".1"
+			self.textBox.delete(deleteStart, deleteEnd)
+
+		return "break"

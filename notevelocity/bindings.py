@@ -15,10 +15,25 @@ You should have received a copy of the GNU General Public License along with thi
 from tkinter import *
 from tkinter.ttk import *
 
+# Change key bindings here
+save = "<Control-s>"
+saveAs = "<Control-S>"
+rename = "<Control-r>"
+
+quit = "<Control-w>"
+
+decreaseIndent = "<Control-space>"
+
 # Main
 def init(self, root):
 	print("bindings initialised")
 
-	root.bind("<Control-s>", lambda event: self.saveFile(1))
-	root.bind("<Control-S>", lambda event: self.saveFile(2))
-	root.bind("<Control-r>", lambda event: self.saveFile(3))
+	# Saving
+	root.bind(save, lambda event: self.saveFile(1))
+	root.bind(saveAs, lambda event: self.saveFile(2))
+	root.bind(rename, lambda event: self.saveFile(3))
+
+	# Opening
+
+	# Quit
+	root.bind(quit, lambda event: self.quit())

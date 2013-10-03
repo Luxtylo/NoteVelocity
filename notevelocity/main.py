@@ -46,7 +46,7 @@ class AppFrame(Frame):
 			self.quit()
 
 		try:
-			self.textFrame = frames.text(self)
+			self.textFrame = frames.text(self, root)
 			print(self.textFrame.testMessage)
 		except:
 			print("textFrame was not initialised properly")
