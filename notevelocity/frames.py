@@ -107,7 +107,7 @@ class text(Frame):
 		# Bind Enter to newLine
 		self.textBox.bind("<Return>", lambda event: self.newLine())
 
-		# Bind Shift-tab to decreaseIndent
+		self.textBox.bind(bindings.increaseIndent, self.increaseIndent)
 		self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
 
 	# Make new lines keep the same indentation
@@ -129,6 +129,10 @@ class text(Frame):
 			insertIndex = str(int(lineNum) + 1) + ".0"
 			insertTabs = "\n" + "\t" * self.tabbed
 			self.textBox.insert(insertIndex, insertTabs)
+
+		else:
+			insertIndex = str(int(lineNum) + 1) + ".0"
+			self.textBox.insert(insertIndex, "\n")
 
 		return "break"
 
@@ -152,3 +156,10 @@ class text(Frame):
 			self.textBox.delete(deleteStart, deleteEnd)
 
 		return "break"
+
+	def increaseIndent(self, event):
+		lineNum, columnNum = self.textBox.index("insert").split(".")
+
+		insertIndex = lineNum + ".0"
+
+		self.textBox.insert(insertIndex, "\t")

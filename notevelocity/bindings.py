@@ -22,7 +22,8 @@ rename = "<Control-r>"
 
 quit = "<Control-w>"
 
-decreaseIndent = "<Control-space>"
+decreaseIndent = "<Control-Shift-space>"
+increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
 
 # Main
 def init(self, root):
