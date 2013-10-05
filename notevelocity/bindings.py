@@ -25,6 +25,8 @@ quit = "<Control-w>"
 decreaseIndent = "<Control-Shift-space>"
 increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
 
+margins = 2
+
 # Main
 def init(self, root):
 	print("bindings initialised")

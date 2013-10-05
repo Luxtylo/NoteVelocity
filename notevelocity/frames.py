@@ -87,6 +87,7 @@ class text(Frame):
 	def __init__(self, master, root):
 
 		self.master = master
+		self.root = root
 
 		self.testMessage = "textFrame is initialised"
 
@@ -109,6 +110,10 @@ class text(Frame):
 
 		self.textBox.bind(bindings.increaseIndent, self.increaseIndent)
 		self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
+
+		self.configureTags()
+
+		self.startUpdate()
 
 	# Make new lines keep the same indentation
 	def newLine(self):
@@ -163,3 +168,62 @@ class text(Frame):
 		insertIndex = lineNum + ".0"
 
 		self.textBox.insert(insertIndex, "\t")
+
+	def configureTags(self):
+		self.tags = ["title", "subtitle", "text"]
+
+		self.textBox.tag_add(self.tags[0], "1.0", "end")
+		self.textBox.tag_add(self.tags[1], "1.0", "end")
+		self.textBox.tag_add(self.tags[2], "1.0", "end")
+
+	def startUpdate(self):
+		self.updateTagFlag = True
+		self.updateTags()
+
+	def stopUpdate(self):
+		self.updateTagFlag = False
+
+	# Run every second or so (do testing to find how often is necessary)
+	def updateTags(self):
+
+		if self.updateTagFlag:
+
+			lineNum = 0
+
+			for line in self.textBox.get("1.0", "end"):
+
+				self.tabbed = 0
+
+				for char in line:
+					if char == "\t":
+						self.tabbed += 1
+
+					else:
+						break
+
+				lineStart = str(lineNum) + ".0"
+				lineEnd = str(lineNum) + ".end"
+
+				# Remove tags
+				self.textBox.tag_remove(self.tags[0], lineStart, lineEnd)
+				self.textBox.tag_remove(self.tags[1], lineStart, lineEnd)
+				self.textBox.tag_remove(self.tags[2], lineStart, lineEnd)
+
+				if self.tabbed == 0:
+					self.textBox.tag_add(self.tags[0], lineStart, lineEnd)
+					#print("Title")
+
+				elif self.tabbed == 1:
+					self.textBox.tag_add(self.tags[1], lineStart, lineEnd)
+					#print("Subtitle")
+
+				elif self.tabbed == 2:
+					self.textBox.tag_add(self.tags[2], lineStart, lineEnd)
+					#print("Text")
+
+				lineNum += 1
+
+			self.root.after(1000, self.updateTags)
+
+		else:
+			print("Tag updating disabled")

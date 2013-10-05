@@ -45,12 +45,13 @@ class AppFrame(Frame):
 			print("formatBar was not initialised properly")
 			self.quit()
 
-		try:
+		"""try:
 			self.textFrame = frames.text(self, root)
 			print(self.textFrame.testMessage)
 		except:
 			print("textFrame was not initialised properly")
-			self.quit()
+			self.quit()"""
+		self.textFrame = frames.text(self, root)
 
 		try:
 			bindings.init(self, root)
