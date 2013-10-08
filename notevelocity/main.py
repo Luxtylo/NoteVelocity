@@ -87,7 +87,17 @@ class AppFrame(Frame):
 		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False:
 			print("No open location selected")
 		else:
-			pass
+			openFile = open(openLocation, "r+")
+
+			self.textFrame.textBox.delete("1.0", "end")
+
+			lineNum = 1
+
+			for line in openFile:
+				insertLoc = str(lineNum) + ".0"
+				self.textFrame.textBox.insert(insertLoc, line)
+				
+				lineNum += 1
 
 	def max(self):
 		pass

@@ -185,7 +185,7 @@ class text(Frame):
 	def stopUpdate(self):
 		self.updateTagFlag = False
 
-	# Run every second or so (do testing to find how often is necessary)
+	# Run once a 5-character buffer has built up or something
 	def updateTags(self):
 
 		if self.updateTagFlag:
