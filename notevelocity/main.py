@@ -13,6 +13,8 @@ You should have received a copy of the GNU General Public License along with thi
 
 ## Imports
 from tkinter import *
+from tkinter import filedialog
+from os import getcwd
 import frames
 import bindings
 
@@ -31,12 +33,14 @@ class AppFrame(Frame):
 		print("Initialising UI...")
 
 		## Top level frames
-		try:
+		"""try:
 			self.titleBar = frames.titleBar(self, root)
 			print(self.titleBar.testMessage)
 		except:
 			print("titleBar was not initialised properly")
-			self.quit()
+			self.quit()"""
+
+		self.titleBar = frames.titleBar(self, root)
 
 		try:
 			self.formatBar = frames.formatBar(self)
@@ -45,13 +49,12 @@ class AppFrame(Frame):
 			print("formatBar was not initialised properly")
 			self.quit()
 
-		"""try:
+		try:
 			self.textFrame = frames.text(self, root)
 			print(self.textFrame.testMessage)
 		except:
 			print("textFrame was not initialised properly")
-			self.quit()"""
-		self.textFrame = frames.text(self, root)
+			self.quit()
 
 		try:
 			bindings.init(self, root)
@@ -63,6 +66,8 @@ class AppFrame(Frame):
 		if mode == 1:
 			# Save file
 			print("Saving file")
+
+			fileContents = self.textFrame.textBox.get("1.0", "end")
 		elif mode == 2:
 			# Save file as
 			print("Saving file as <filename>")
@@ -73,7 +78,16 @@ class AppFrame(Frame):
 			print("saveFile index out of range")
 
 	def open(self):
-		pass
+		# May need to be changed depending on OS
+		notesDir = getcwd() + "/notes"
+		print(notesDir)
+
+		openLocation = filedialog.askopenfilename(initialdir = notesDir, title = "Select note to open", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+
+		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False:
+			print("No open location selected")
+		else:
+			pass
 
 	def max(self):
 		pass
