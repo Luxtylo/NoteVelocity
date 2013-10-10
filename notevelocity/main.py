@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License along with thi
 ## Imports
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 from os import getcwd
 import frames
 import bindings
@@ -27,20 +28,20 @@ class AppFrame(Frame):
 		self.initUI()
 
 	def initVars(self):
-		pass
+		self.files = list()
+
+		self.notesDir = getcwd() + "/notes"
 
 	def initUI(self):
 		print("Initialising UI...")
 
 		## Top level frames
-		"""try:
+		try:
 			self.titleBar = frames.titleBar(self, root)
 			print(self.titleBar.testMessage)
 		except:
 			print("titleBar was not initialised properly")
-			self.quit()"""
-
-		self.titleBar = frames.titleBar(self, root)
+			self.quit()
 
 		try:
 			self.formatBar = frames.formatBar(self)
@@ -67,10 +68,36 @@ class AppFrame(Frame):
 			# Save file
 			print("Saving file")
 
-			fileContents = self.textFrame.textBox.get("1.0", "end")
+			if(self.textFrame.fileName == ""):
+				print("File has no name")
+				self.saveFile(2)
+			else:
+				fileContents = self.textFrame.textBox.get("1.0", "end")
+
+				saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "SAVING", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+
+				self.textFrame.changed = False
+
 		elif mode == 2:
 			# Save file as
-			print("Saving file as <filename>")
+			fileContents = self.textFrame.textBox.get("1.0", "end")
+
+			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+			self.textFrame.fileName = saveLocation
+
+			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n":
+				print("No save location selected")
+			else:
+				fileToSave = open(saveLocation, "w+").close()
+
+				textContents = self.textFrame.textBox.get("1.0", "end")
+				print(textContents)
+				fileToSave.write(textContents)
+
+				print("Saved file at " + saveLocation)
+
+				self.textFrame.changed = False
+
 		elif mode == 3:
 			# Rename
 			print("Renaming file to <filename>")
@@ -78,16 +105,19 @@ class AppFrame(Frame):
 			print("saveFile index out of range")
 
 	def open(self):
-		# May need to be changed depending on OS
-		notesDir = getcwd() + "/notes"
-		print(notesDir)
+		# Check whether textbox contents have changed. If yes, ask to save.
+		if self.textFrame.changed == True:
+			yesno = messagebox.askyesno("Save current file?", "The currently open file has not been saved. Save it?")
 
-		openLocation = filedialog.askopenfilename(initialdir = notesDir, title = "Select note to open", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+			if yesno is True:
+				self.saveFile(1)
+
+		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
 
 		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False:
 			print("No open location selected")
-		else:
-			openFile = open(openLocation, "r+")
+		elif self.textFrame.changed == False:
+			openFile = open(openLocation, "r")
 
 			self.textFrame.textBox.delete("1.0", "end")
 
@@ -98,6 +128,10 @@ class AppFrame(Frame):
 				self.textFrame.textBox.insert(insertLoc, line)
 				
 				lineNum += 1
+
+			print("Opening file from " + openLocation)
+		else:
+			print("Error opening file. The \'changed\' variable may not have been correctly set.")
 
 	def max(self):
 		pass

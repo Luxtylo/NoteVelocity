@@ -38,7 +38,7 @@ class titleBar(Frame):
 		self.buttonB = Button(self.Frame, text = "Open")
 		self.buttonB.pack(expand = 0, side = LEFT)
 
-		self.title = Label(self.Frame, text = "New note                            ", anchor = CENTER)
+		self.title = Label(self.Frame, text = "   New note", anchor = "w")
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
 		self.Bindings()
@@ -113,9 +113,15 @@ class text(Frame):
 		self.textBox.bind(bindings.increaseIndent, self.increaseIndent)
 		self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
 
+		self.textBox.bind("<<Modified>>", lambda event: self.modified())
+
 		self.configureTags()
 
 		self.startUpdate()
+
+		self.changed = False
+		self.fileName = ""
+		self.shortFileName = self.fileName.split("/")[-1]
 
 	# Make new lines keep the same indentation
 	def newLine(self):
@@ -184,6 +190,9 @@ class text(Frame):
 
 	def stopUpdate(self):
 		self.updateTagFlag = False
+
+	def modified(self):
+		self.changed = True
 
 	# Run once a 5-character buffer has built up or something
 	def updateTags(self):
