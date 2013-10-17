@@ -18,11 +18,14 @@ from tkinter import messagebox
 from os import getcwd
 import frames
 import bindings
+import logging
 
 ## Main loop
 class AppFrame(Frame):
 	def __init__(self, master):
 		self.master = master
+
+		self.log = logging.Log(self)
 
 		self.initVars()
 		self.initUI()
@@ -33,34 +36,38 @@ class AppFrame(Frame):
 		self.notesDir = getcwd() + "/notes"
 
 	def initUI(self):
-		print("Initialising UI...")
+		self.log.write("Initialising UI")
 
 		## Top level frames
 		try:
 			self.titleBar = frames.titleBar(self, root)
-			print(self.titleBar.testMessage)
+			self.log.write(self.titleBar.testMessage)
 		except:
 			print("titleBar was not initialised properly")
+			self.log.write("titleBar was not initialised properly")
 			self.quit()
 
 		try:
 			self.formatBar = frames.formatBar(self)
-			print(self.formatBar.testMessage)
+			self.log.write(self.formatBar.testMessage)
 		except:
 			print("formatBar was not initialised properly")
+			self.log.write("formatBar was not initialised properly")
 			self.quit()
 
 		try:
 			self.textFrame = frames.text(self, root)
-			print(self.textFrame.testMessage)
+			self.log.write(self.textFrame.testMessage)
 		except:
 			print("textFrame was not initialised properly")
+			self.log.write("textFrame was not initialised properly")
 			self.quit()
 
 		try:
 			bindings.init(self, root)
 		except:
 			print("bindings were not initialised properly")
+			self.log.write("bindings were not initialised properly")
 			self.quit()
 
 	def saveFile(self, mode):
@@ -103,6 +110,7 @@ class AppFrame(Frame):
 			print("Renaming file to <filename>")
 		else:
 			print("saveFile index out of range")
+			self.log.write("saveFile index out of range")
 
 	def open(self):
 		# Check whether textbox contents have changed. If yes, ask to save.
@@ -116,6 +124,7 @@ class AppFrame(Frame):
 
 		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False:
 			print("No open location selected")
+			self.log.write("No open location selected")
 		elif self.textFrame.changed == False:
 			openFile = open(openLocation, "r")
 
@@ -130,6 +139,7 @@ class AppFrame(Frame):
 				lineNum += 1
 
 			print("Opening file from " + openLocation)
+			self.log.write("Opening file from " + openLocation)
 		else:
 			print("Error opening file. The \'changed\' variable may not have been correctly set.")
 
@@ -141,6 +151,8 @@ class AppFrame(Frame):
 
 	def quit(self):
 		print("Closing NoteVelocity...")
+		self.log.write("Closing NoteVelocity...")
+		self.log.close()
 
 		global root
 		root.destroy()
