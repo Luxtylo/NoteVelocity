@@ -6,6 +6,7 @@ log.*
 doc/**/*.txt
 output.*
 test.*
+Test.*
 *.temp
 *.pyc
 *.swp
