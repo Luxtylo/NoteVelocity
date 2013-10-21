@@ -200,4 +200,5 @@ root.focus_set()
 
 ## Start main loop
 app = AppFrame(root)
+root.protocol("WM_DELETE_WINDOW", app.quit)
 root.mainloop()
