@@ -44,7 +44,7 @@ class AppFrame(Frame):
 			self.log.write(self.titleBar.testMessage)
 		except:
 			print("titleBar was not initialised properly")
-			self.log.write("titleBar was not initialised properly")
+			self.log.writeError("titleBar was not initialised properly")
 			self.quit()
 
 		try:
@@ -52,7 +52,7 @@ class AppFrame(Frame):
 			self.log.write(self.formatBar.testMessage)
 		except:
 			print("formatBar was not initialised properly")
-			self.log.write("formatBar was not initialised properly")
+			self.log.writeError("formatBar was not initialised properly")
 			self.quit()
 
 		try:
@@ -60,14 +60,14 @@ class AppFrame(Frame):
 			self.log.write(self.textFrame.testMessage)
 		except:
 			print("textFrame was not initialised properly")
-			self.log.write("textFrame was not initialised properly")
+			self.log.writeError("textFrame was not initialised properly")
 			self.quit()
 
 		try:
 			bindings.init(self, root)
 		except:
 			print("bindings were not initialised properly")
-			self.log.write("bindings were not initialised properly")
+			self.log.writeError("bindings were not initialised properly")
 			self.quit()
 
 	def saveFile(self, mode):
@@ -102,6 +102,7 @@ class AppFrame(Frame):
 				fileToSave.write(textContents)
 
 				print("Saved file at " + saveLocation)
+				self.log.write("Saved file at " + saveLocation)
 
 				fileToSave.close()
 
@@ -144,6 +145,7 @@ class AppFrame(Frame):
 			self.log.write("Opening file from " + openLocation)
 		else:
 			print("Error opening file. The \'changed\' variable may not have been correctly set.")
+			self.log.writeError("Error opening file. The \'changed\' variable may not have been correctly set.")
 
 	def max(self):
 		pass
