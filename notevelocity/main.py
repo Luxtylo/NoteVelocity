@@ -76,7 +76,7 @@ class AppFrame(Frame):
 			print("Saving file")
 
 			if(self.textFrame.fileName == ""):
-				print("File has no name")
+				print("File has no name. Saving as")
 				self.saveFile(2)
 			else:
 				fileContents = self.textFrame.textBox.get("1.0", "end")
@@ -93,15 +93,17 @@ class AppFrame(Frame):
 			self.textFrame.fileName = saveLocation
 
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n":
-				print("No save location selected")
+				print("No save location selected. Cancelling")
 			else:
-				fileToSave = open(saveLocation, "w+").close()
+				fileToSave = open(saveLocation, "w+")
 
 				textContents = self.textFrame.textBox.get("1.0", "end")
 				print(textContents)
 				fileToSave.write(textContents)
 
 				print("Saved file at " + saveLocation)
+
+				fileToSave.close()
 
 				self.textFrame.changed = False
 
