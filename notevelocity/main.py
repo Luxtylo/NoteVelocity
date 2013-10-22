@@ -111,6 +111,7 @@ class AppFrame(Frame):
 				fileToSave = open(saveLocation, "w+")
 
 				textContents = self.textFrame.textBox.get("1.0", "end")
+				
 				fileToSave.write(textContents)
 
 				print("Saved file at " + saveLocation)
