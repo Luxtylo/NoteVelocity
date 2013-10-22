@@ -99,7 +99,7 @@ class AppFrame(Frame):
 			# Save file as
 			fileContents = self.textFrame.textBox.get("1.0", "end")
 
-			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note")])
 			self.textFrame.fileName = saveLocation
 
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
@@ -115,7 +115,7 @@ class AppFrame(Frame):
 				self.log.write("Saved file at " + saveLocation)
 
 				self.textFrame.fileName = saveLocation
-				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1])
+				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1].split(".")[-2])
 
 				fileToSave.close()
 
@@ -125,7 +125,7 @@ class AppFrame(Frame):
 			# Rename
 			fileContents = self.textFrame.textBox.get("1.0", "end")
 
-			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Rename note to", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Rename note to", filetypes = [("Note files", "*.note")])
 
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
 				print("No rename location selected. Cancelling")
@@ -143,7 +143,7 @@ class AppFrame(Frame):
 
 				self.textFrame.fileName = saveLocation
 				print(self.textFrame.fileName)
-				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1])
+				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1].split(".")[-2])
 
 				fileToSave.close()
 
@@ -163,7 +163,7 @@ class AppFrame(Frame):
 			else:
 				self.textFrame.changed = False
 
-		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
+		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note")])
 
 		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False or openLocation == ():
 			print("No open location selected")
@@ -182,10 +182,12 @@ class AppFrame(Frame):
 				lineNum += 1
 
 			self.textFrame.fileName = openLocation
-			self.titleBar.title.config(text = "   " + self.textFrame.fileName.split("/")[-1])
+			self.titleBar.title.config(text = "   " + self.textFrame.fileName.split("/")[-1].split(".")[-2])
 
 			print("Opening file from " + openLocation)
 			self.log.write("Opening file from " + openLocation)
+
+			self.textFrame.changed = False
 		else:
 			print("Error opening file. The \'changed\' variable may not have been correctly set.")
 			self.log.writeError("Error opening file. The \'changed\' variable may not have been correctly set.")
