@@ -40,7 +40,7 @@ class Log():
 
 	def writeError(self, line):
 		time = self.getTime()
-		self.logFile.write("\n#ERROR:\n\t" + time + " - " + line)
+		self.logFile.write("\n\n#ERROR:\n\t" + time + " - " + line)
 
 	def close(self):
 		self.logFile.close()

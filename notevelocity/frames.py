@@ -53,7 +53,7 @@ class titleBar(Frame):
 		self.buttonA.bind("<Control-Enter>", lambda event: self.buttonARename())
 		self.buttonA.bind("<Control-Leave>", lambda event: self.buttonASave())
 
-		self.buttonB.config(command = self.master.open)
+		self.buttonB.config(command = self.master.openFile)
 
 	def buttonASave(self):
 		self.buttonA.config(text = "Save", command = lambda: self.master.saveFile(1))
