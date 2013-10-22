@@ -19,6 +19,7 @@ from tkinter.ttk import *
 save = "<Control-s>"
 saveAs = "<Control-S>"
 rename = "<Control-r>"
+openFile = "<Control-o>"
 
 quit = "<Control-w>"
 
@@ -37,6 +38,7 @@ def init(self, root):
 	root.bind(rename, lambda event: self.saveFile(3))
 
 	# Opening
+	root.bind(openFile, lambda event: self.openFile())
 
 	# Quit
 	root.bind(quit, lambda event: self.quit())
