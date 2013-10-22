@@ -71,6 +71,8 @@ class AppFrame(Frame):
 			self.log.writeError("bindings were not initialised properly")
 			self.quit()
 
+		self.log.write("All initialised\n")
+
 	def saveFile(self, mode):
 		if mode == 1:
 			# Save file
