@@ -126,7 +126,6 @@ class AppFrame(Frame):
 			fileContents = self.textFrame.textBox.get("1.0", "end")
 
 			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Rename note to", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
-			self.textFrame.fileName = saveLocation
 
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
 				print("No rename location selected. Cancelling")
@@ -139,9 +138,11 @@ class AppFrame(Frame):
 				print("Renamed file to " + saveLocation)
 				self.log.write("Renamed file to " + saveLocation)
 
-				os.remove(self.textFrame.fileName)
+				remove(self.textFrame.fileName)
+				print(self.textFrame.fileName)
 
 				self.textFrame.fileName = saveLocation
+				print(self.textFrame.fileName)
 				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1])
 
 				fileToSave.close()
@@ -159,6 +160,8 @@ class AppFrame(Frame):
 
 			if yesno:
 				self.saveFile(1)
+			else:
+				self.textFrame.changed = False
 
 		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note"), ("Text files", "*.txt"), ("All files", "*")])
 
@@ -178,8 +181,8 @@ class AppFrame(Frame):
 				
 				lineNum += 1
 
-			self.textFrame.fileName = "   " + openLocation.split("/")[-1]
-			self.titleBar.title.config(text = self.textFrame.fileName)
+			self.textFrame.fileName = openLocation
+			self.titleBar.title.config(text = "   " + self.textFrame.fileName.split("/")[-1])
 
 			print("Opening file from " + openLocation)
 			self.log.write("Opening file from " + openLocation)
