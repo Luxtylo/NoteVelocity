@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with thi
 from tkinter import *
 from tkinter.ttk import *
 import bindings
+import tkinter.font
 
 ## Main
 # Title bar
@@ -25,6 +26,8 @@ class titleBar(Frame):
 		self.root = root
 
 		self.testMessage = "titleBar is initialised"
+
+		self.fonts = initFont()
 
 		self.Frame = Frame()
 		self.Frame.pack(fill = X, side = TOP, expand = 0, ipadx = 2, ipady = 2)
@@ -72,17 +75,31 @@ class formatBar(Frame):
 
 		self.testMessage = "formatBar is initialised"
 
+		self.fonts = initFont()
+
+		self.initButtonStyle()
+
 		self.Frame = Frame()
 		self.Frame.pack(fill = Y, side = LEFT, expand = 0, ipadx = 2, ipady = 2)
 
-		self.bold = Button(self.Frame, text = "B")
-		self.bold.pack(expand = 0, side = TOP)
+		self.title = Button(self.Frame, text = "T", style = "F.TButton")
+		self.title.pack(expand = 0, side = TOP)
 
-		self.italic = Button(self.Frame, text = "I")
-		self.italic.pack(expand = 0, side = TOP)
+		self.subTitle = Button(self.Frame, text = "S", style = "F.TButton")
+		self.subTitle.pack(expand = 0, side = TOP)
 
-		self.settings = Button(self.Frame, text = "S")
+		self.equation = Button(self.Frame, text = "E", style = "F.TButton")
+		self.equation.pack(expand = 0, side = TOP)
+
+		self.settings = Button(self.Frame, text = "Set", style = "F.TButton")
 		self.settings.pack(expand = 0, side = BOTTOM)
+
+	def bindings(self):
+		pass
+
+	def initButtonStyle(self):
+		formatButtonStyle = Style()
+		formatButtonStyle.configure("F.TButton", foreground = "#333", background = "#FFF", width = 4, font = self.fonts[0])
 
 # Text Frame
 class text(Frame):
@@ -90,6 +107,8 @@ class text(Frame):
 
 		self.master = master
 		self.root = root
+
+		self.fonts = initFont()
 
 		self.testMessage = "textFrame is initialised"
 
@@ -238,3 +257,18 @@ class text(Frame):
 
 		else:
 			print("Tag updating disabled")
+
+def initFont():
+	buttonFont = tkinter.font.Font(family = "Source Sans Pro", size = 10)
+
+	fonts = [buttonFont]
+	return fonts
+
+class tabBar(Frame):
+	def __init__(self, master):
+		pass
+
+	class tab():
+		def __init__(self, master):
+			self.master = master
+			
