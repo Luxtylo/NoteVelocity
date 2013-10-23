@@ -28,6 +28,7 @@ class titleBar(Frame):
 		self.testMessage = "titleBar is initialised"
 
 		self.fonts = initFont()
+		self.styles()
 
 		self.Frame = Frame()
 		self.Frame.pack(fill = X, side = TOP, expand = 0, ipadx = 2, ipady = 2)
@@ -35,13 +36,13 @@ class titleBar(Frame):
 		self.icon = Frame(self.Frame)
 		self.icon.pack(expand = 0, side = LEFT)
 
-		self.buttonA = Button(self.Frame, text = "Save")
+		self.buttonA = Button(self.Frame, text = "Save", style = "TB.TButton")
 		self.buttonA.pack(expand = 0, side = LEFT)
 
-		self.buttonB = Button(self.Frame, text = "Open")
+		self.buttonB = Button(self.Frame, text = "Open", style = "TB.TButton")
 		self.buttonB.pack(expand = 0, side = LEFT)
 
-		self.title = Label(self.Frame, text = "   New note", anchor = "w")
+		self.title = Label(self.Frame, text = "   New note", anchor = "w", style = "T.TLabel")
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
 		self.Bindings()
@@ -66,6 +67,13 @@ class titleBar(Frame):
 
 	def buttonARename(self):
 		self.buttonA.config(text = "Rename", command = lambda: self.master.saveFile(3))
+
+	def styles(self):
+		titleBarButtonStyle = Style()
+		titleBarButtonStyle.configure("TB.TButton", foreground = "#333", background = "#FFF", width = 5, font = self.fonts[0])
+
+		titleStyle = Style()
+		titleStyle.configure("T.TLabel", foreground = "#444", font = self.fonts[1])
 
 # Formatting bar
 class formatBar(Frame):
@@ -260,8 +268,9 @@ class text(Frame):
 
 def initFont():
 	buttonFont = tkinter.font.Font(family = "Source Sans Pro", size = 10)
+	titleFont = tkinter.font.Font(family = "Source Sans Pro", size = 11, weight = "bold")
 
-	fonts = [buttonFont]
+	fonts = [buttonFont, titleFont]
 	return fonts
 
 class tabBar(Frame):
