@@ -13,12 +13,11 @@ You should have received a copy of the GNU General Public License along with thi
 
 from tkinter import *
 from tkinter.ttk import *
-import tkinter.font
 
 def init():
 	# Fonts
-	buttonFont = tkinter.font.Font(family = "Source Sans Pro", size = 10)
-	titleFont = tkinter.font.Font(family = "Source Sans Pro", size = 11, weight = "bold")
+	buttonFont = ("Source Sans Pro", 10)
+	titleFont = ("Source Sans Pro", 11, "bold")
 
 	# Styles
 	titleBarButtonStyle = Style()
