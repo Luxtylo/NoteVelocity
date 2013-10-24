@@ -27,9 +27,6 @@ class titleBar(Frame):
 
 		self.testMessage = "titleBar is initialised"
 
-		self.fonts = initFont()
-		self.styles()
-
 		self.Frame = Frame()
 		self.Frame.pack(fill = X, side = TOP, expand = 0, ipadx = 2, ipady = 2)
 
@@ -68,13 +65,6 @@ class titleBar(Frame):
 	def buttonARename(self):
 		self.buttonA.config(text = "Rename", command = lambda: self.master.saveFile(3))
 
-	def styles(self):
-		titleBarButtonStyle = Style()
-		titleBarButtonStyle.configure("TB.TButton", foreground = "#333", background = "#FFF", width = 5, font = self.fonts[0])
-
-		titleStyle = Style()
-		titleStyle.configure("T.TLabel", foreground = "#444", font = self.fonts[1])
-
 # Formatting bar
 class formatBar(Frame):
 	def __init__(self, master):
@@ -82,10 +72,6 @@ class formatBar(Frame):
 		self.master = master
 
 		self.testMessage = "formatBar is initialised"
-
-		self.fonts = initFont()
-
-		self.initButtonStyle()
 
 		self.Frame = Frame()
 		self.Frame.pack(fill = Y, side = LEFT, expand = 0, ipadx = 2, ipady = 2)
@@ -105,18 +91,12 @@ class formatBar(Frame):
 	def bindings(self):
 		pass
 
-	def initButtonStyle(self):
-		formatButtonStyle = Style()
-		formatButtonStyle.configure("F.TButton", foreground = "#333", background = "#FFF", width = 4, font = self.fonts[0])
-
 # Text Frame
 class text(Frame):
 	def __init__(self, master, root):
 
 		self.master = master
 		self.root = root
-
-		self.fonts = initFont()
 
 		self.testMessage = "textFrame is initialised"
 
@@ -265,13 +245,6 @@ class text(Frame):
 
 		else:
 			print("Tag updating disabled")
-
-def initFont():
-	buttonFont = tkinter.font.Font(family = "Source Sans Pro", size = 10)
-	titleFont = tkinter.font.Font(family = "Source Sans Pro", size = 11, weight = "bold")
-
-	fonts = [buttonFont, titleFont]
-	return fonts
 
 class tabBar(Frame):
 	def __init__(self, master):

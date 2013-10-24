@@ -20,6 +20,7 @@ from os import remove
 import frames
 import bindings
 import logging
+import styles
 
 ## Main loop
 class AppFrame(Frame):
@@ -38,6 +39,8 @@ class AppFrame(Frame):
 
 	def initUI(self):
 		self.log.write("Initialising UI")
+
+		styles.init()
 
 		## Top level frames
 		try:
@@ -141,11 +144,10 @@ class AppFrame(Frame):
 				print("Renamed file to " + saveLocation)
 				self.log.write("Renamed file to " + saveLocation)
 
-				remove(self.textFrame.fileName)
-				print(self.textFrame.fileName)
+				if self.textFrame.fileName != "":
+					remove(self.textFrame.fileName)
 
 				self.textFrame.fileName = saveLocation
-				print(self.textFrame.fileName)
 				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1].split(".")[-2])
 
 				fileToSave.close()
