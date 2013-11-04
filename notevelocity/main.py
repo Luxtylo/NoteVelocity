@@ -74,6 +74,8 @@ class AppFrame(Frame):
 			self.log.writeError("bindings were not initialised properly")
 			self.quit()
 
+		self.textFrame.textBox.focus_set()
+
 		self.log.write("All initialised\n")
 
 	def saveFile(self, mode):
