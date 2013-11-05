@@ -54,9 +54,9 @@ class AppFrame(Frame):
 		try:
 			self.formatBar = frames.formatBar(self)
 			self.log.write(self.formatBar.testMessage)
-		except:
-			print("formatBar was not initialised properly")
-			self.log.writeError("formatBar was not initialised properly")
+		except Exception as ex:
+			print("formatBar was not initialised properly. Error:\n", ex)
+			self.log.writeError("formatBar was not initialised properly. Error:\n", ex)
 			self.quit()
 
 		try:

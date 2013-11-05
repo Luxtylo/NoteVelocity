@@ -76,11 +76,19 @@ class formatBar(Frame):
 		self.Frame = Frame()
 		self.Frame.pack(fill = Y, side = LEFT, expand = 0, ipadx = 2, ipady = 2)
 
+		self.spacer1 = Frame(self.Frame, height = 2)
+		self.spacer1.pack(expand = 0, side = TOP)
+
 		self.title = Button(self.Frame, text = "T", style = "F.TButton")
 		self.title.pack(expand = 0, side = TOP)
 
 		self.subTitle = Button(self.Frame, text = "S", style = "F.TButton")
 		self.subTitle.pack(expand = 0, side = TOP)
+
+		self.notes = Button(self.Frame, text = "N", style = "F.TButton")
+
+		self.spacer2 = Frame(self.Frame, height = 5)
+		self.spacer2.pack(expand = 0, side = TOP)
 
 		self.equation = Button(self.Frame, text = "E", style = "F.TButton")
 		self.equation.pack(expand = 0, side = TOP)
