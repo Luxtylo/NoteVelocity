@@ -46,32 +46,32 @@ class AppFrame(Frame):
 		try:
 			self.titleBar = frames.titleBar(self, root)
 			self.log.write(self.titleBar.testMessage)
-		except:
+		except Exception as ex:
 			print("titleBar was not initialised properly")
-			self.log.writeError("titleBar was not initialised properly")
+			self.log.writeError("titleBar was not initialised properly. Error:\n", ex)
 			self.quit()
 
 		try:
 			self.formatBar = frames.formatBar(self)
 			self.log.write(self.formatBar.testMessage)
 		except Exception as ex:
-			print("formatBar was not initialised properly. Error:\n", ex)
+			print("formatBar was not initialised properly")
 			self.log.writeError("formatBar was not initialised properly. Error:\n", ex)
 			self.quit()
 
 		try:
 			self.textFrame = frames.text(self, root)
 			self.log.write(self.textFrame.testMessage)
-		except:
+		except Exception as ex:
 			print("textFrame was not initialised properly")
-			self.log.writeError("textFrame was not initialised properly")
+			self.log.writeError("textFrame was not initialised properly. Error:\n", ex)
 			self.quit()
 
 		try:
 			bindings.init(self, root)
-		except:
+		except Exception as ex:
 			print("bindings were not initialised properly")
-			self.log.writeError("bindings were not initialised properly")
+			self.log.writeError("bindings were not initialised properly. Error:\n", ex)
 			self.quit()
 
 		self.textFrame.textBox.focus_set()
