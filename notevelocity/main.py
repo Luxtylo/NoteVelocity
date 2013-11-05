@@ -48,7 +48,7 @@ class AppFrame(Frame):
 			self.log.write(self.titleBar.testMessage)
 		except Exception as ex:
 			print("titleBar was not initialised properly")
-			self.log.writeError("titleBar was not initialised properly. Error:\n", ex)
+			self.log.writeError("titleBar was not initialised properly. Error:\n" + str(ex))
 			self.quit()
 
 		try:
@@ -56,22 +56,38 @@ class AppFrame(Frame):
 			self.log.write(self.formatBar.testMessage)
 		except Exception as ex:
 			print("formatBar was not initialised properly")
-			self.log.writeError("formatBar was not initialised properly. Error:\n", ex)
+			self.log.writeError("formatBar was not initialised properly. Error:\n" + str(ex))
 			self.quit()
 
 		try:
-			self.textFrame = frames.text(self, root)
+			self.arrangementFrame = frames.arrangementFrame(self)
+			self.log.write(self.arrangementFrame.testMessage)
+		except Exception as ex:
+			print("arrangementFrame was not initialised properly")
+			self.log.writeError("arrangementFrame was not initialised properly. Error:\n" + str(ex))
+			self.quit()
+
+		try:
+			self.textFrame = frames.text(self.arrangementFrame, root)
 			self.log.write(self.textFrame.testMessage)
 		except Exception as ex:
 			print("textFrame was not initialised properly")
-			self.log.writeError("textFrame was not initialised properly. Error:\n", ex)
+			self.log.writeError("textFrame was not initialised properly. Error:\n" + str(ex))
+			self.quit()
+
+		try:
+			self.tabBar = frames.tabBar(self.arrangementFrame)
+			self.log.write(self.tabBar.testMessage)
+		except Exception as ex:
+			print("tabBar was not initialised properly")
+			self.log.writeError("tabBar was not initialsed properly. Error:\n" + str(ex))
 			self.quit()
 
 		try:
 			bindings.init(self, root)
 		except Exception as ex:
 			print("bindings were not initialised properly")
-			self.log.writeError("bindings were not initialised properly. Error:\n", ex)
+			self.log.writeError("bindings were not initialised properly. Error:\n" + str(ex))
 			self.quit()
 
 		self.textFrame.textBox.focus_set()

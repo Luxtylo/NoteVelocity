@@ -19,12 +19,26 @@ def init():
 	buttonFont = ("Source Sans Pro", 10)
 	titleFont = ("Source Sans Pro", 11, "bold")
 
-	# Styles
+	# Colours - these values should be in hexadecimal
+	toolbarColour = "#E8E8E8"
+	toolbarFontColour = "#303030"
+	toolbarButtonColour = "#FFFFFF"
+
+	# Styles (Do not edit)
+	titleBarStyle = Style()
+	titleBarStyle.configure("TB.TFrame", background = toolbarColour)
+
 	titleBarButtonStyle = Style()
-	titleBarButtonStyle.configure("TB.TButton", foreground = "#333", background = "#FFF", width = 7, font = buttonFont)
+	titleBarButtonStyle.configure("TB.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, width = 7, font = buttonFont)
 
 	formatButtonStyle = Style()
-	formatButtonStyle.configure("F.TButton", foreground = "#333", background = "#FFF", width = 3, font = buttonFont)
+	formatButtonStyle.configure("F.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, width = 3, font = buttonFont)
 
 	titleStyle = Style()
-	titleStyle.configure("T.TLabel", foreground = "#444", font = titleFont)
+	titleStyle.configure("T.TLabel", foreground = toolbarFontColour, font = titleFont)
+
+	tabBarStyle = Style()
+	tabBarStyle.configure("TB.TFrame", background = toolbarColour)
+
+	tabStyle = Style()
+	tabStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = buttonFont)

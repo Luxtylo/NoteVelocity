@@ -27,7 +27,7 @@ class titleBar(Frame):
 
 		self.testMessage = "titleBar is initialised"
 
-		self.Frame = Frame()
+		self.Frame = Frame(style = "TB.TFrame")
 		self.Frame.pack(fill = X, side = TOP, expand = 0, ipadx = 2, ipady = 2)
 
 		self.icon = Frame(self.Frame)
@@ -73,7 +73,7 @@ class formatBar(Frame):
 
 		self.testMessage = "formatBar is initialised"
 
-		self.Frame = Frame()
+		self.Frame = Frame(style = "TB.TFrame")
 		self.Frame.pack(fill = Y, side = LEFT, expand = 0, ipadx = 2, ipady = 2)
 
 		self.spacer1 = Frame(self.Frame, height = 2)
@@ -108,8 +108,8 @@ class text(Frame):
 
 		self.testMessage = "textFrame is initialised"
 
-		self.Frame = Frame()
-		self.Frame.pack(fill = BOTH, expand = 1, side = LEFT)
+		self.Frame = Frame(style = "TB.TFrame")
+		self.Frame.pack(fill = BOTH, expand = 1, side = TOP)
 
 		self.scrollbar = Scrollbar(self.Frame)
 		self.scrollbar.pack(expand = 0, fill = Y, side = RIGHT)
@@ -254,11 +254,30 @@ class text(Frame):
 		else:
 			print("Tag updating disabled")
 
+class arrangementFrame(Frame):
+	def __init__(self, master):
+		self.master = master
+
+		self.testMessage = "arrangementFrame is initialised"
+
+		self.Frame = Frame()
+		self.Frame.pack(side = LEFT)
+
 class tabBar(Frame):
 	def __init__(self, master):
-		pass
+		self.master = master
+
+		self.testMessage = "tabBar is initialised"
+
+		self.Frame = Frame(height = 24, style = "TB.TFrame")
+		self.Frame.pack(fill = X, expand = 0, side = BOTTOM, ipadx = 4, ipady = 2)
+
+		self.Button = Button(self.Frame, text = "Tab", style = "Tab.TButton")
+		self.Button.pack(expand = 0, side = LEFT)
 
 	class tab():
 		def __init__(self, master):
 			self.master = master
-			
+
+			self.text = StringVar()
+		
