@@ -94,7 +94,7 @@ class formatBar(Frame):
 		self.equation.pack(expand = 0, side = TOP)
 
 		self.settings = Button(self.Frame, text = "Set", style = "F.TButton")
-		self.settings.pack(expand = 0, side = BOTTOM)
+		self.settings.pack(expand = 0, side = BOTTOM, padx = 2, pady = 4)
 
 	def bindings(self):
 		pass
@@ -272,12 +272,29 @@ class tabBar(Frame):
 		self.Frame = Frame(height = 24, style = "TB.TFrame")
 		self.Frame.pack(fill = X, expand = 0, side = BOTTOM, ipadx = 4, ipady = 2)
 
-		self.Button = Button(self.Frame, text = "Tab", style = "Tab.TButton")
-		self.Button.pack(expand = 0, side = LEFT)
+		self.firstTab = self.tab(self.master, "New Note")
+		self.firstTab.show()
 
 	class tab():
-		def __init__(self, master):
+		def __init__(self, master, title):
 			self.master = master
 
 			self.text = StringVar()
-		
+
+			self.Frame = Frame(style = "Tab.TFrame")
+
+			self.title = Label(self.Frame, style = "TT.TLabel")
+			self.title.config(text = title)
+
+			self.rewriteButton = Button(self.Frame, style = "F.TButton", text = "R", width = 2)
+
+			self.closeButton = Button(self.Frame, style = "F.TButton", text = "X", width = 2)
+
+		def show(self):
+			self.Frame.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2)
+			self.title.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
+			self.rewriteButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
+			self.closeButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
+
+		def close():
+			pass

@@ -18,6 +18,7 @@ def init():
 	# Fonts
 	buttonFont = ("Source Sans Pro", 10)
 	titleFont = ("Source Sans Pro", 11, "bold")
+	tabFont = ("Source Sans Pro", 10)
 
 	# Colours - these values should be in hexadecimal
 	toolbarColour = "#E8E8E8"
@@ -41,4 +42,10 @@ def init():
 	tabBarStyle.configure("TB.TFrame", background = toolbarColour)
 
 	tabStyle = Style()
-	tabStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = buttonFont)
+	tabStyle.configure("Tab.TFrame", background = toolbarButtonColour)
+
+	tabButtonStyle = Style()
+	tabButtonStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = buttonFont)
+
+	tabTitleStyle = Style()
+	tabTitleStyle.configure("TT.TLabel", foreground = toolbarFontColour, background = toolbarButtonColour, font = tabFont)
