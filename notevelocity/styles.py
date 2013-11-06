@@ -25,6 +25,9 @@ def init():
 	toolbarFontColour = "#303030"
 	toolbarButtonColour = "#FFFFFF"
 
+	tabColour = "#EEEEEE"
+	tabSelectedColour = "#DDDDDD"
+
 	# Styles (Do not edit)
 	titleBarStyle = Style()
 	titleBarStyle.configure("TB.TFrame", background = toolbarColour)
@@ -42,7 +45,9 @@ def init():
 	tabBarStyle.configure("TabBar.TFrame", background = toolbarColour)
 
 	tabStyle = Style()
-	tabStyle.configure("Tab.TFrame", background = toolbarButtonColour)
+	tabStyle.configure("Tab.TFrame", background = tabColour)
+	tabSelectedStyle = Style()
+	tabSelectedStyle.configure("TabSelected.TFrame", background = tabSelectedColour)
 
 	tabButtonStyle = Style()
 	tabButtonStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = buttonFont)

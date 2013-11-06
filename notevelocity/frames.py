@@ -299,5 +299,13 @@ class tabBar(Frame):
 			self.rewriteButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
 			self.closeButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
 
+			self.select()
+
+		def select(self):
+			pass
+
+		def deselect(self):
+			pass
+
 		def close(self):
 			self.Frame.pack_forget()
