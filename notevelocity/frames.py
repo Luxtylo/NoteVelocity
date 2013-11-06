@@ -269,11 +269,14 @@ class tabBar(Frame):
 
 		self.testMessage = "tabBar is initialised"
 
-		self.Frame = Frame(height = 24, style = "TB.TFrame")
+		self.Frame = Frame(height = 24, style = "TabBar.TFrame")
 		self.Frame.pack(fill = X, expand = 0, side = BOTTOM, ipadx = 4, ipady = 2)
 
-		self.firstTab = self.tab(self.master, "New Note")
+		self.firstTab = self.tab(self, "New Note")
 		self.firstTab.show()
+
+		self.secondTab = self.tab(self, "Note 2")
+		self.secondTab.show()
 
 	class tab():
 		def __init__(self, master, title):
@@ -281,20 +284,20 @@ class tabBar(Frame):
 
 			self.text = StringVar()
 
-			self.Frame = Frame(style = "Tab.TFrame")
+			self.Frame = Frame(self.master.Frame, style = "Tab.TFrame")
 
 			self.title = Label(self.Frame, style = "TT.TLabel")
 			self.title.config(text = title)
 
 			self.rewriteButton = Button(self.Frame, style = "F.TButton", text = "R", width = 2)
 
-			self.closeButton = Button(self.Frame, style = "F.TButton", text = "X", width = 2)
+			self.closeButton = Button(self.Frame, style = "F.TButton", text = "X", width = 2, command = self.close)
 
 		def show(self):
-			self.Frame.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2)
+			self.Frame.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2, padx = 1)
 			self.title.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
 			self.rewriteButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
 			self.closeButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
 
-		def close():
-			pass
+		def close(self):
+			self.Frame.pack_forget()

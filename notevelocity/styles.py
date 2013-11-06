@@ -39,7 +39,7 @@ def init():
 	titleStyle.configure("T.TLabel", foreground = toolbarFontColour, font = titleFont)
 
 	tabBarStyle = Style()
-	tabBarStyle.configure("TB.TFrame", background = toolbarColour)
+	tabBarStyle.configure("TabBar.TFrame", background = toolbarColour)
 
 	tabStyle = Style()
 	tabStyle.configure("Tab.TFrame", background = toolbarButtonColour)
