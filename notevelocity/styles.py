@@ -17,6 +17,7 @@ from tkinter.ttk import *
 def init():
 	# Fonts
 	buttonFont = ("Source Sans Pro", 10)
+	smallButtonFont = ("Source Sans Pro", 8)
 	titleFont = ("Source Sans Pro", 11, "bold")
 	tabFont = ("Source Sans Pro", 10)
 
@@ -25,8 +26,8 @@ def init():
 	toolbarFontColour = "#303030"
 	toolbarButtonColour = "#FFFFFF"
 
-	tabColour = "#EEEEEE"
-	tabSelectedColour = "#DDDDDD"
+	tabColour = "#DDDDDD"
+	tabSelectedColour = "#B8B8B8"
 
 	# Styles (Do not edit)
 	titleBarStyle = Style()
@@ -50,7 +51,9 @@ def init():
 	tabSelectedStyle.configure("TabSelected.TFrame", background = tabSelectedColour)
 
 	tabButtonStyle = Style()
-	tabButtonStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = buttonFont)
+	tabButtonStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = smallButtonFont)
 
 	tabTitleStyle = Style()
-	tabTitleStyle.configure("TT.TLabel", foreground = toolbarFontColour, background = toolbarButtonColour, font = tabFont)
+	tabTitleStyle.configure("TT.TLabel", foreground = toolbarFontColour, background = tabColour, font = tabFont)
+	tabTitleSelectedStyle = Style()
+	tabTitleSelectedStyle.configure("TTS.TLabel", foreground = toolbarFontColour, background = tabSelectedColour, font = tabFont)

@@ -96,9 +96,6 @@ class formatBar(Frame):
 		self.settings = Button(self.Frame, text = "Set", style = "F.TButton")
 		self.settings.pack(expand = 0, side = BOTTOM, padx = 2, pady = 4)
 
-	def bindings(self):
-		pass
-
 # Text Frame
 class text(Frame):
 	def __init__(self, master, root):
@@ -270,13 +267,65 @@ class tabBar(Frame):
 		self.testMessage = "tabBar is initialised"
 
 		self.Frame = Frame(height = 24, style = "TabBar.TFrame")
-		self.Frame.pack(fill = X, expand = 0, side = BOTTOM, ipadx = 4, ipady = 2)
+		self.Frame.pack(fill = X, expand = 0, side = BOTTOM)
 
-		self.firstTab = self.tab(self, "New Note")
-		self.firstTab.show()
+		self.tabs = list()
 
-		self.secondTab = self.tab(self, "Note 2")
-		self.secondTab.show()
+		self.lastSelectedTab = 0
+		self.selectedTab = 0
+
+		self.add(self, "New Tab")
+		self.add(self, "New Tab 2")
+
+	def add(self, master, title):
+		newTabNum = len(self.tabs)
+		self.tabs.append(self.tab(self, title))
+
+		self.switch(1, len(self.tabs)-1)
+
+	def switch(self, mode, amount):
+		if mode == 0: #Add amount
+			if self.selectedTab + amount < len(self.tabs) and self.selectedTab + amount >= 0:
+				self.lastSelectedTab = self.selectedTab
+				self.selectedTab += amount
+
+				self.tabs[self.lastSelectedTab].deselect()
+				self.tabs[self.selectedTab].select()
+
+			elif self.selectedTab + amount >= len(self.tabs) - 1:
+				self.lastSelectedTab = self.selectedTab
+				self.selectedTab = 0
+
+				self.tabs[self.lastSelectedTab].deselect()
+				self.tabs[self.selectedTab].select()
+
+			elif self.selectedTab + amount < 0:
+				self.lastSelectedTab = self.selectedTab
+				self.selectedTab = len(self.tabs) - 1
+
+				self.tabs[self.lastSelectedTab].deselect()
+				self.tabs[self.selectedTab].select()
+
+		elif mode == 1: # Switch to amount
+			if amount < len(self.tabs) and amount >= 0:
+				self.lastSelectedTab = self.selectedTab
+				self.selectedTab = amount
+
+				self.tabs[self.lastSelectedTab].deselect()
+				self.tabs[self.selectedTab].select()
+			elif amount < 0:
+				self.lastSelectedTab = self.selectedTab
+				self.selectedTab = 0
+
+				self.tabs[self.lastSelectedTab].deselect()
+				self.tabs[self.selectedTab].select()
+
+			elif amount >= len(self.tabs):
+				self.lastSelectedTab = self.selectedTab
+				self.selectedTab = len(self.tabs) - 1
+
+				self.tabs[self.lastSelectedTab].deselect()
+				self.tabs[self.selectedTab].select()
 
 	class tab():
 		def __init__(self, master, title):
@@ -286,26 +335,33 @@ class tabBar(Frame):
 
 			self.Frame = Frame(self.master.Frame, style = "Tab.TFrame")
 
+			if len(title) > 16:
+				title = title[:16] + "..."
+
 			self.title = Label(self.Frame, style = "TT.TLabel")
 			self.title.config(text = title)
 
-			self.rewriteButton = Button(self.Frame, style = "F.TButton", text = "R", width = 2)
+			self.rewriteButton = Button(self.Frame, style = "Tab.TButton", text = "R", width = 1)
 
-			self.closeButton = Button(self.Frame, style = "F.TButton", text = "X", width = 2, command = self.close)
+			self.closeButton = Button(self.Frame, style = "Tab.TButton", text = "X", width = 1, command = self.close)
+
+			self.show()
 
 		def show(self):
-			self.Frame.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2, padx = 1)
-			self.title.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
-			self.rewriteButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
-			self.closeButton.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 0)
+			self.Frame.pack(side = LEFT, expand = 0, ipadx = 2, ipady = 2, padx = 4, pady = 2)
+			self.title.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2, padx = 4)
+			self.rewriteButton.pack(side = LEFT, expand = 0, ipadx = 1, ipady = 0)
+			self.closeButton.pack(side = LEFT, expand = 0, ipadx = 1, ipady = 0)
 
 			self.select()
 
 		def select(self):
-			pass
+			self.Frame.config(style = "TabSelected.TFrame")
+			self.title.config(style = "TTS.TLabel")
 
 		def deselect(self):
-			pass
+			self.Frame.config(style = "Tab.TFrame")
+			self.title.config(style = "TT.TLabel")
 
 		def close(self):
 			self.Frame.pack_forget()

@@ -21,6 +21,9 @@ saveAs = "<Control-S>"
 rename = "<Control-r>"
 openFile = "<Control-o>"
 
+nextTab = "<Control-l>"
+prevTab = "<Control-h>"
+
 quit = "<Control-w>"
 
 decreaseIndent = "<Control-Shift-space>"
@@ -31,7 +34,7 @@ makeSubtitle = "<Control-T>"
 
 margins = 2
 
-# Main
+# Binding - do not change this
 def init(self, root):
 	print("bindings initialised")
 

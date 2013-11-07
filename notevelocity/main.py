@@ -75,13 +75,15 @@ class AppFrame(Frame):
 			self.log.writeError("textFrame was not initialised properly. Error:\n" + str(ex))
 			self.quit()
 
-		try:
+		"""try:
 			self.tabBar = frames.tabBar(self.arrangementFrame)
 			self.log.write(self.tabBar.testMessage)
 		except Exception as ex:
 			print("tabBar was not initialised properly")
 			self.log.writeError("tabBar was not initialsed properly. Error:\n" + str(ex))
-			self.quit()
+			self.quit()"""
+
+		self.tabBar = frames.tabBar(self.arrangementFrame)
 
 		try:
 			bindings.init(self, root)
