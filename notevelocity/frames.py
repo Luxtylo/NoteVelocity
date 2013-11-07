@@ -333,12 +333,15 @@ class tabBar(Frame):
 			self.selectedTab -= 1
 
 			self.tabs[self.lastSelectedTab].close()
+			del self.tabs[self.lastSelectedTab]
 			self.tabs[self.selectedTab].select()
+
 		else:
 			self.lastSelectedTab = 0
 			self.selectedTab = 0
 
 			self.tabs[self.lastSelectedTab].close()
+			del self.tabs[0]
 			self.add(self, "New Note")
 
 	class tab():
@@ -379,3 +382,5 @@ class tabBar(Frame):
 
 		def close(self):
 			self.Frame.pack_forget()
+
+			# save file
