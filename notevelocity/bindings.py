@@ -23,8 +23,9 @@ openFile = "<Control-o>"
 
 nextTab = "<Control-l>"
 prevTab = "<Control-h>"
+closeTab = "<Control-w>"
 
-quit = "<Control-w>"
+quit = "<Control-Q>" # This means Control-Shift-Q
 
 decreaseIndent = "<Control-Shift-space>"
 increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
@@ -45,6 +46,11 @@ def init(self, root):
 
 	# Opening
 	root.bind(openFile, lambda event: self.openFile())
+
+	# Tab control
+	root.bind(nextTab, lambda event: self.tabBar.switch(0, 1))
+	root.bind(prevTab, lambda event: self.tabBar.switch(0, -1))
+	root.bind(closeTab, lambda event: self.tabBar.close())
 
 	# Quit
 	root.bind(quit, lambda event: self.quit())

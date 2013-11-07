@@ -274,8 +274,8 @@ class tabBar(Frame):
 		self.lastSelectedTab = 0
 		self.selectedTab = 0
 
-		self.add(self, "New Tab")
-		self.add(self, "New Tab 2")
+		self.add(self, "New Note")
+		self.add(self, "New Note 2")
 
 	def add(self, master, title):
 		newTabNum = len(self.tabs)
@@ -326,6 +326,20 @@ class tabBar(Frame):
 
 				self.tabs[self.lastSelectedTab].deselect()
 				self.tabs[self.selectedTab].select()
+
+	def close(self):
+		if len(self.tabs) > 1:
+			self.lastSelectedTab = self.selectedTab
+			self.selectedTab -= 1
+
+			self.tabs[self.lastSelectedTab].close()
+			self.tabs[self.selectedTab].select()
+		else:
+			self.lastSelectedTab = 0
+			self.selectedTab = 0
+
+			self.tabs[self.lastSelectedTab].close()
+			self.add(self, "New Note")
 
 	class tab():
 		def __init__(self, master, title):
