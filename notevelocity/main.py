@@ -17,6 +17,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 from os import getcwd
 from os import remove
+import platform
 import frames
 import bindings
 import logging
@@ -29,6 +30,7 @@ class AppFrame(Frame):
 
 		self.log = logging.Log(self)
 
+		self.osStuff()
 		self.initVars()
 		self.initUI()
 
@@ -141,7 +143,7 @@ class AppFrame(Frame):
 				self.log.write("Saved file at " + saveLocation)
 
 				self.textFrame.fileName = saveLocation
-				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1].split(".")[-2])
+				self.titleBar.title.config(text = "   " + saveLocation.split(self.slashChar)[-1].split(".")[-2])
 
 				fileToSave.close()
 
@@ -168,7 +170,7 @@ class AppFrame(Frame):
 					remove(self.textFrame.fileName)
 
 				self.textFrame.fileName = saveLocation
-				self.titleBar.title.config(text = "   " + saveLocation.split("/")[-1].split(".")[-2])
+				self.titleBar.title.config(text = "   " + saveLocation.split(self.slashChar)[-1].split(".")[-2])
 
 				fileToSave.close()
 
@@ -207,7 +209,7 @@ class AppFrame(Frame):
 				lineNum += 1
 
 			self.textFrame.fileName = openLocation
-			self.titleBar.title.config(text = "   " + self.textFrame.fileName.split("/")[-1].split(".")[-2])
+			self.titleBar.title.config(text = "   " + self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2])
 
 			print("Opening file from " + openLocation)
 			self.log.write("Opening file from " + openLocation)
@@ -238,8 +240,19 @@ class AppFrame(Frame):
 		elif mode == 1:
 			pass
 
-	def initStyles(self):
-		s = Style()
+	def osStuff(self):
+		self.os = platform.system()
+
+		if self.os == "Windows":
+			self.slashChar = "\\"
+		elif self.os == "Linux":
+			self.slashChar = "/"
+		elif self.os == "Darwin":
+			self.slashChar = "/"
+		else:
+			self.log.wrteError("System not detected as Windows, Mac or Linux. Some features may not work.")
+			print("System not detected as Windows, Mac or Linux. Some features may not work.")
+			self.slashChar = "/"
 
 # Set root window properties
 root = Tk()

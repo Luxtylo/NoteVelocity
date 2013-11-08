@@ -21,19 +21,19 @@ saveAs = "<Control-S>"
 rename = "<Control-r>"
 openFile = "<Control-o>"
 
-nextTab = "<Control-l>"
-prevTab = "<Control-h>"
+nextTab = "<Control-d>"
+prevTab = "<Control-D>"
+newTab = "<Control-n>"
+newTabTwo = "<Control-t>"
 closeTab = "<Control-w>"
 
-quit = "<Control-Q>" # This means Control-Shift-Q
+quit = "<Control-Q>"
 
 decreaseIndent = "<Control-Shift-space>"
 increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
 
-makeTitle = "<Control-t>"
-makeSubtitle = "<Control-T>"
-
-margins = 2
+makeHeading = "<Control-h>"
+makeSubheading = "<Control-H>"
 
 # Binding - do not change this
 def init(self, root):
@@ -50,7 +50,12 @@ def init(self, root):
 	# Tab control
 	root.bind(nextTab, lambda event: self.tabBar.switch(0, 1))
 	root.bind(prevTab, lambda event: self.tabBar.switch(0, -1))
+	root.bind(newTab, lambda event: self.tabBar.add(self, "New Note"))
+	root.bind(newTabTwo, lambda event: self.tabBar.add(self, "New Note"))
 	root.bind(closeTab, lambda event: self.tabBar.close())
+
+	root.bind(makeHeading, lambda event: print("Making heading"))
+	root.bind(makeSubheading, lambda event: print("Making subheading"))
 
 	# Quit
 	root.bind(quit, lambda event: self.quit())

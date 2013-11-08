@@ -275,7 +275,6 @@ class tabBar(Frame):
 		self.selectedTab = 0
 
 		self.add(self, "New Note")
-		self.add(self, "New Note 2")
 
 	def add(self, master, title):
 		newTabNum = len(self.tabs)
@@ -358,16 +357,28 @@ class tabBar(Frame):
 			self.title = Label(self.Frame, style = "TT.TLabel")
 			self.title.config(text = title)
 
+			self.titleBox = Entry(self.Frame, width = 20)
+			self.titleBox.insert(0, title)
+
 			self.rewriteButton = Button(self.Frame, style = "Tab.TButton", text = "R", width = 1)
 
 			self.closeButton = Button(self.Frame, style = "Tab.TButton", text = "X", width = 1, command = self.close)
 
+			self.bindings()
+
 			self.show()
+
+		def bindings(self):
+			self.title.bind("<Button-1>", lambda event: self.master.switch(1, self.findPlace()))
+			self.Frame.bind("<Button-1>", lambda event: self.master.switch(1, self.findPlace()))
+
+		def findPlace(self):
+			place = 0
+			return place
 
 		def show(self):
 			self.Frame.pack(side = LEFT, expand = 0, ipadx = 2, ipady = 2, padx = 4, pady = 2)
 			self.title.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2, padx = 4)
-			self.rewriteButton.pack(side = LEFT, expand = 0, ipadx = 1, ipady = 0)
 			self.closeButton.pack(side = LEFT, expand = 0, ipadx = 1, ipady = 0)
 
 			self.select()
@@ -379,6 +390,9 @@ class tabBar(Frame):
 		def deselect(self):
 			self.Frame.config(style = "Tab.TFrame")
 			self.title.config(style = "TT.TLabel")
+
+		def rename(self):
+			self.titleBox.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2, padx = 4)
 
 		def close(self):
 			self.Frame.pack_forget()
