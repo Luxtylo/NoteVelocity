@@ -43,7 +43,7 @@ class AppFrame(Frame):
 	def initUI(self):
 		self.log.write("Initialising UI")
 
-		styles.init()
+		styles.init(self)
 
 		## Top level frames
 		try:
@@ -79,7 +79,7 @@ class AppFrame(Frame):
 			self.quit()
 
 		"""try:
-			self.tabBar = frames.tabBar(self.arrangementFrame)
+			self.tabBar = tabs.tabBar(self.arrangementFrame)
 			self.log.write(self.tabBar.testMessage)
 		except Exception as ex:
 			print("tabBar was not initialised properly")

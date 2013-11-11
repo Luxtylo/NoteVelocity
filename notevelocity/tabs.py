@@ -26,6 +26,8 @@ class tabBar(Frame):
 		self.Frame.pack(fill = X, expand = 0, side = BOTTOM)
 
 		self.tabs = list()
+		self.blank = StringVar()
+		self.blank.set("")
 
 		self.lastSelectedTab = 0
 		self.selectedTab = 0
@@ -39,57 +41,63 @@ class tabBar(Frame):
 		self.switch(1, len(self.tabs)-1)
 
 	def switch(self, mode, amount):
+		self.lastSelectedTab = self.selectedTab
+
 		if mode == 0: #Add amount
 			if self.selectedTab + amount < len(self.tabs) and self.selectedTab + amount >= 0:
-				self.lastSelectedTab = self.selectedTab
 				self.selectedTab += amount
 
 			elif self.selectedTab + amount >= len(self.tabs) - 1:
-				self.lastSelectedTab = self.selectedTab
 				self.selectedTab = 0
 
 			elif self.selectedTab + amount < 0:
-				self.lastSelectedTab = self.selectedTab
 				self.selectedTab = len(self.tabs) - 1
 
 		elif mode == 1: # Switch to amount
 			if amount < len(self.tabs) and amount >= 0:
-				self.lastSelectedTab = self.selectedTab
 				self.selectedTab = amount
+
 			elif amount < 0:
-				self.lastSelectedTab = self.selectedTab
 				self.selectedTab = 0
 
 			elif amount >= len(self.tabs):
-				self.lastSelectedTab = self.selectedTab
 				self.selectedTab = len(self.tabs) - 1
 
 		self.tabs[self.lastSelectedTab].deselect()
 		self.tabs[self.selectedTab].select()
+		self.swapBoxContents(self.lastSelectedTab, self.selectedTab)
+
+	def swapBoxContents(self, last, new):
+		textBoxContents = self.master.master.textFrame.textBox.get(1.0, "end")
+		self.tabs[last].text.set(textBoxContents)
+
+		self.master.master.textFrame.textBox.delete(1.0, "end")
+		textBoxContents = self.tabs[new].text.get()
+		self.master.master.textFrame.textBox.insert(1.0, textBoxContents)
 
 	def closeCurrent(self):
 		if len(self.tabs) > 1:
-			self.lastSelectedTab = self.selectedTab
-			self.selectedTab -= 1
+			self.switch(1, self.selectedTab - 1)
 
 			self.tabs[self.lastSelectedTab].close()
 			del self.tabs[self.lastSelectedTab]
-			self.tabs[self.selectedTab].select()
-
 		else:
 			self.lastSelectedTab = 0
 			self.selectedTab = 0
 
 			self.tabs[self.lastSelectedTab].close()
 			del self.tabs[0]
+
 			self.add(self, "New Note")
+			self.master.master.textFrame.textBox.delete(1.0, "end")
+			self.master.master.textFrame.textBox.insert(1.0, self.blank.get())
 
 	def closeSpecific(self, tabNum):
 		if tabNum < self.selectedTab:
 			self.tabs[tabNum].close()
 			del self.tabs[tabNum]
 			self.selectedTab -= 1
-			
+
 		elif tabNum > self.selectedTab:
 			self.tabs[tabNum].close()
 			del self.tabs[tabNum]
@@ -124,11 +132,14 @@ class tabBar(Frame):
 				del self.tabs[tabNum]
 				self.switch(1, self.selectedTab)
 
+		print("Closing tab" + str(tabNum))
+
 	class tab():
 		def __init__(self, master, title):
 			self.master = master
 
 			self.text = StringVar()
+			self.text.set("")
 
 			self.Frame = Frame(self.master.Frame, style = "Tab.TFrame")
 

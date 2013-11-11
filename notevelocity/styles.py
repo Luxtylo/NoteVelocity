@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License along with thi
 from tkinter import *
 from tkinter.ttk import *
 
-def init():
+def init(master):
 	# Fonts
 	buttonFont = ("Source Sans Pro", 10)
 	smallButtonFont = ("Source Sans Pro", 8)
@@ -28,6 +28,9 @@ def init():
 
 	tabColour = "#DDDDDD"
 	tabSelectedColour = "#B8B8B8"
+
+	textBoxBackground = "#FCFCFC"
+	textBoxTextColour = "#101010"
 
 	# Styles (Do not edit)
 	titleBarStyle = Style()
@@ -57,3 +60,6 @@ def init():
 	tabTitleStyle.configure("TT.TLabel", foreground = toolbarFontColour, background = tabColour, font = tabFont)
 	tabTitleSelectedStyle = Style()
 	tabTitleSelectedStyle.configure("TTS.TLabel", foreground = toolbarFontColour, background = tabSelectedColour, font = tabFont)
+
+	master.textBoxBackground = textBoxBackground
+	master.textBoxTextColour = textBoxTextColour

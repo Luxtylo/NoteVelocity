@@ -27,7 +27,7 @@ newTab = "<Control-n>"
 newTabTwo = "<Control-t>"
 closeTab = "<Control-w>"
 
-quit = "<Control-Q>"
+quit = "<Control-W>"
 
 decreaseIndent = "<Control-Shift-space>"
 increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
@@ -35,7 +35,7 @@ increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
 makeHeading = "<Control-h>"
 makeSubheading = "<Control-H>"
 
-# Binding - do not change this
+# Binding (Do not edit)
 def init(self, root):
 	print("bindings initialised")
 

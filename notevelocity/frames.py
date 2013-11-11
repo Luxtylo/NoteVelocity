@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with thi
 from tkinter import *
 from tkinter.ttk import *
 import bindings
+import styles
 
 ## Main
 # Title bar
@@ -112,7 +113,8 @@ class text(Frame):
 
 		self.textBox = Text(self.Frame)
 		self.textBox.pack(expand = 1, fill = BOTH, side = LEFT)
-		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"))
+		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"), borderwidth = 0)
+		self.textBox.config(bg = master.master.textBoxBackground, fg = master.master.textBoxTextColour)
 
 		# Link self.textBox and self.scrollbar
 		self.textBox.config(yscrollcommand = self.scrollbar.set)
