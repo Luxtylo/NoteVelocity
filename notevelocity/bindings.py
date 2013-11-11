@@ -52,7 +52,7 @@ def init(self, root):
 	root.bind(prevTab, lambda event: self.tabBar.switch(0, -1))
 	root.bind(newTab, lambda event: self.tabBar.add(self, "New Note"))
 	root.bind(newTabTwo, lambda event: self.tabBar.add(self, "New Note"))
-	root.bind(closeTab, lambda event: self.tabBar.close())
+	root.bind(closeTab, lambda event: self.tabBar.closeCurrent())
 
 	root.bind(makeHeading, lambda event: print("Making heading"))
 	root.bind(makeSubheading, lambda event: print("Making subheading"))

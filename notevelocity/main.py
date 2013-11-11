@@ -19,6 +19,7 @@ from os import getcwd
 from os import remove
 import platform
 import frames
+import tabs
 import bindings
 import logging
 import styles
@@ -85,7 +86,7 @@ class AppFrame(Frame):
 			self.log.writeError("tabBar was not initialsed properly. Error:\n" + str(ex))
 			self.quit()"""
 
-		self.tabBar = frames.tabBar(self.arrangementFrame)
+		self.tabBar = tabs.tabBar(self.arrangementFrame)
 
 		try:
 			bindings.init(self, root)
