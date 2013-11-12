@@ -129,6 +129,7 @@ class AppFrame(Frame):
 
 			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note")])
 			self.textFrame.fileName = saveLocation
+			self.tabBar.updateFilename()
 
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
 				print("No save location selected. Cancelling")
@@ -144,7 +145,9 @@ class AppFrame(Frame):
 				self.log.write("Saved file at " + saveLocation)
 
 				self.textFrame.fileName = saveLocation
-				self.titleBar.title.config(text = "   " + saveLocation.split(self.slashChar)[-1].split(".")[-2])
+				shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
+				self.titleBar.title.config(text = "   " + shortName)
+				self.tabBar.renameCurrent(shortName)
 
 				fileToSave.close()
 
@@ -171,7 +174,9 @@ class AppFrame(Frame):
 					remove(self.textFrame.fileName)
 
 				self.textFrame.fileName = saveLocation
-				self.titleBar.title.config(text = "   " + saveLocation.split(self.slashChar)[-1].split(".")[-2])
+				shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
+				self.titleBar.title.config(text = "   " + shortName)
+				self.tabBar.renameCurrent(shortName)
 
 				fileToSave.close()
 

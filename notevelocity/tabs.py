@@ -69,11 +69,20 @@ class tabBar(Frame):
 
 	def swapBoxContents(self, last, new):
 		textBoxContents = self.master.master.textFrame.textBox.get(1.0, "end")
+		textBoxContents = textBoxContents[:-1]
 		self.tabs[last].text.set(textBoxContents)
 
 		self.master.master.textFrame.textBox.delete(1.0, "end")
 		textBoxContents = self.tabs[new].text.get()
 		self.master.master.textFrame.textBox.insert(1.0, textBoxContents)
+
+		# Update textBox properties
+		self.tabs[last].fileName = self.master.master.textFrame.fileName
+		self.master.master.textFrame.fileName = self.tabs[new].fileName
+
+	def updateFilename(self):
+		self.tabs[self.selectedTab].fileName = self.master.master.textFrame.fileName
+		print(self.master.master.textFrame.fileName)
 
 	def closeCurrent(self):
 		if len(self.tabs) > 1:
@@ -134,20 +143,24 @@ class tabBar(Frame):
 
 		print("Closing tab" + str(tabNum))
 
+	def renameCurrent(self, name):
+		self.tabs[self.selectedTab].rename(name)
+
 	class tab():
 		def __init__(self, master, title):
 			self.master = master
 
 			self.text = StringVar()
 			self.text.set("")
+			self.text.trace("w", lambda *args: self.changeMade())
 
 			self.Frame = Frame(self.master.Frame, style = "Tab.TFrame")
-
-			if len(title) > 16:
-				title = title[:16] + "..."
+			
+			self.changed = False
+			self.fileName = ""
 
 			self.title = Label(self.Frame, style = "TT.TLabel")
-			self.title.config(text = title)
+			self.rename(title)
 
 			self.titleBox = Entry(self.Frame, width = 20)
 			self.titleBox.insert(0, title)
@@ -181,8 +194,16 @@ class tabBar(Frame):
 			self.Frame.config(style = "Tab.TFrame")
 			self.title.config(style = "TT.TLabel")
 
-		def rename(self):
-			self.titleBox.pack(side = LEFT, expand = 0, ipadx = 4, ipady = 2, padx = 4)
+		def rename(self, name):
+			if len(name) > 16:
+				name = name[:16] + "..."
+			self.title.config(text = name)
+
+		def changeMade(self):
+			self.changed = True
+
+		def changeSaved(self):
+			self.changed = False
 
 		def close(self):
 			self.Frame.pack_forget()
