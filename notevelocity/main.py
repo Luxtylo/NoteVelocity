@@ -190,28 +190,18 @@ class AppFrame(Frame):
 			self.log.write("saveFile index out of range")
 
 	def openFile(self):
-		# Check whether textbox contents have changed. If yes, ask to save.
-		if self.textFrame.changed == True:
-			yesno = messagebox.askyesno("Save current file?", "The currently open file has not been saved. Save it?")
-
-			if yesno:
-				self.saveFile(1)
-			else:
-				self.textFrame.changed = False
-
 		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note")])
 
 		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False or openLocation == ():
 			print("No open location selected")
 			self.log.write("No open location selected")
-		elif self.textFrame.changed == False:
+		else:
 			openFile = open(openLocation, "r")
 
 			self.textFrame.fileName = openLocation
 			shortName = self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2]
 			self.tabBar.add(self.tabBar, shortName)
 			self.titleBar.title.config(text = "   " + shortName)
-			#self.tabBar.renameCurrent(shortName)
 
 			self.textFrame.textBox.delete("1.0", "end")
 
@@ -227,9 +217,6 @@ class AppFrame(Frame):
 			self.log.write("Opened file from " + openLocation)
 
 			self.textFrame.changed = False
-		else:
-			print("Error opening file. The \'changed\' variable may not have been correctly set.")
-			self.log.writeError("Error opening file. The \'changed\' variable may not have been correctly set.")
 
 	def max(self):
 		pass

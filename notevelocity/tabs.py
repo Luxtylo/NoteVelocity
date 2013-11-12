@@ -76,6 +76,8 @@ class tabBar(Frame):
 		textBoxContents = self.tabs[new].text.get()
 		self.master.master.textFrame.textBox.insert(1.0, textBoxContents)
 
+		self.master.master.titleBar.title.config(text = self.tabs[self.selectedTab].longTitle)
+
 		# Update textBox properties
 		self.tabs[last].fileName = self.master.master.textFrame.fileName
 		self.master.master.textFrame.fileName = self.tabs[new].fileName
@@ -201,6 +203,7 @@ class tabBar(Frame):
 			self.title.config(style = "TT.TLabel")
 
 		def rename(self, name):
+			self.longTitle = "   " + name
 			if len(name) > 16:
 				name = name[:16] + "..."
 			self.title.config(text = name)
