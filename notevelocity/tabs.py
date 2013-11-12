@@ -87,6 +87,7 @@ class tabBar(Frame):
 		print(self.master.master.textFrame.fileName)
 
 	def closeCurrent(self):
+		# Make it save the file before closing!
 		if len(self.tabs) > 1:
 			self.switch(1, self.selectedTab - 1)
 
