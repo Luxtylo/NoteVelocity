@@ -87,64 +87,75 @@ class tabBar(Frame):
 		print(self.master.master.textFrame.fileName)
 
 	def closeCurrent(self):
-		# Make it save the file before closing!
-		if len(self.tabs) > 1:
-			self.switch(1, self.selectedTab - 1)
+		errorCheck = self.save()
 
-			self.tabs[self.lastSelectedTab].close()
-			del self.tabs[self.lastSelectedTab]
-		else:
-			self.lastSelectedTab = 0
-			self.selectedTab = 0
+		if errorCheck == 0:
+			if len(self.tabs) > 1:
+				self.switch(1, self.selectedTab - 1)
 
-			self.tabs[self.lastSelectedTab].close()
-			del self.tabs[0]
+				self.tabs[self.lastSelectedTab].close()
+				del self.tabs[self.lastSelectedTab]
+			else:
+				self.lastSelectedTab = 0
+				self.selectedTab = 0
 
-			self.add(self, "New Note")
-			self.master.master.textFrame.textBox.delete(1.0, "end")
-			self.master.master.textFrame.textBox.insert(1.0, self.blank.get())
+				self.tabs[self.lastSelectedTab].close()
+				del self.tabs[0]
+
+				self.add(self, "New Note")
+				self.master.master.textFrame.textBox.delete(1.0, "end")
+				self.master.master.textFrame.textBox.insert(1.0, self.blank.get())
 
 	def closeSpecific(self, tabNum):
-		if tabNum < self.selectedTab:
-			self.tabs[tabNum].close()
-			del self.tabs[tabNum]
-			self.selectedTab -= 1
+		errorCheck = self.save()
 
-		elif tabNum > self.selectedTab:
-			self.tabs[tabNum].close()
-			del self.tabs[tabNum]
+		if errorCheck == 0:
+			if tabNum < self.selectedTab:
+				self.tabs[tabNum].close()
+				del self.tabs[tabNum]
+				self.selectedTab -= 1
 
-		else: # if the selected tab is the one being closed
-			if tabNum == 0: # if it's the first tab
-				if len(self.tabs) == 1: # if it's the only tab
+			elif tabNum > self.selectedTab:
+				self.tabs[tabNum].close()
+				del self.tabs[tabNum]
+
+			else: # if the selected tab is the one being closed
+				if tabNum == 0: # if it's the first tab
+					if len(self.tabs) == 1: # if it's the only tab
+						self.tabs[tabNum].close()
+						del self.tabs[tabNum]
+						self.add(self, "New Note")
+
+					else: # if it's not the only tab
+						self.tabs[tabNum].close()
+						del self.tabs[tabNum]
+						self.selectedTab = 0
+						self.switch(1, self.selectedTab)
+
+				elif tabNum == len(self.tabs) - 1: # if it's the last tab
 					self.tabs[tabNum].close()
 					del self.tabs[tabNum]
-					self.add(self, "New Note")
 
-				else: # if it's not the only tab
-					self.tabs[tabNum].close()
-					del self.tabs[tabNum]
-					self.selectedTab = 0
+					if self.selectedTab == tabNum:
+						self.selectedTab -= 1
+
 					self.switch(1, self.selectedTab)
 
-			elif tabNum == len(self.tabs) - 1: # if it's the last tab
-				self.tabs[tabNum].close()
-				del self.tabs[tabNum]
+				else: # if it's somewhere in the middle
+					if self.selectedTab == tabNum:
+						self.selectedTab -= 1
 
-				if self.selectedTab == tabNum:
-					self.selectedTab -= 1
+					self.tabs[tabNum].close()
+					del self.tabs[tabNum]
+					self.switch(1, self.selectedTab)
 
-				self.switch(1, self.selectedTab)
+	def save(self):
+		self.updateFilename()
 
-			else: # if it's somewhere in the middle
-				if self.selectedTab == tabNum:
-					self.selectedTab -= 1
-
-				self.tabs[tabNum].close()
-				del self.tabs[tabNum]
-				self.switch(1, self.selectedTab)
-
-		print("Closing tab" + str(tabNum))
+		if self.master.master.textFrame.fileName == "":
+			return self.master.master.saveFile(2)
+		else:
+			return self.master.master.saveFile(1)
 
 	def renameCurrent(self, name):
 		self.tabs[self.selectedTab].rename(name)

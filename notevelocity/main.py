@@ -107,7 +107,7 @@ class AppFrame(Frame):
 			if(self.textFrame.fileName == ""):
 				print("File has no name. Saving as")
 				self.log.write("File has no name. Saving as")
-				self.saveFile(2)
+				return self.saveFile(2)
 			else:
 				saveLocation = self.textFrame.fileName
 
@@ -124,6 +124,8 @@ class AppFrame(Frame):
 				self.textFrame.changed = False
 				self.tabBar.resetChanged()
 
+				return 0
+
 		elif mode == 2:
 			# Save file as
 			fileContents = self.textFrame.textBox.get("1.0", "end")
@@ -135,6 +137,7 @@ class AppFrame(Frame):
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
 				print("No save location selected. Cancelling")
 				self.log.write("No save location selected. Cancelling")
+				return 1
 			else:
 				fileToSave = open(saveLocation, "w+")
 
@@ -146,6 +149,7 @@ class AppFrame(Frame):
 				self.log.write("Saved file at " + saveLocation)
 
 				self.textFrame.fileName = saveLocation
+				self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
 				shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
 				self.titleBar.title.config(text = "   " + shortName)
 				self.tabBar.renameCurrent(shortName)
@@ -155,6 +159,8 @@ class AppFrame(Frame):
 				self.textFrame.changed = False
 				self.tabBar.resetChanged()
 
+				return 0
+
 		elif mode == 3:
 			# Rename
 			fileContents = self.textFrame.textBox.get("1.0", "end")
@@ -163,6 +169,7 @@ class AppFrame(Frame):
 
 			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
 				print("No rename location selected. Cancelling")
+				return 1
 			else:
 				fileToSave = open(saveLocation, "w+")
 
@@ -176,6 +183,7 @@ class AppFrame(Frame):
 					remove(self.textFrame.fileName)
 
 				self.textFrame.fileName = saveLocation
+				self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
 				shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
 				self.titleBar.title.config(text = "   " + shortName)
 				self.tabBar.renameCurrent(shortName)
@@ -185,9 +193,12 @@ class AppFrame(Frame):
 				self.textFrame.changed = False
 				self.tabBar.resetChanged()
 
+				return 0
+
 		else:
 			print("saveFile index out of range")
 			self.log.write("saveFile index out of range")
+			return 0
 
 	def openFile(self):
 		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note")])
@@ -201,6 +212,7 @@ class AppFrame(Frame):
 			self.textFrame.fileName = openLocation
 			shortName = self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2]
 			self.tabBar.add(self.tabBar, shortName)
+			self.tabBar.tabs[self.tabBar.selectedTab].fileName = openLocation
 			self.titleBar.title.config(text = "   " + shortName)
 
 			self.textFrame.textBox.delete("1.0", "end")
@@ -217,6 +229,7 @@ class AppFrame(Frame):
 			self.log.write("Opened file from " + openLocation)
 
 			self.textFrame.changed = False
+			self.textFrame.fileName = openLocation
 
 	def max(self):
 		pass
