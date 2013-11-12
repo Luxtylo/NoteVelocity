@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License along with thi
 from tkinter import *
 from tkinter.ttk import *
 import bindings
+import styles
 
 ## Main
 # Title bar
@@ -26,19 +27,19 @@ class titleBar(Frame):
 
 		self.testMessage = "titleBar is initialised"
 
-		self.Frame = Frame()
+		self.Frame = Frame(style = "TB.TFrame")
 		self.Frame.pack(fill = X, side = TOP, expand = 0, ipadx = 2, ipady = 2)
 
 		self.icon = Frame(self.Frame)
 		self.icon.pack(expand = 0, side = LEFT)
 
-		self.buttonA = Button(self.Frame, text = "Save")
+		self.buttonA = Button(self.Frame, text = "Save", style = "TB.TButton")
 		self.buttonA.pack(expand = 0, side = LEFT)
 
-		self.buttonB = Button(self.Frame, text = "Open")
+		self.buttonB = Button(self.Frame, text = "Open", style = "TB.TButton")
 		self.buttonB.pack(expand = 0, side = LEFT)
 
-		self.title = Label(self.Frame, text = "   New note", anchor = "w")
+		self.title = Label(self.Frame, text = "   New note", anchor = "w", style = "T.TLabel")
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
 		self.Bindings()
@@ -72,17 +73,28 @@ class formatBar(Frame):
 
 		self.testMessage = "formatBar is initialised"
 
-		self.Frame = Frame()
+		self.Frame = Frame(style = "TB.TFrame")
 		self.Frame.pack(fill = Y, side = LEFT, expand = 0, ipadx = 2, ipady = 2)
 
-		self.bold = Button(self.Frame, text = "B")
-		self.bold.pack(expand = 0, side = TOP)
+		self.spacer1 = Frame(self.Frame, height = 2)
+		self.spacer1.pack(expand = 0, side = TOP)
 
-		self.italic = Button(self.Frame, text = "I")
-		self.italic.pack(expand = 0, side = TOP)
+		self.title = Button(self.Frame, text = "T", style = "F.TButton")
+		self.title.pack(expand = 0, side = TOP)
 
-		self.settings = Button(self.Frame, text = "S")
-		self.settings.pack(expand = 0, side = BOTTOM)
+		self.subTitle = Button(self.Frame, text = "S", style = "F.TButton")
+		self.subTitle.pack(expand = 0, side = TOP)
+
+		self.notes = Button(self.Frame, text = "N", style = "F.TButton")
+
+		self.spacer2 = Frame(self.Frame, height = 5)
+		self.spacer2.pack(expand = 0, side = TOP)
+
+		self.equation = Button(self.Frame, text = "E", style = "F.TButton")
+		self.equation.pack(expand = 0, side = TOP)
+
+		self.settings = Button(self.Frame, text = "Set", style = "F.TButton")
+		self.settings.pack(expand = 0, side = BOTTOM, padx = 2, pady = 4)
 
 # Text Frame
 class text(Frame):
@@ -93,15 +105,16 @@ class text(Frame):
 
 		self.testMessage = "textFrame is initialised"
 
-		self.Frame = Frame()
-		self.Frame.pack(fill = BOTH, expand = 1, side = LEFT)
+		self.Frame = Frame(style = "TB.TFrame")
+		self.Frame.pack(fill = BOTH, expand = 1, side = TOP)
 
 		self.scrollbar = Scrollbar(self.Frame)
 		self.scrollbar.pack(expand = 0, fill = Y, side = RIGHT)
 
 		self.textBox = Text(self.Frame)
 		self.textBox.pack(expand = 1, fill = BOTH, side = LEFT)
-		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"))
+		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"), borderwidth = 0)
+		self.textBox.config(bg = master.master.textBoxBackground, fg = master.master.textBoxTextColour)
 
 		# Link self.textBox and self.scrollbar
 		self.textBox.config(yscrollcommand = self.scrollbar.set)
@@ -238,3 +251,13 @@ class text(Frame):
 
 		else:
 			print("Tag updating disabled")
+
+class arrangementFrame(Frame):
+	def __init__(self, master):
+		self.master = master
+
+		self.testMessage = "arrangementFrame is initialised"
+
+		self.Frame = Frame()
+		self.Frame.pack(side = LEFT)
+
