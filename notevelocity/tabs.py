@@ -146,6 +146,12 @@ class tabBar(Frame):
 	def renameCurrent(self, name):
 		self.tabs[self.selectedTab].rename(name)
 
+	def resetChanged(self):
+		self.tabs[self.selectedTab].change = False
+
+	def checkFilename(self):
+		return self.tabs[self.selectedTab].fileName
+
 	class tab():
 		def __init__(self, master, title):
 			self.master = master
@@ -155,7 +161,7 @@ class tabBar(Frame):
 			self.text.trace("w", lambda *args: self.changeMade())
 
 			self.Frame = Frame(self.master.Frame, style = "Tab.TFrame")
-			
+
 			self.changed = False
 			self.fileName = ""
 

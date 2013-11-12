@@ -122,6 +122,7 @@ class AppFrame(Frame):
 				fileToSave.close()
 
 				self.textFrame.changed = False
+				self.tabBar.resetChanged()
 
 		elif mode == 2:
 			# Save file as
@@ -152,6 +153,7 @@ class AppFrame(Frame):
 				fileToSave.close()
 
 				self.textFrame.changed = False
+				self.tabBar.resetChanged()
 
 		elif mode == 3:
 			# Rename
@@ -181,6 +183,7 @@ class AppFrame(Frame):
 				fileToSave.close()
 
 				self.textFrame.changed = False
+				self.tabBar.resetChanged()
 
 		else:
 			print("saveFile index out of range")
@@ -204,6 +207,12 @@ class AppFrame(Frame):
 		elif self.textFrame.changed == False:
 			openFile = open(openLocation, "r")
 
+			self.textFrame.fileName = openLocation
+			shortName = self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2]
+			self.tabBar.add(self.tabBar, shortName)
+			self.titleBar.title.config(text = "   " + shortName)
+			#self.tabBar.renameCurrent(shortName)
+
 			self.textFrame.textBox.delete("1.0", "end")
 
 			lineNum = 1
@@ -214,11 +223,8 @@ class AppFrame(Frame):
 				
 				lineNum += 1
 
-			self.textFrame.fileName = openLocation
-			self.titleBar.title.config(text = "   " + self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2])
-
-			print("Opening file from " + openLocation)
-			self.log.write("Opening file from " + openLocation)
+			print("Opened file from " + openLocation)
+			self.log.write("Opened file from " + openLocation)
 
 			self.textFrame.changed = False
 		else:
