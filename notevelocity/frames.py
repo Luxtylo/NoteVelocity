@@ -42,6 +42,9 @@ class titleBar(Frame):
 		self.title = Label(self.Frame, text = "   New note", anchor = "w", style = "T.TLabel")
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
+		self.changedIndicator = Frame(self.Frame, style = "CIOff.TFrame", width = 40, height = 20)
+		self.changedIndicator.pack(expand = 0, fill = Y, side = RIGHT)
+
 		self.Bindings()
 
 	def Bindings(self):

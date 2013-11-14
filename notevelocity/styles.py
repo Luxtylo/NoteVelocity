@@ -32,6 +32,9 @@ def init(master):
 	textBoxBackground = "#FCFCFC"
 	textBoxTextColour = "#101010"
 
+	changedIndicatorOn = "#FF0000"
+	changedIndicatorOff = "#E8E8E8"
+
 	# Styles (Do not edit)
 	titleBarStyle = Style()
 	titleBarStyle.configure("TB.TFrame", background = toolbarColour)
@@ -60,6 +63,11 @@ def init(master):
 	tabTitleStyle.configure("TT.TLabel", foreground = toolbarFontColour, background = tabColour, font = tabFont)
 	tabTitleSelectedStyle = Style()
 	tabTitleSelectedStyle.configure("TTS.TLabel", foreground = toolbarFontColour, background = tabSelectedColour, font = tabFont)
+
+	chIn = Style()
+	chIn.configure("CIOn.TFrame", width = 20, height = 20, background = changedIndicatorOn)
+	chInOff = Style()
+	chInOff.configure("CIOff.TFrame", width = 20, height = 20, background = changedIndicatorOff)
 
 	master.textBoxBackground = textBoxBackground
 	master.textBoxTextColour = textBoxTextColour

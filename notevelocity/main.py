@@ -233,6 +233,7 @@ class AppFrame(Frame):
 
 			self.textFrame.changed = False
 			self.textFrame.fileName = openLocation
+			self.tabBar.resetChanged()
 
 	def quit(self):
 		print("Closing NoteVelocity...")
