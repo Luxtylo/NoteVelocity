@@ -40,6 +40,8 @@ class tabBar(Frame):
 
 		self.switch(1, len(self.tabs)-1)
 
+		self.tabs[self.selectedTab].changed = False
+
 	def switch(self, mode, amount):
 		self.lastSelectedTab = self.selectedTab
 
@@ -152,13 +154,17 @@ class tabBar(Frame):
 	def save(self):
 		self.updateFilename()
 
-		if self.master.master.textFrame.fileName == "":
-			return self.master.master.saveFile(2)
+		if self.master.master.textFrame.fileName == "" and self.tabs[self.selectedTab].changed == True:
+			return self.master.master.saveFile(1)
 		else:
+			self.master.master.textFrame.changed = False
 			return self.master.master.saveFile(1)
 
 	def renameCurrent(self, name):
 		self.tabs[self.selectedTab].rename(name)
+
+	def change(self):
+		self.tabs[self.selectedTab].change = True
 
 	def resetChanged(self):
 		self.tabs[self.selectedTab].change = False
