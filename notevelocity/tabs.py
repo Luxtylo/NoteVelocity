@@ -14,6 +14,7 @@ You should have received a copy of the GNU General Public License along with thi
 # Imports
 from tkinter import *
 from tkinter.ttk import *
+from tkinter import messagebox
 import bindings
 
 class tabBar(Frame):
@@ -111,7 +112,7 @@ class tabBar(Frame):
 	def closeSpecific(self, tabNum):
 		errorCheck = self.save()
 
-		if errorCheck == 0:
+		if errorCheck == 0 or errorCheck == 1:
 			if tabNum < self.selectedTab:
 				self.tabs[tabNum].close()
 				del self.tabs[tabNum]
@@ -154,11 +155,17 @@ class tabBar(Frame):
 	def save(self):
 		self.updateFilename()
 
-		if self.master.master.textFrame.fileName == "" and self.tabs[self.selectedTab].changed == True:
-			return self.master.master.saveFile(1)
+		if self.tabs[self.selectedTab].changed or self.master.master.textFrame.changed:
+			yesno = messagebox.askyesno(title = "Save note?", message = "The tab has been changed. Would you like to save?")
+
+			if yesno:
+				return self.master.master.saveFile(1)
+			else:
+				return 0
+		
 		else:
-			self.master.master.textFrame.changed = False
-			return self.master.master.saveFile(1)
+			print(str(self.tabs[self.selectedTab].changed) + " " + str(self.master.master.textFrame.changed))
+			return 0
 
 	def renameCurrent(self, name):
 		self.tabs[self.selectedTab].rename(name)
@@ -171,6 +178,10 @@ class tabBar(Frame):
 
 	def checkFilename(self):
 		return self.tabs[self.selectedTab].fileName
+
+	def checkChanged(self):
+		#self.tabs[self.selectedTab].changed = self.master.master.textFrame.changed
+		return self.tabs[self.selectedTab].changed
 
 	class tab():
 		def __init__(self, master, title):

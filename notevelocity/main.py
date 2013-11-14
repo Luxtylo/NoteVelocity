@@ -14,7 +14,6 @@ You should have received a copy of the GNU General Public License along with thi
 ## Imports
 from tkinter import *
 from tkinter import filedialog
-from tkinter import messagebox
 from os import getcwd
 from os import remove
 import platform
@@ -104,7 +103,11 @@ class AppFrame(Frame):
 			# Save file
 			print("Saving file")
 
-			if(self.textFrame.fileName == ""):
+			if self.textFrame.changed == False and self.tabBar.checkChanged == False:
+				print("Not changed, so not saving.")
+				self.log.write("Not changed, so not saving")
+				return 0
+			elif self.textFrame.fileName == "":
 				print("File has no name. Saving as")
 				self.log.write("File has no name. Saving as")
 				return self.saveFile(2)
@@ -231,12 +234,6 @@ class AppFrame(Frame):
 			self.textFrame.changed = False
 			self.textFrame.fileName = openLocation
 
-	def max(self):
-		pass
-
-	def min(self):
-		pass
-
 	def quit(self):
 		print("Closing NoteVelocity...")
 		self.log.write("Closing NoteVelocity...")
@@ -245,12 +242,6 @@ class AppFrame(Frame):
 		global root
 		root.destroy()
 		raise SystemExit
-
-	def log(self, mode):
-		if mode == 0:
-			pass
-		elif mode == 1:
-			pass
 
 	def osStuff(self):
 		self.os = platform.system()
@@ -262,7 +253,7 @@ class AppFrame(Frame):
 		elif self.os == "Darwin":
 			self.slashChar = "/"
 		else:
-			self.log.wrteError("System not detected as Windows, Mac or Linux. Some features may not work.")
+			self.log.writeError("System not detected as Windows, Mac or Linux. Some features may not work.")
 			print("System not detected as Windows, Mac or Linux. Some features may not work.")
 			self.slashChar = "/"
 
