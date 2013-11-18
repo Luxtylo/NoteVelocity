@@ -202,7 +202,7 @@ class tabBar(Frame):
 			self.titleBox = Entry(self.Frame, width = 20)
 			self.titleBox.insert(0, title)
 
-			self.closeButton = Button(self.Frame, style = "Tab.TButton", text = "X", width = 1)
+			self.closeButton = Button(self.Frame, style = "Tab.TButton", text = "X", width = 1, takefocus = 0)
 
 			self.bindings()
 

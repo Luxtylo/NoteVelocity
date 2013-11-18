@@ -33,10 +33,10 @@ class titleBar(Frame):
 		self.icon = Frame(self.Frame)
 		self.icon.pack(expand = 0, side = LEFT)
 
-		self.buttonA = Button(self.Frame, text = "Save", style = "TB.TButton")
+		self.buttonA = Button(self.Frame, text = "Save", style = "TB.TButton", takefocus = 0)
 		self.buttonA.pack(expand = 0, side = LEFT)
 
-		self.buttonB = Button(self.Frame, text = "Open", style = "TB.TButton")
+		self.buttonB = Button(self.Frame, text = "Open", style = "TB.TButton", takefocus = 0)
 		self.buttonB.pack(expand = 0, side = LEFT)
 
 		self.title = Label(self.Frame, text = "   New note", anchor = "w", style = "T.TLabel")
@@ -103,23 +103,25 @@ class formatBar(Frame):
 		self.spacer1 = Frame(self.Frame, height = 2)
 		self.spacer1.pack(expand = 0, side = TOP)
 
-		self.title = Button(self.Frame, text = "T", style = "F.TButton")
+		self.title = Button(self.Frame, text = "T", style = "F.TButton", takefocus = 0)
 		self.title.pack(expand = 0, side = TOP)
-		self.title.bind("<Button-1>", lambda event: self.master.textFrame.makeTitle())
+		self.title.bind("<Button-1>", lambda event: self.master.textFrame.makeLevel("title"))
 
-		self.subTitle = Button(self.Frame, text = "S", style = "F.TButton")
+		self.subTitle = Button(self.Frame, text = "S", style = "F.TButton", takefocus = 0)
 		self.subTitle.pack(expand = 0, side = TOP)
-		self.subTitle.bind("<Button-1>", lambda event: self.master.textFrame.makeSubTitle())
+		self.subTitle.bind("<Button-1>", lambda event: self.master.textFrame.makeLevel("subtitle"))
 
-		self.notes = Button(self.Frame, text = "N", style = "F.TButton")
+		self.notes = Button(self.Frame, text = "N", style = "F.TButton", takefocus = 0)
+		self.notes.pack(expand = 0, side = TOP)
+		self.notes.bind("<Button-1>", lambda event: self.master.textFrame.makeLevel("notes"))
 
 		self.spacer2 = Frame(self.Frame, height = 5)
 		self.spacer2.pack(expand = 0, side = TOP)
 
-		self.equation = Button(self.Frame, text = "E", style = "F.TButton")
+		self.equation = Button(self.Frame, text = "E", style = "F.TButton", takefocus = 0)
 		self.equation.pack(expand = 0, side = TOP)
 
-		self.settings = Button(self.Frame, text = "Set", style = "F.TButton")
+		self.settings = Button(self.Frame, text = "Set", style = "F.TButton", takefocus = 0)
 		self.settings.pack(expand = 0, side = BOTTOM, padx = 2, pady = 4)
 
 # Text Frame
@@ -212,7 +214,7 @@ class text(Frame):
 
 		self.textBox.insert(insertIndex, "\t")
 
-	def makeTitle(self):
+	def makeLevel(self, level):
 		index = self.textBox.index("insert").split(".")[0]
 		lineStart = index + ".0"
 		lineEnd = index + ".end"
@@ -232,26 +234,12 @@ class text(Frame):
 
 		self.textBox.delete(deleteStart, deleteEnd)
 
-	def makeSubTitle(self):
-		index = self.textBox.index("insert").split(".")[0]
-		lineStart = index + ".0"
-		lineEnd = index + ".end"
-
-		line = self.textBox.get(lineStart, lineEnd)
-
-		numberTabs = 0
-
-		for char in line:
-			if char == "\t":
-				numberTabs += 1
-			else:
-				break
-
-		deleteStart = lineStart
-		deleteEnd = index + "." + str(numberTabs)
-
-		self.textBox.delete(deleteStart, deleteEnd)
-		self.textBox.insert(deleteStart, "\t")
+		if level == "title":
+			pass
+		elif level == "subtitle":
+			self.textBox.insert(deleteStart, "\t")
+		elif level == "notes":
+			self.textBox.insert(deleteStart, "\t\t")
 
 	def modified(self):
 		self.changed = True
