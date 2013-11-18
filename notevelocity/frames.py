@@ -105,9 +105,11 @@ class formatBar(Frame):
 
 		self.title = Button(self.Frame, text = "T", style = "F.TButton")
 		self.title.pack(expand = 0, side = TOP)
+		self.title.bind("<Button-1>", lambda event: self.master.textFrame.makeTitle())
 
 		self.subTitle = Button(self.Frame, text = "S", style = "F.TButton")
 		self.subTitle.pack(expand = 0, side = TOP)
+		self.subTitle.bind("<Button-1>", lambda event: self.master.textFrame.makeSubTitle())
 
 		self.notes = Button(self.Frame, text = "N", style = "F.TButton")
 
@@ -151,10 +153,6 @@ class text(Frame):
 		self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
 
 		self.textBox.bind("<<Modified>>", lambda event: self.modified())
-
-		self.configureTags()
-
-		self.startUpdate()
 
 		self.changed = False
 		self.fileName = ""
@@ -214,68 +212,50 @@ class text(Frame):
 
 		self.textBox.insert(insertIndex, "\t")
 
-	def configureTags(self):
-		self.tags = ["title", "subtitle", "text"]
+	def makeTitle(self):
+		index = self.textBox.index("insert").split(".")[0]
+		lineStart = index + ".0"
+		lineEnd = index + ".end"
 
-		self.textBox.tag_add(self.tags[0], "1.0", "end")
-		self.textBox.tag_add(self.tags[1], "1.0", "end")
-		self.textBox.tag_add(self.tags[2], "1.0", "end")
+		line = self.textBox.get(lineStart, lineEnd)
 
-	def startUpdate(self):
-		self.updateTagFlag = True
-		self.updateTags()
+		numberTabs = 0
 
-	def stopUpdate(self):
-		self.updateTagFlag = False
+		for char in line:
+			if char == "\t":
+				numberTabs += 1
+			else:
+				break
+
+		deleteStart = lineStart
+		deleteEnd = index + "." + str(numberTabs)
+
+		self.textBox.delete(deleteStart, deleteEnd)
+
+	def makeSubTitle(self):
+		index = self.textBox.index("insert").split(".")[0]
+		lineStart = index + ".0"
+		lineEnd = index + ".end"
+
+		line = self.textBox.get(lineStart, lineEnd)
+
+		numberTabs = 0
+
+		for char in line:
+			if char == "\t":
+				numberTabs += 1
+			else:
+				break
+
+		deleteStart = lineStart
+		deleteEnd = index + "." + str(numberTabs)
+
+		self.textBox.delete(deleteStart, deleteEnd)
+		self.textBox.insert(deleteStart, "\t")
 
 	def modified(self):
 		self.changed = True
 		self.master.titleBar.changed()
-
-	# Run once a 5-character buffer has built up or something
-	def updateTags(self):
-
-		if self.updateTagFlag:
-
-			lineNum = 0
-
-			for line in self.textBox.get("1.0", "end"):
-
-				self.tabbed = 0
-
-				for char in line:
-					if char == "\t":
-						self.tabbed += 1
-
-					else:
-						break
-
-				lineStart = str(lineNum) + ".0"
-				lineEnd = str(lineNum) + ".end"
-
-				# Remove tags
-				self.textBox.tag_remove(self.tags[0], lineStart, lineEnd)
-				self.textBox.tag_remove(self.tags[1], lineStart, lineEnd)
-				self.textBox.tag_remove(self.tags[2], lineStart, lineEnd)
-
-				if self.tabbed == 0:
-					self.textBox.tag_add(self.tags[0], lineStart, lineEnd)
-					#print("Title")
-
-				elif self.tabbed == 1:
-					self.textBox.tag_add(self.tags[1], lineStart, lineEnd)
-					#print("Subtitle")
-
-				elif self.tabbed == 2:
-					self.textBox.tag_add(self.tags[2], lineStart, lineEnd)
-					#print("Text")
-
-				lineNum += 1
-
-			self.root.after(1000, self.updateTags)
-
-		else:
-			print("Tag updating disabled")
 
 class arrangementFrame(Frame):
 	def __init__(self, master):
