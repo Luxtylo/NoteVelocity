@@ -42,8 +42,11 @@ class titleBar(Frame):
 		self.title = Label(self.Frame, text = "   New note", anchor = "w", style = "T.TLabel")
 		self.title.pack(expand = 1, fill = BOTH, side = LEFT)
 
-		self.changedIndicator = Frame(self.Frame, style = "CIOff.TFrame", width = 40, height = 20)
+		self.changedIndicator = Frame(self.Frame, style = "CIOff.TFrame", height = 20)
 		self.changedIndicator.pack(expand = 0, fill = Y, side = RIGHT)
+
+		self.changedIndicatorText = Label(self.changedIndicator, style = "CITextOff.TLabel", text = "Changed")
+		self.changedIndicatorText.pack(expand = 0, side = RIGHT, padx = 4)
 
 		self.Bindings()
 
@@ -57,7 +60,11 @@ class titleBar(Frame):
 		self.buttonA.bind("<Control-Enter>", lambda event: self.buttonARename())
 		self.buttonA.bind("<Control-Leave>", lambda event: self.buttonASave())
 
-		self.buttonB.config(command = self.master.openFile)
+		self.buttonB.bind("<Enter>", lambda event: self.buttonBOpen())
+		self.buttonB.bind("<Leave>", lambda event: self.buttonBOpen())
+
+		self.buttonB.bind("<Control-Enter>", lambda event: self.buttonBRewrite())
+		self.buttonB.bind("<Control-Leave>", lambda event: self.buttonBRewrite())
 
 	def buttonASave(self):
 		self.buttonA.config(text = "Save", command = lambda: self.master.saveFile(1))
@@ -67,6 +74,20 @@ class titleBar(Frame):
 
 	def buttonARename(self):
 		self.buttonA.config(text = "Rename", command = lambda: self.master.saveFile(3))
+
+	def buttonBOpen(self):
+		self.buttonB.config(text = "Open", command = lambda: self.master.openFile())
+
+	def buttonBRewrite(self):
+		self.buttonB.config(text = "Rewrite", command = lambda: self.master.rewriteFile())
+
+	def changed(self):
+		self.changedIndicator.config(style = "CIOn.TFrame")
+		self.changedIndicatorText.config(style = "CIText.TLabel")
+
+	def unChanged(self):
+		self.changedIndicator.config(style = "CIOff.TFrame")
+		self.changedIndicatorText.config(style = "CITextOff.TLabel")
 
 # Formatting bar
 class formatBar(Frame):
@@ -209,6 +230,7 @@ class text(Frame):
 
 	def modified(self):
 		self.changed = True
+		self.master.titleBar.changed()
 
 	# Run once a 5-character buffer has built up or something
 	def updateTags(self):
@@ -260,6 +282,8 @@ class arrangementFrame(Frame):
 		self.master = master
 
 		self.testMessage = "arrangementFrame is initialised"
+
+		self.titleBar = self.master.titleBar
 
 		self.Frame = Frame()
 		self.Frame.pack(side = LEFT)

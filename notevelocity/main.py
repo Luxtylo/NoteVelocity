@@ -126,6 +126,7 @@ class AppFrame(Frame):
 
 				self.textFrame.changed = False
 				self.tabBar.resetChanged()
+				self.indicateNoChange()
 
 				return 0
 
@@ -161,6 +162,7 @@ class AppFrame(Frame):
 
 				self.textFrame.changed = False
 				self.tabBar.resetChanged()
+				self.indicateNoChange()
 
 				return 0
 
@@ -195,6 +197,7 @@ class AppFrame(Frame):
 
 				self.textFrame.changed = False
 				self.tabBar.resetChanged()
+				self.indicateNoChange()
 
 				return 0
 
@@ -234,6 +237,16 @@ class AppFrame(Frame):
 			self.textFrame.changed = False
 			self.textFrame.fileName = openLocation
 			self.tabBar.resetChanged()
+			self.indicateNoChange()
+
+	def rewriteFile(self):
+		print("Rewriting...")
+
+	def indicateChange(self):
+		self.titleBar.changed()
+
+	def indicateNoChange(self):
+		self.titleBar.unChanged()
 
 	def quit(self):
 		print("Closing NoteVelocity...")

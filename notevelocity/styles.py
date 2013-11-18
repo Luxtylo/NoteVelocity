@@ -32,8 +32,9 @@ def init(master):
 	textBoxBackground = "#FCFCFC"
 	textBoxTextColour = "#101010"
 
-	changedIndicatorOn = "#FF0000"
+	changedIndicatorOn = "#888888"
 	changedIndicatorOff = "#E8E8E8"
+	changedIndicatorText = "#101010"
 
 	# Styles (Do not edit)
 	titleBarStyle = Style()
@@ -68,6 +69,10 @@ def init(master):
 	chIn.configure("CIOn.TFrame", width = 20, height = 20, background = changedIndicatorOn)
 	chInOff = Style()
 	chInOff.configure("CIOff.TFrame", width = 20, height = 20, background = changedIndicatorOff)
+	chInT = Style()
+	chInT.configure("CIText.TLabel", foreground = changedIndicatorText, background = changedIndicatorOn, font = tabFont)
+	chInTOff = Style()
+	chInTOff.configure("CITextOff.TLabel", foreground = changedIndicatorOff, background = changedIndicatorOff, font = tabFont)
 
 	master.textBoxBackground = textBoxBackground
 	master.textBoxTextColour = textBoxTextColour
