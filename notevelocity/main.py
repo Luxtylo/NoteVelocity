@@ -240,6 +240,12 @@ class AppFrame(Frame):
 	def rewriteFile(self):
 		print("Rewriting...")
 
+	def updateChanged(self):
+		if self.textFrame.changed == True:
+			self.indicateChange()
+		elif self.textFrame.changed == False:
+			self.indicateNoChange()
+
 	def indicateChange(self):
 		self.titleBar.changed()
 

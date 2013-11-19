@@ -46,7 +46,7 @@ class tabBar(Frame):
 	def switch(self, mode, amount):
 		self.lastSelectedTab = self.selectedTab
 
-		if mode == 0: #Add amount
+		if mode == 0: #Add amount to tabNum
 			if self.selectedTab + amount < len(self.tabs) and self.selectedTab + amount >= 0:
 				self.selectedTab += amount
 
@@ -56,7 +56,7 @@ class tabBar(Frame):
 			elif self.selectedTab + amount < 0:
 				self.selectedTab = len(self.tabs) - 1
 
-		elif mode == 1: # Switch to amount
+		elif mode == 1: # Switch to tab amount
 			if amount < len(self.tabs) and amount >= 0:
 				self.selectedTab = amount
 
@@ -69,6 +69,7 @@ class tabBar(Frame):
 		self.tabs[self.lastSelectedTab].deselect()
 		self.tabs[self.selectedTab].select()
 		self.swapBoxContents(self.lastSelectedTab, self.selectedTab)
+		self.master.master.updateChanged()
 
 	def swapBoxContents(self, last, new):
 		textBoxContents = self.master.master.textFrame.textBox.get(1.0, "end")
@@ -84,6 +85,9 @@ class tabBar(Frame):
 		# Update textBox properties
 		self.tabs[last].fileName = self.master.master.textFrame.fileName
 		self.master.master.textFrame.fileName = self.tabs[new].fileName
+
+		self.tabs[last].changed = self.master.master.textFrame.changed
+		self.master.master.textFrame.changed = self.tabs[new].changed
 
 	def updateFilename(self):
 		self.tabs[self.selectedTab].fileName = self.master.master.textFrame.fileName
@@ -164,7 +168,7 @@ class tabBar(Frame):
 				return 0
 		
 		else:
-			print(str(self.tabs[self.selectedTab].changed) + " " + str(self.master.master.textFrame.changed))
+			#print(str(self.tabs[self.selectedTab].changed) + " " + str(self.master.master.textFrame.changed))
 			return 0
 
 	def renameCurrent(self, name):
