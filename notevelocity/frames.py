@@ -121,6 +121,13 @@ class formatBar(Frame):
 		self.equation = Button(self.Frame, text = "E", style = "F.TButton", takefocus = 0)
 		self.equation.pack(expand = 0, side = TOP)
 
+		self.spacer3 = Frame(self.Frame, height = 5)
+		self.spacer3.pack(expand = 0, side = TOP)
+
+		self.rewriteToggle = Button(self.Frame, text = "R", style = "F.TButton", takefocus = 0)
+		self.rewriteToggle.pack(expand = 0, side = TOP)
+		self.rewriteToggle.bind("<Button-1>", lambda event: self.master.textFrame.toggleRewrite())
+
 		self.settings = Button(self.Frame, text = "Set", style = "F.TButton", takefocus = 0)
 		self.settings.pack(expand = 0, side = BOTTOM, padx = 2, pady = 4)
 
@@ -136,17 +143,25 @@ class text(Frame):
 		self.Frame = Frame(style = "TB.TFrame")
 		self.Frame.pack(fill = BOTH, expand = 1, side = TOP)
 
-		self.scrollbar = Scrollbar(self.Frame)
-		self.scrollbar.pack(expand = 0, fill = Y, side = RIGHT)
-
 		self.textBox = Text(self.Frame)
-		self.textBox.pack(expand = 1, fill = BOTH, side = LEFT)
-		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"), borderwidth = 0)
+		self.textBox.config(tabs = ("0.5c", "0.75c", "0.825c"), borderwidth = 0, width = 1)
 		self.textBox.config(bg = master.master.textBoxBackground, fg = master.master.textBoxTextColour)
+		self.textBox.pack(expand = 1, fill = BOTH, side = LEFT)
 
-		# Link self.textBox and self.scrollbar
+		self.scrollbar = Scrollbar(self.Frame)
+		self.scrollbar.pack(expand = 0, fill = Y, side = LEFT)
+
+		self.rewriteBox = Text(self.Frame)
+		self.rewriteBox.config(tabs = ("0.5c", "0.75c", "0.825c"), borderwidth = 0, width = 1)
+		self.rewriteBox.config(bg = master.master.textBoxBackground, fg = master.master.textBoxTextColour)
+
+		self.rewriteScrollbar = Scrollbar(self.Frame)
+
+		# Link textboxes and scrollbars
 		self.textBox.config(yscrollcommand = self.scrollbar.set)
 		self.scrollbar.config(command = self.textBox.yview)
+		self.rewriteBox.config(yscrollcommand = self.rewriteScrollbar.set)
+		self.rewriteScrollbar.config(command = self.rewriteBox.yview)
 
 		# Bind Enter to newLine
 		self.textBox.bind("<Return>", lambda event: self.newLine())
@@ -155,8 +170,13 @@ class text(Frame):
 		self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
 
 		self.textBox.bind("<<Modified>>", lambda event: self.modified())
+		self.rewriteBox.bind("<<Modified>>", lambda event: self.rewriteModified())
 
+		self.selectedBox = 0
 		self.changed = False
+		self.rewriteChanged = False
+		self.rewriteShown = False
+
 		self.fileName = ""
 		self.shortFileName = self.fileName.split("/")[-1]
 
@@ -244,6 +264,44 @@ class text(Frame):
 	def modified(self):
 		self.changed = True
 		self.master.titleBar.changed()
+
+	def rewriteModified(self):
+		self.rewriteChanged = True
+		self.master.titleBar.changed()
+
+	def selectText(self):
+		self.selectedBox = 0
+		self.textBox.focus_set()
+		if self.changed == True:
+			self.master.titleBar.changed()
+		else:
+			self.master.titleBar.unChanged()
+
+	def selectRewrite(self):
+		self.selectedBox = 1
+		self.rewriteBox.focus_set()
+		if self.rewriteChanged == True:
+			self.master.titleBar.changed()
+		else:
+			self.master.titleBar.unChanged()
+
+	def showRewrite(self):
+		self.rewriteBox.pack(expand = 1, fill = BOTH, side = LEFT)
+		self.rewriteScrollbar.pack(expand = 0, fill = Y, side = LEFT)
+		self.rewriteShown = True
+		self.selectRewrite()
+
+	def hideRewrite(self):
+		self.rewriteBox.pack_forget()
+		self.rewriteScrollbar.pack_forget()
+		self.rewriteShown = False
+		self.selectText
+
+	def toggleRewrite(self):
+		if self.rewriteShown:
+			self.hideRewrite()
+		else:
+			self.showRewrite()
 
 class arrangementFrame(Frame):
 	def __init__(self, master):

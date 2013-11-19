@@ -91,7 +91,6 @@ class tabBar(Frame):
 
 	def updateFilename(self):
 		self.tabs[self.selectedTab].fileName = self.master.master.textFrame.fileName
-		print(self.master.master.textFrame.fileName)
 
 	def closeCurrent(self):
 		errorCheck = self.save()
