@@ -26,6 +26,10 @@ import styles
 ## Main
 # Title bar
 class titleBar(Frame):
+    """Bar along the top of the program.
+    Contains:
+        Button A - Save, Save as, rename
+        Button B - Open, Rewrite"""
     def __init__(self, master, root):
 
         self.master = master
@@ -57,6 +61,7 @@ class titleBar(Frame):
         self.Bindings()
 
     def Bindings(self):
+        """Change function of buttons depending on keys held."""
         self.buttonA.bind("<Enter>", lambda event: self.buttonASave())
         self.buttonA.bind("<Leave>", lambda event: self.buttonASave())
 
@@ -73,30 +78,38 @@ class titleBar(Frame):
         self.buttonB.bind("<Control-Leave>", lambda event: self.buttonBRewrite())
 
     def buttonASave(self):
+        """Change button A to function as a save button"""
         self.buttonA.config(text = "Save", command = lambda: self.master.saveFile(1))
 
     def buttonASaveAs(self):
+        """Change button A to function as a save as button"""
         self.buttonA.config(text = "Save As", command = lambda: self.master.saveFile(2))
 
     def buttonARename(self):
+        """Change button A to function as a rename button"""
         self.buttonA.config(text = "Rename", command = lambda: self.master.saveFile(3))
 
     def buttonBOpen(self):
+        """Change button B to function as an open button"""
         self.buttonB.config(text = "Open", command = lambda: self.master.openFile())
 
     def buttonBRewrite(self):
+        """Change button B to function as a rewrite button"""
         self.buttonB.config(text = "Rewrite", command = lambda: self.master.rewriteFile())
 
     def changed(self):
+        """Change changedIndicator to show a change"""
         self.changedIndicator.config(style = "CIOn.TFrame")
         self.changedIndicatorText.config(style = "CIText.TLabel")
 
     def unChanged(self):
+        """Change changedIndicator to show no change"""
         self.changedIndicator.config(style = "CIOff.TFrame")
         self.changedIndicatorText.config(style = "CITextOff.TLabel")
 
 # Formatting bar
 class formatBar(Frame):
+    """Formatting bar down the left side of the program"""
     def __init__(self, master):
 
         self.master = master
@@ -132,6 +145,7 @@ class formatBar(Frame):
 
 # Text Frame
 class text(Frame):
+    """Contains the text box which is typed into"""
     def __init__(self, master, root):
 
         self.master = master
@@ -166,8 +180,8 @@ class text(Frame):
         self.fileName = ""
         self.shortFileName = self.fileName.split("/")[-1]
 
-    # Make new lines keep the same indentation
     def newLine(self):
+        """Make new lines but keep their indentation"""
         self.tabbed = 0
 
         # Get current line
@@ -193,6 +207,7 @@ class text(Frame):
         return "break"
 
     def decreaseIndent(self, event):
+        """Decrease the indent of the current line by one tab"""
         self.tabbed = 0
 
         # Get current line
@@ -214,6 +229,7 @@ class text(Frame):
         return "break"
 
     def increaseIndent(self, event):
+        """Increase the indent of the current line by one tab"""
         lineNum, columnNum = self.textBox.index("insert").split(".")
 
         insertIndex = lineNum + ".0"
@@ -221,6 +237,7 @@ class text(Frame):
         self.textBox.insert(insertIndex, "\t")
 
     def makeLevel(self, level):
+        """Set the number of tab chars before start of the current line to 'level'"""
         index = self.textBox.index("insert").split(".")[0]
         lineStart = index + ".0"
         lineEnd = index + ".end"
@@ -248,10 +265,12 @@ class text(Frame):
             self.textBox.insert(deleteStart, "\t\t")
 
     def modified(self):
+        """Show that the contents of the textBox have been modified"""
         self.changed = True
         self.master.titleBar.changed()
 
 class arrangementFrame(Frame):
+    """Frame to make arrangement of textFrame and tabBar work properly"""
     def __init__(self, master):
         self.master = master
 

@@ -43,6 +43,7 @@ makeSubheading = "<Control-H>"
 
 # Binding (Do not edit)
 def init(self, root):
+    """Initialise keybindings"""
     print("bindings initialised")
 
     # Saving

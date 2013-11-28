@@ -21,14 +21,16 @@ You should have received a copy of the GNU General Public License along with
 from os import getcwd
 from datetime import datetime
 
-# Main
+
 class Log():
+    """Class to store the methods for logging"""
     def __init__(self, master):
         self.master = master
 
         self.open()
 
     def open(self):
+        """Open the log file"""
         self.location = getcwd() + "/.log"
 
         self.logFile = open(self.location, "w+")
@@ -37,16 +39,20 @@ class Log():
         self.logFile.write("NoteVelocity Log File\n" + time + " - Log initialised")
 
     def getTime(self):
+        """Get the a string of the time"""
         timeStamp = str(datetime.now())
         return timeStamp
 
     def write(self, line):
+        """Write content to the log file"""
         time = self.getTime()
         self.logFile.write("\n" + time + " - " + line)
 
     def writeError(self, line):
+        """Write an error to the log file"""
         time = self.getTime()
         self.logFile.write("\n\n#ERROR:\n\t" + time + " - " + line)
 
     def close(self):
+        """Close the log file"""
         self.logFile.close()

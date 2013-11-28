@@ -17,10 +17,11 @@ You should have received a copy of the GNU General Public License along with
 
 """
 
-from tkinter import *
-from tkinter.ttk import *
+from tkinter.ttk import Style
+
 
 def init(master):
+    """Initialise fonts and styles"""
     # Fonts
     buttonFont = ("Source Sans Pro", 10)
     smallButtonFont = ("Source Sans Pro", 8)

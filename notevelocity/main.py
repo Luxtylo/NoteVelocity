@@ -306,14 +306,14 @@ class AppFrame(Frame):
 root = Tk()
 
 root.title("NoteVelocity")
-root.minsize(640,480)
+root.minsize(640, 480)
 
 screenWidth = root.winfo_screenwidth()
 screenHeight = root.winfo_screenheight()
 windowWidth = int(screenWidth * 3 / 4)
 windowHeight = int(screenHeight * 3 / 4)
 
-if screenWidth <=1024 or screenHeight <= 768:
+if screenWidth <= 1024 or screenHeight <= 768:
     root.geometry("%dx%d" % (windowWidth, windowHeight))
     print("Resolution set to %dx%d" % (windowWidth, windowHeight))
 elif screenWidth == 1024 and screenHeight == 768:
