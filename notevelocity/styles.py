@@ -1,18 +1,26 @@
 """
+NoteVelocity - A speedy note-taking program.
 
-NoteVelocity - A speedy note-taking program
 Copyright (C) 2013  George Bryant
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free
+    Software Foundation, either version 3 of the License, or (at your option)
+    any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
 
-You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with
+    this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
 from tkinter import *
 from tkinter.ttk import *
+
 
 def init(master):
     # Fonts
@@ -51,35 +59,46 @@ def init(master):
         font=buttonFont)
 
     formatButtonStyle = Style()
-    formatButtonStyle.configure("F.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, width = 3, font = buttonFont)
+    formatButtonStyle.configure("F.TButton",
+        foreground=toolbarFontColour,
+        background=toolbarButtonColour, width=3, font=buttonFont)
 
     titleStyle = Style()
-    titleStyle.configure("T.TLabel", foreground = toolbarFontColour, font = titleFont)
+    titleStyle.configure("T.TLabel",
+        foreground=toolbarFontColour, font=titleFont)
 
     tabBarStyle = Style()
-    tabBarStyle.configure("TabBar.TFrame", background = toolbarColour)
+    tabBarStyle.configure("TabBar.TFrame", background=toolbarColour)
 
     tabStyle = Style()
-    tabStyle.configure("Tab.TFrame", background = tabColour)
+    tabStyle.configure("Tab.TFrame", background=tabColour)
     tabSelectedStyle = Style()
-    tabSelectedStyle.configure("TabSelected.TFrame", background = tabSelectedColour)
+    tabSelectedStyle.configure(
+        "TabSelected.TFrame", background=tabSelectedColour)
 
     tabButtonStyle = Style()
-    tabButtonStyle.configure("Tab.TButton", foreground = toolbarFontColour, background = toolbarButtonColour, font = smallButtonFont)
+    tabButtonStyle.configure("Tab.TButton",
+        foreground=toolbarFontColour, background=toolbarButtonColour, font=smallButtonFont)
 
     tabTitleStyle = Style()
-    tabTitleStyle.configure("TT.TLabel", foreground = toolbarFontColour, background = tabColour, font = tabFont)
+    tabTitleStyle.configure("TT.TLabel",
+        foreground=toolbarFontColour, background=tabColour, font=tabFont)
     tabTitleSelectedStyle = Style()
-    tabTitleSelectedStyle.configure("TTS.TLabel", foreground = toolbarFontColour, background = tabSelectedColour, font = tabFont)
+    tabTitleSelectedStyle.configure("TTS.TLabel",
+        foreground=toolbarFontColour, background=tabSelectedColour, font=tabFont)
 
     chIn = Style()
-    chIn.configure("CIOn.TFrame", width = 20, height = 20, background = changedIndicatorOn)
+    chIn.configure("CIOn.TFrame", width=20, height=20,
+        background=changedIndicatorOn)
     chInOff = Style()
-    chInOff.configure("CIOff.TFrame", width = 20, height = 20, background = changedIndicatorOff)
+    chInOff.configure("CIOff.TFrame", width=20, height=20,
+        background=changedIndicatorOff)
     chInT = Style()
-    chInT.configure("CIText.TLabel", foreground = changedIndicatorText, background = changedIndicatorOn, font = tabFont)
+    chInT.configure("CIText.TLabel",
+        foreground=changedIndicatorText, background=changedIndicatorOn, font=tabFont)
     chInTOff = Style()
-    chInTOff.configure("CITextOff.TLabel", foreground = changedIndicatorOff, background = changedIndicatorOff, font = tabFont)
+    chInTOff.configure("CITextOff.TLabel",
+        foreground=changedIndicatorOff, background=changedIndicatorOff, font=tabFont)
 
     master.textBoxBackground = textBoxBackground
     master.textBoxTextColour = textBoxTextColour

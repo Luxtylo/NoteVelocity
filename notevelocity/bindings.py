@@ -1,17 +1,23 @@
 """
+NoteVelocity - A speedy note-taking program.
 
-NoteVelocity - A speedy note-taking program
 Copyright (C) 2013  George Bryant
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free
+    Software Foundation, either version 3 of the License, or (at your option)
+    any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
 
-You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with
+    this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-# Imports
 from tkinter import *
 from tkinter.ttk import *
 
@@ -31,12 +37,15 @@ closeTab = "<Control-w>"
 quit = "<Control-W>"
 
 decreaseIndent = "<Control-Shift-space>"
-increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
+# Or the tab key when at the start of a line
+increaseIndent = "<Control-space>"
 
 makeHeading = "<Control-h>"
 makeSubheading = "<Control-H>"
 
 # Binding (Do not edit)
+
+
 def init(self, root):
     """Binds keys defined above to functions elsewhere"""
     print("bindings initialised")
