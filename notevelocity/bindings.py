@@ -20,6 +20,7 @@ save = "<Control-s>"
 saveAs = "<Control-S>"
 rename = "<Control-r>"
 openFile = "<Control-o>"
+rewrite = "<Control-Shift-r>"
 
 nextTab = "<Control-d>"
 prevTab = "<Control-D>"
@@ -37,25 +38,26 @@ makeSubheading = "<Control-H>"
 
 # Binding (Do not edit)
 def init(self, root):
-	print("bindings initialised")
+    """Binds keys defined above to functions elsewhere"""
+    print("bindings initialised")
 
-	# Saving
-	root.bind(save, lambda event: self.saveFile(1))
-	root.bind(saveAs, lambda event: self.saveFile(2))
-	root.bind(rename, lambda event: self.saveFile(3))
+    # Saving
+    root.bind(save, lambda event: self.saveFile(1))
+    root.bind(saveAs, lambda event: self.saveFile(2))
+    root.bind(rename, lambda event: self.saveFile(3))
 
-	# Opening
-	root.bind(openFile, lambda event: self.openFile())
+    # Opening
+    root.bind(openFile, lambda event: self.openFile())
 
-	# Tab control
-	root.bind(nextTab, lambda event: self.tabBar.switch(0, 1))
-	root.bind(prevTab, lambda event: self.tabBar.switch(0, -1))
-	root.bind(newTab, lambda event: self.tabBar.add(self, "New Note"))
-	root.bind(newTabTwo, lambda event: self.tabBar.add(self, "New Note"))
-	root.bind(closeTab, lambda event: self.tabBar.closeCurrent())
+    # Tab control
+    root.bind(nextTab, lambda event: self.tabBar.switch(0, 1))
+    root.bind(prevTab, lambda event: self.tabBar.switch(0, -1))
+    root.bind(newTab, lambda event: self.tabBar.add(self, "New Note"))
+    root.bind(newTabTwo, lambda event: self.tabBar.add(self, "New Note"))
+    root.bind(closeTab, lambda event: self.tabBar.closeCurrent())
 
-	root.bind(makeHeading, lambda event: print("Making heading"))
-	root.bind(makeSubheading, lambda event: print("Making subheading"))
+    root.bind(makeHeading, lambda event: print("Making heading"))
+    root.bind(makeSubheading, lambda event: print("Making subheading"))
 
-	# Quit
-	root.bind(quit, lambda event: self.quit())
+    # Quit
+    root.bind(quit, lambda event: self.quit())

@@ -25,257 +25,254 @@ import styles
 
 ## Main loop
 class AppFrame(Frame):
-	def __init__(self, master):
-		self.master = master
+    def __init__(self, master):
+        self.master = master
 
-		self.log = logging.Log(self)
+        self.log = logging.Log(self)
 
-		self.osStuff()
-		self.initVars()
-		self.initUI()
+        self.osStuff()
+        self.initVars()
+        self.initUI()
 
-	def initVars(self):
-		self.files = list()
+    def initVars(self):
+        self.files = list()
 
-		self.notesDir = getcwd() + "/notes"
+        self.notesDir = getcwd() + "/notes"
 
-	def initUI(self):
-		self.log.write("Initialising UI")
+    def initUI(self):
+        self.log.write("Initialising UI")
 
-		styles.init(self)
+        styles.init(self)
 
-		## Top level frames
-		try:
-			self.titleBar = frames.titleBar(self, root)
-			self.log.write(self.titleBar.testMessage)
-		except Exception as ex:
-			print("titleBar was not initialised properly")
-			self.log.writeError("titleBar was not initialised properly. Error:\n" + str(ex))
-			self.quit()
+        ## Top level frames
+        try:
+            self.titleBar = frames.titleBar(self, root)
+            self.log.write(self.titleBar.testMessage)
+        except Exception as ex:
+            print("titleBar was not initialised properly")
+            self.log.writeError("titleBar was not initialised properly. Error:\n" + str(ex))
+            self.quit()
 
-		try:
-			self.formatBar = frames.formatBar(self)
-			self.log.write(self.formatBar.testMessage)
-		except Exception as ex:
-			print("formatBar was not initialised properly")
-			self.log.writeError("formatBar was not initialised properly. Error:\n" + str(ex))
-			self.quit()
+        try:
+            self.formatBar = frames.formatBar(self)
+            self.log.write(self.formatBar.testMessage)
+        except Exception as ex:
+            print("formatBar was not initialised properly")
+            self.log.writeError("formatBar was not initialised properly. Error:\n" + str(ex))
+            self.quit()
 
-		try:
-			self.arrangementFrame = frames.arrangementFrame(self)
-			self.log.write(self.arrangementFrame.testMessage)
-		except Exception as ex:
-			print("arrangementFrame was not initialised properly")
-			self.log.writeError("arrangementFrame was not initialised properly. Error:\n" + str(ex))
-			self.quit()
+        try:
+            self.arrangementFrame = frames.arrangementFrame(self)
+            self.log.write(self.arrangementFrame.testMessage)
+        except Exception as ex:
+            print("arrangementFrame was not initialised properly")
+            self.log.writeError("arrangementFrame was not initialised properly. Error:\n" + str(ex))
+            self.quit()
 
-		"""try:
-			self.textFrame = frames.text(self.arrangementFrame, root)
-			self.log.write(self.textFrame.testMessage)
-		except Exception as ex:
-			print("textFrame was not initialised properly")
-			self.log.writeError("textFrame was not initialised properly. Error:\n" + str(ex))
-			self.quit()"""
+        """try:
+            self.textFrame = frames.text(self.arrangementFrame, root)
+            self.log.write(self.textFrame.testMessage)
+        except Exception as ex:
+            print("textFrame was not initialised properly")
+            self.log.writeError("textFrame was not initialised properly. Error:\n" + str(ex))
+            self.quit()"""
 
-		self.textFrame = frames.text(self.arrangementFrame, root)
+        self.textFrame = frames.text(self.arrangementFrame, root)
 
-		try:
-			self.tabBar = tabs.tabBar(self.arrangementFrame)
-			self.log.write(self.tabBar.testMessage)
-		except Exception as ex:
-			print("tabBar was not initialised properly")
-			self.log.writeError("tabBar was not initialsed properly. Error:\n" + str(ex))
-			self.quit()
+        try:
+            self.tabBar = tabs.tabBar(self.arrangementFrame)
+            self.log.write(self.tabBar.testMessage)
+        except Exception as ex:
+            print("tabBar was not initialised properly")
+            self.log.writeError("tabBar was not initialsed properly. Error:\n" + str(ex))
+            self.quit()
 
-		try:
-			bindings.init(self, root)
-		except Exception as ex:
-			print("bindings were not initialised properly")
-			self.log.writeError("bindings were not initialised properly. Error:\n" + str(ex))
-			self.quit()
+        try:
+            bindings.init(self, root)
+        except Exception as ex:
+            print("bindings were not initialised properly")
+            self.log.writeError("bindings were not initialised properly. Error:\n" + str(ex))
+            self.quit()
 
-		self.textFrame.textBox.focus_set()
+        self.textFrame.textBox.focus_set()
 
-		self.log.write("All initialised\n")
+        self.log.write("All initialised\n")
 
-	def saveFile(self, mode):
-		if mode == 1:
-			# Save file
-			print("Saving file")
+    def saveFile(self, mode):
+        if mode == 1:
+            # Save file
+            print("Saving file")
 
-			if self.textFrame.changed == False and self.tabBar.checkChanged == False:
-				print("Not changed, so not saving.")
-				self.log.write("Not changed, so not saving")
-				return 0
-			elif self.textFrame.fileName == "":
-				print("File has no name. Saving as")
-				self.log.write("File has no name. Saving as")
-				return self.saveFile(2)
-			else:
-				saveLocation = self.textFrame.fileName
+            if self.textFrame.changed == False and self.tabBar.checkChanged == False:
+                print("Not changed, so not saving.")
+                self.log.write("Not changed, so not saving")
+                return 0
+            elif self.textFrame.fileName == "":
+                print("File has no name. Saving as")
+                self.log.write("File has no name. Saving as")
+                return self.saveFile(2)
+            else:
+                saveLocation = self.textFrame.fileName
 
-				fileToSave = open(saveLocation, "w+")
+                fileToSave = open(saveLocation, "w+")
 
-				textContents = self.textFrame.textBox.get("1.0", "end")
-				fileToSave.write(textContents)
+                textContents = self.textFrame.textBox.get("1.0", "end")
+                fileToSave.write(textContents)
 
-				print("Saved file at " + saveLocation)
-				self.log.write("Saved file at " + saveLocation)
+                print("Saved file at " + saveLocation)
+                self.log.write("Saved file at " + saveLocation)
 
-				fileToSave.close()
+                fileToSave.close()
 
-				self.textFrame.changed = False
-				self.tabBar.resetChanged()
-				self.indicateNoChange()
+                self.textFrame.changed = False
+                self.tabBar.resetChanged()
+                self.indicateNoChange()
 
-				return 0
+                return 0
 
-		elif mode == 2:
-			# Save file as
-			fileContents = self.textFrame.textBox.get("1.0", "end")
+        elif mode == 2:
+            # Save file as
+            fileContents = self.textFrame.textBox.get("1.0", "end")
 
-			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note")])
-			self.textFrame.fileName = saveLocation
-			self.tabBar.updateFilename()
+            saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note")])
+            self.textFrame.fileName = saveLocation
+            self.tabBar.updateFilename()
 
-			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
-				print("No save location selected. Cancelling")
-				self.log.write("No save location selected. Cancelling")
-				return 1
-			else:
-				fileToSave = open(saveLocation, "w+")
+            if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
+                print("No save location selected. Cancelling")
+                self.log.write("No save location selected. Cancelling")
+                return 1
+            else:
+                fileToSave = open(saveLocation, "w+")
 
-				textContents = self.textFrame.textBox.get("1.0", "end")
-				
-				fileToSave.write(textContents)
+                textContents = self.textFrame.textBox.get("1.0", "end")
+                
+                fileToSave.write(textContents)
 
-				print("Saved file at " + saveLocation)
-				self.log.write("Saved file at " + saveLocation)
+                print("Saved file at " + saveLocation)
+                self.log.write("Saved file at " + saveLocation)
 
-				self.textFrame.fileName = saveLocation
-				self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
-				shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
-				self.titleBar.title.config(text = "   " + shortName)
-				self.tabBar.renameCurrent(shortName)
+                self.textFrame.fileName = saveLocation
+                self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
+                shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
+                self.titleBar.title.config(text = "   " + shortName)
+                self.tabBar.renameCurrent(shortName)
 
-				fileToSave.close()
+                fileToSave.close()
 
-				self.textFrame.changed = False
-				self.tabBar.resetChanged()
-				self.indicateNoChange()
+                self.textFrame.changed = False
+                self.tabBar.resetChanged()
+                self.indicateNoChange()
 
-				return 0
+                return 0
 
-		elif mode == 3:
-			# Rename
-			fileContents = self.textFrame.textBox.get("1.0", "end")
+        elif mode == 3:
+            # Rename
+            fileContents = self.textFrame.textBox.get("1.0", "end")
 
-			saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Rename note to", filetypes = [("Note files", "*.note")])
+            saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Rename note to", filetypes = [("Note files", "*.note")])
 
-			if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
-				print("No rename location selected. Cancelling")
-				return 1
-			else:
-				fileToSave = open(saveLocation, "w+")
+            if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
+                print("No rename location selected. Cancelling")
+                return 1
+            else:
+                fileToSave = open(saveLocation, "w+")
 
-				textContents = self.textFrame.textBox.get("1.0", "end")
-				fileToSave.write(textContents)
+                textContents = self.textFrame.textBox.get("1.0", "end")
+                fileToSave.write(textContents)
 
-				print("Renamed file to " + saveLocation)
-				self.log.write("Renamed file to " + saveLocation)
+                print("Renamed file to " + saveLocation)
+                self.log.write("Renamed file to " + saveLocation)
 
-				if self.textFrame.fileName != "":
-					remove(self.textFrame.fileName)
+                if self.textFrame.fileName != "":
+                    remove(self.textFrame.fileName)
 
-				self.textFrame.fileName = saveLocation
-				self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
-				shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
-				self.titleBar.title.config(text = "   " + shortName)
-				self.tabBar.renameCurrent(shortName)
+                self.textFrame.fileName = saveLocation
+                self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
+                shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
+                self.titleBar.title.config(text = "   " + shortName)
+                self.tabBar.renameCurrent(shortName)
 
-				fileToSave.close()
+                fileToSave.close()
 
-				self.textFrame.changed = False
-				self.tabBar.resetChanged()
-				self.indicateNoChange()
+                self.textFrame.changed = False
+                self.tabBar.resetChanged()
+                self.indicateNoChange()
 
-				return 0
+                return 0
 
-		else:
-			print("saveFile index out of range")
-			self.log.write("saveFile index out of range")
-			return 0
+        else:
+            print("saveFile index out of range")
+            self.log.write("saveFile index out of range")
+            return 0
 
-	def openFile(self):
-		openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note")])
+    def openFile(self):
+        openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note")])
 
-		if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False or openLocation == ():
-			print("No open location selected")
-			self.log.write("No open location selected")
-		else:
-			openFile = open(openLocation, "r")
+        if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False or openLocation == ():
+            print("No open location selected")
+            self.log.write("No open location selected")
+        else:
+            openFile = open(openLocation, "r")
 
-			self.textFrame.fileName = openLocation
-			shortName = self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2]
-			self.tabBar.add(self.tabBar, shortName)
-			self.tabBar.tabs[self.tabBar.selectedTab].fileName = openLocation
-			self.titleBar.title.config(text = "   " + shortName)
+            self.textFrame.fileName = openLocation
+            shortName = self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2]
+            self.tabBar.add(self.tabBar, shortName)
+            self.tabBar.tabs[self.tabBar.selectedTab].fileName = openLocation
+            self.titleBar.title.config(text = "   " + shortName)
 
-			self.textFrame.textBox.delete("1.0", "end")
+            self.textFrame.textBox.delete("1.0", "end")
 
-			lineNum = 1
+            lineNum = 1
 
-			for line in openFile:
-				insertLoc = str(lineNum) + ".0"
-				self.textFrame.textBox.insert(insertLoc, line)
-				
-				lineNum += 1
+            for line in openFile:
+                insertLoc = str(lineNum) + ".0"
+                self.textFrame.textBox.insert(insertLoc, line)
+                
+                lineNum += 1
 
-			print("Opened file from " + openLocation)
-			self.log.write("Opened file from " + openLocation)
+            print("Opened file from " + openLocation)
+            self.log.write("Opened file from " + openLocation)
 
-			self.textFrame.changed = False
-			self.textFrame.fileName = openLocation
-			self.tabBar.resetChanged()
-			self.indicateNoChange()
+            self.textFrame.changed = False
+            self.textFrame.fileName = openLocation
+            self.tabBar.resetChanged()
+            self.indicateNoChange()
 
-	def rewriteFile(self):
-		print("Rewriting...")
+    def updateChanged(self):
+        if self.textFrame.changed == True:
+            self.indicateChange()
+        elif self.textFrame.changed == False:
+            self.indicateNoChange()
 
-	def updateChanged(self):
-		if self.textFrame.changed == True:
-			self.indicateChange()
-		elif self.textFrame.changed == False:
-			self.indicateNoChange()
+    def indicateChange(self):
+        self.titleBar.changed()
 
-	def indicateChange(self):
-		self.titleBar.changed()
+    def indicateNoChange(self):
+        self.titleBar.unChanged()
 
-	def indicateNoChange(self):
-		self.titleBar.unChanged()
+    def quit(self):
+        print("Closing NoteVelocity...")
+        self.log.write("Closing NoteVelocity...")
+        self.log.close()
 
-	def quit(self):
-		print("Closing NoteVelocity...")
-		self.log.write("Closing NoteVelocity...")
-		self.log.close()
+        global root
+        root.destroy()
+        raise SystemExit
 
-		global root
-		root.destroy()
-		raise SystemExit
+    def osStuff(self):
+        self.os = platform.system()
 
-	def osStuff(self):
-		self.os = platform.system()
-
-		if self.os == "Windows":
-			self.slashChar = "\\"
-		elif self.os == "Linux":
-			self.slashChar = "/"
-		elif self.os == "Darwin":
-			self.slashChar = "/"
-		else:
-			self.log.writeError("System not detected as Windows, Mac or Linux. Some features may not work.")
-			print("System not detected as Windows, Mac or Linux. Some features may not work.")
-			self.slashChar = "/"
+        if self.os == "Windows":
+            self.slashChar = "\\"
+        elif self.os == "Linux":
+            self.slashChar = "/"
+        elif self.os == "Darwin":
+            self.slashChar = "/"
+        else:
+            self.log.writeError("System not detected as Windows, Mac or Linux. Some features may not work.")
+            print("System not detected as Windows, Mac or Linux. Some features may not work.")
+            self.slashChar = "/"
 
 # Set root window properties
 root = Tk()
@@ -289,14 +286,14 @@ windowWidth = int(screenWidth * 3 / 4)
 windowHeight = int(screenHeight * 3 / 4)
 
 if screenWidth <=1024 or screenHeight <= 768:
-	root.geometry("%dx%d" % (windowWidth, windowHeight))
-	print("Resolution set to %dx%d" % (windowWidth, windowHeight))
+    root.geometry("%dx%d" % (windowWidth, windowHeight))
+    print("Resolution set to %dx%d" % (windowWidth, windowHeight))
 elif screenWidth == 1024 and screenHeight == 768:
-	root.geometry("%dx%d" % (windowWidth, windowHeight))
-	print("Resolution set to %dx%d" % (windowWidth, windowHeight))
+    root.geometry("%dx%d" % (windowWidth, windowHeight))
+    print("Resolution set to %dx%d" % (windowWidth, windowHeight))
 else:
-	root.geometry("800x600")
-	print("Resolution set to default 800x600")
+    root.geometry("800x600")
+    print("Resolution set to default 800x600")
 
 # Make window centred on startup
 windowXPos = (screenWidth - windowWidth) / 2

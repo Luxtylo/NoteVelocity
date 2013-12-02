@@ -17,30 +17,30 @@ from datetime import datetime
 
 # Main
 class Log():
-	def __init__(self, master):
-		self.master = master
+    def __init__(self, master):
+        self.master = master
 
-		self.open()
+        self.open()
 
-	def open(self):
-		self.location = getcwd() + "/.log"
+    def open(self):
+        self.location = getcwd() + "/.log"
 
-		self.logFile = open(self.location, "w+")
+        self.logFile = open(self.location, "w+")
 
-		time = self.getTime()
-		self.logFile.write("NoteVelocity Log File\n" + time + " - Log initialised")
+        time = self.getTime()
+        self.logFile.write("NoteVelocity Log File\n" + time + " - Log initialised")
 
-	def getTime(self):
-		timeStamp = str(datetime.now())
-		return timeStamp
+    def getTime(self):
+        timeStamp = str(datetime.now())
+        return timeStamp
 
-	def write(self, line):
-		time = self.getTime()
-		self.logFile.write("\n" + time + " - " + line)
+    def write(self, line):
+        time = self.getTime()
+        self.logFile.write("\n" + time + " - " + line)
 
-	def writeError(self, line):
-		time = self.getTime()
-		self.logFile.write("\n\n#ERROR:\n\t" + time + " - " + line)
+    def writeError(self, line):
+        time = self.getTime()
+        self.logFile.write("\n\n#ERROR:\n\t" + time + " - " + line)
 
-	def close(self):
-		self.logFile.close()
+    def close(self):
+        self.logFile.close()
