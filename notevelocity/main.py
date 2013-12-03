@@ -56,14 +56,15 @@ class AppFrame(Frame):
         styles.init(self)
 
         # Top level frames
-        try:
+        """try:
             self.titleBar = frames.titleBar(self, root)
             self.log.write(self.titleBar.testMessage)
         except Exception as ex:
             print("titleBar was not initialised properly")
             self.log.writeError(
                 "titleBar was not initialised properly. Error:\n" + str(ex))
-            self.quit()
+            self.quit()"""
+        self.titleBar = frames.titleBar(self, root)
 
         try:
             self.formatBar = frames.formatBar(self)
@@ -120,7 +121,8 @@ class AppFrame(Frame):
         Modes:
             1:  Save file
             2:  Save file as
-            3:  Rename file"""
+            3:  Rename file
+            4:  Save rewrite file"""
         if mode == 1:
             # Save file
             print("Saving file")
@@ -149,6 +151,9 @@ class AppFrame(Frame):
                 self.textFrame.changed = False
                 self.tabBar.resetChanged()
                 self.indicateNoChange()
+
+                if self.textFrame.rewriteExists:
+                    self.saveFile(4)
 
                 return 0
 
@@ -191,6 +196,9 @@ class AppFrame(Frame):
                 self.tabBar.resetChanged()
                 self.indicateNoChange()
 
+                if self.textFrame.rewriteExists:
+                    self.saveFile(4)
+
                 return 0
 
         elif mode == 3:
@@ -223,6 +231,44 @@ class AppFrame(Frame):
                     self.slashChar)[-1].split(".")[-2]
                 self.titleBar.title.config(text="   " + shortName)
                 self.tabBar.renameCurrent(shortName)
+
+                fileToSave.close()
+
+                self.textFrame.changed = False
+                self.tabBar.resetChanged()
+                self.indicateNoChange()
+
+                if self.textFrame.rewriteExists:
+                    self.saveFile(4)
+
+                return 0
+
+        if mode == 4:
+            # Save rewrite
+            print("Saving rewrite")
+
+            if not self.textFrame.changed and not self.tabBar.checkChanged:
+                print("Not changed, so not saving.")
+                self.log.write("Not changed, so not saving")
+                return 0
+            elif self.textFrame.fileName == "":
+                print("File has no name. Saving as")
+                self.log.write("File has no name. Saving as")
+                errorCheck = self.saveFile(2)
+                if errorCheck == 0:
+                    return self.saveFile(4)
+                else:
+                    return 1
+            else:
+                saveLocation = self.textFrame.fileName + ".rewrite"
+
+                fileToSave = open(saveLocation, "w+")
+
+                textContents = self.textFrame.rewriteBox.get("1.0", "end")
+                fileToSave.write(textContents)
+
+                print("Saved file at " + saveLocation)
+                self.log.write("Saved file at " + saveLocation)
 
                 fileToSave.close()
 
@@ -291,6 +337,8 @@ class AppFrame(Frame):
     def indicateNoChange(self):
         """Visually indicate no change"""
         self.titleBar.unChanged()
+
+        self.textFrame.hideRewrite()
 
     def quit(self):
         """Quit NoteVelocity"""

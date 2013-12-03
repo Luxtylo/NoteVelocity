@@ -26,7 +26,7 @@ save = "<Control-s>"
 saveAs = "<Control-S>"
 rename = "<Control-r>"
 openFile = "<Control-o>"
-rewrite = "<Control-Shift-r>"
+rewrite = "<Control-R>"
 
 nextTab = "<Control-d>"
 prevTab = "<Control-D>"
@@ -69,6 +69,9 @@ def init(self, root):
     root.bind(makeHeading, lambda event: self.textFrame.makeLevel("title"))
     root.bind(
         makeSubheading, lambda event: self.textFrame.makeLevel("subtitle"))
+
+    # Rewrite
+    root.bind(rewrite, lambda event: self.textFrame.toggleRewrite())
 
     # Quit
     root.bind(quit, lambda event: self.quit())

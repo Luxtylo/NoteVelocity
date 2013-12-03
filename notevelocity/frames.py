@@ -73,6 +73,12 @@ class titleBar(Frame):
             style="TB.TButton",
             takefocus=0)
 
+        self.rewriteHide = Button(
+            self.Frame,
+            text="Save",
+            style="TB.TButton",
+            takefocus=0)
+
         self.changedIndicator = Frame(
             self.Frame,
             style="CIOff.TFrame",
@@ -146,10 +152,18 @@ class titleBar(Frame):
     def showRewrite(self):
         """Show the rewrite controls"""
         self.rewriteSave.pack(expand=0, side=RIGHT)
+        self.rewriteHide.pack(expand=0, side=RIGHT)
+        self.rewriteBindings()
 
     def hideRewrite(self):
         """Hide the rewrite controls"""
         self.rewriteSave.pack_forget()
+        self.rewriteHide.pack_forget()
+
+    def rewriteBindings(self):
+        """Bind the rewrite buttons"""
+        self.rewriteSave.config(command=lambda: self.master.saveFile(4))
+        self.rewriteHide.config(command=lambda: self.master.textFrame.hideRewrite())
 
 # Formatting bar
 
@@ -261,13 +275,12 @@ class text(Frame):
         self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
 
         self.textBox.bind("<<Modified>>", lambda event: self.modified())
-        self.rewriteBox.bind("<<Modified>>", lambda event:
-                             self.rewriteModified())
+        self.rewriteBox.bind("<<Modified>>", lambda event: self.rewriteModified())
 
         self.selectedBox = 0
         self.changed = False
-        self.rewriteChanged = False
         self.rewriteShown = False
+        self.rewriteExists = False
 
         self.fileName = ""
         self.shortFileName = self.fileName.split("/")[-1]
@@ -362,9 +375,10 @@ class text(Frame):
         self.master.titleBar.changed()
 
     def rewriteModified(self):
-        """Mark rewrite as changed"""
-        self.rewriteChanged = True
+        """Mark as changed, and mark as rewriteExists"""
+        self.changed = True
         self.master.titleBar.changed()
+        self.rewriteExists = True
 
     def selectText(self):
         """Select the textbox"""
@@ -379,7 +393,7 @@ class text(Frame):
         """Select the rewrite box"""
         self.selectedBox = 1
         self.rewriteBox.focus_set()
-        if self.rewriteChanged:
+        if self.changed:
             self.master.titleBar.changed()
         else:
             self.master.titleBar.unChanged()
@@ -392,6 +406,12 @@ class text(Frame):
         self.rewriteShown = True
         self.selectRewrite()
 
+        rewriteContents = self.rewriteBox.get(1.0, "end")
+        if rewriteContents == "" or rewriteContents == "\n":
+            self.rewriteExists = False
+        else:
+            self.rewriteExists = True
+
     def hideRewrite(self):
         """Hide the rewrite box"""
         self.rewriteBox.pack_forget()
@@ -399,6 +419,12 @@ class text(Frame):
         self.rewriteScrollbar.pack_forget()
         self.rewriteShown = False
         self.selectText
+
+        rewriteContents = self.rewriteBox.get(1.0, "end")
+        if rewriteContents == "" or rewriteContents == "\n":
+            self.rewriteExists = False
+        else:
+            self.rewriteExists = True
 
     def toggleRewrite(self):
         """Toggle the rewrite box"""

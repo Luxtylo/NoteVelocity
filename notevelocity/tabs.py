@@ -85,7 +85,7 @@ class tabBar(Frame):
         self.master.master.updateChanged()
 
     def swapBoxContents(self, last, new):
-        """Swap the contents of the textbox"""
+        """Swap the contents of the textboxes"""
         textBoxContents = self.master.master.textFrame.textBox.get(1.0, "end")
         textBoxContents = textBoxContents[:-1]
         self.tabs[last].text.set(textBoxContents)
@@ -96,6 +96,17 @@ class tabBar(Frame):
 
         self.master.master.titleBar.title.config(
             text=self.tabs[self.selectedTab].longTitle)
+        
+        # Switch rewrite boxes
+        rewriteBoxContents = self.master.master.textFrame.rewriteBox.get(
+                1.0,
+                "end")
+        rewriteBoxContents = rewriteBoxContents[:-1]
+        self.tabs[last].rewrite.set(rewriteBoxContents)
+
+        self.master.master.textFrame.rewriteBox.delete(1.0, "end")
+        rewriteBoxContents = self.tabs[new].rewrite.get()
+        self.master.master.textFrame.rewriteBox.insert(1.0, rewriteBoxContents)
 
         # Update textBox properties
         self.tabs[last].fileName = self.master.master.textFrame.fileName
@@ -103,6 +114,8 @@ class tabBar(Frame):
 
         self.tabs[last].changed = self.master.master.textFrame.changed
         self.master.master.textFrame.changed = self.tabs[new].changed
+
+        self.tabs[last].rewriteExists = self.master.master.textFrame.rewriteExists
 
     def updateFilename(self):
         """Update the current tab's filename"""
@@ -175,18 +188,28 @@ class tabBar(Frame):
                     del self.tabs[tabNum]
                     self.switch(1, self.selectedTab)
 
-    def save(self):
+    def save(self, *tab):
         """Save the contents of the textbox"""
+        if tab is int():
+            tabToSave = tab
+        else:
+            tabToSave = self.selectedTab
+
         self.updateFilename()
 
-        if (self.tabs[self.selectedTab].changed or
+        if (self.tabs[tabToSave].changed or
                 self.master.master.textFrame.changed):
             yesno = messagebox.askyesno(
                 title="Save note?",
                 message="The tab has been changed. Would you like to save?")
 
             if yesno:
-                return self.master.master.saveFile(1)
+                a = self.master.master.saveFile(1)
+                b = self.master.master.saveFile(4)
+                if a == 1 or b == 1:
+                    return 1
+                else:
+                    return 0
             else:
                 return 0
 
@@ -222,6 +245,12 @@ class tabBar(Frame):
             self.text = StringVar()
             self.text.set("")
             self.text.trace("w", lambda *args: self.changeMade())
+
+            self.rewrite = StringVar()
+            self.rewrite.set("")
+            self.rewrite.trace("w", lambda *args: self.changeMade())
+
+            self.rewriteExists = False
 
             self.Frame = Frame(self.master.Frame, style="Tab.TFrame")
 
