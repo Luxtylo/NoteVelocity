@@ -154,8 +154,6 @@ class AppFrame(Frame):
 
         elif mode == 2:
             # Save file as
-            fileContents = self.textFrame.textBox.get("1.0", "end")
-
             saveLocation = filedialog.asksaveasfilename(
                 initialdir=self.notesDir,
                 title="Save note as",

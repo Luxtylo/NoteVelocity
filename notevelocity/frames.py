@@ -21,7 +21,6 @@ You should have received a copy of the GNU General Public License along with
 from tkinter import *
 from tkinter.ttk import *
 import bindings
-import styles
 
 # Title bar
 
@@ -29,6 +28,7 @@ import styles
 class titleBar(Frame):
 
     def __init__(self, master, root):
+        """Initialise titlebar"""
 
         self.master = master
         self.root = root
@@ -88,57 +88,67 @@ class titleBar(Frame):
         self.Bindings()
 
     def Bindings(self):
+        """Initialise bindings"""
         self.buttonA.bind("<Enter>", lambda event: self.buttonASave())
         self.buttonA.bind("<Leave>", lambda event: self.buttonASave())
 
         self.buttonA.bind("<Shift-Enter>", lambda event: self.buttonASaveAs())
         self.buttonA.bind("<Shift-Leave>", lambda event: self.buttonASave())
 
-        self.buttonA.bind("<Control-Enter>", lambda event:
-                          self.buttonARename())
+        self.buttonA.bind(
+            "<Control-Enter>", lambda event: self.buttonARename())
         self.buttonA.bind("<Control-Leave>", lambda event: self.buttonASave())
 
         self.buttonB.bind("<Enter>", lambda event: self.buttonBOpen())
         self.buttonB.bind("<Leave>", lambda event: self.buttonBOpen())
 
-        self.buttonB.bind("<Control-Enter>", lambda event:
-                          self.buttonBRewrite())
-        self.buttonB.bind("<Control-Leave>", lambda event:
-                          self.buttonBRewrite())
+        self.buttonB.bind(
+            "<Control-Enter>", lambda event: self.buttonBRewrite())
+        self.buttonB.bind(
+            "<Control-Leave>", lambda event: self.buttonBRewrite())
 
     def buttonASave(self):
-        self.buttonA.config(text="Save", command=lambda:
-                            self.master.saveFile(1))
+        """Make button A save"""
+        self.buttonA.config(
+            text="Save", command=lambda: self.master.saveFile(1))
 
     def buttonASaveAs(self):
-        self.buttonA.config(text="Save As",
-                            command=lambda: self.master.saveFile(2))
+        """Make button A save as"""
+        self.buttonA.config(
+            text="Save As", command=lambda: self.master.saveFile(2))
 
     def buttonARename(self):
-        self.buttonA.config(text="Rename", command=lambda:
-                            self.master.saveFile(3))
+        """Make button A rename"""
+        self.buttonA.config(
+            text="Rename", command=lambda: self.master.saveFile(3))
 
     def buttonBOpen(self):
-        self.buttonB.config(text="Open", command=lambda:
-                            self.master.openFile())
+        """Make button B open"""
+        self.buttonB.config(
+            text="Open", command=lambda: self.master.openFile())
 
     def buttonBRewrite(self):
+        """Make button B rewrite"""
         self.buttonB.config(
             text="Rewrite",
             command=lambda: self.master.textFrame.toggleRewrite())
 
     def changed(self):
+        """Activate visual change indicator"""
         self.changedIndicator.config(style="CIOn.TFrame")
         self.changedIndicatorText.config(style="CIText.TLabel")
 
     def unChanged(self):
+        """Deactivate visual change indicator"""
         self.changedIndicator.config(style="CIOff.TFrame")
         self.changedIndicatorText.config(style="CITextOff.TLabel")
 
     def showRewrite(self):
+        """Show the rewrite controls"""
         self.rewriteSave.pack(expand=0, side=RIGHT)
 
     def hideRewrite(self):
+        """Hide the rewrite controls"""
         self.rewriteSave.pack_forget()
 
 # Formatting bar
@@ -147,41 +157,44 @@ class titleBar(Frame):
 class formatBar(Frame):
 
     def __init__(self, master):
+        """Initialise formatbar"""
 
         self.master = master
 
         self.testMessage = "formatBar is initialised"
 
         self.Frame = Frame(style="TB.TFrame")
-        self.Frame.pack(fill=Y, side=LEFT,
-                        expand=0, ipadx=2, ipady=2)
+        self.Frame.pack(fill=Y, side=LEFT, expand=0, ipadx=2, ipady=2)
 
         self.spacer1 = Frame(self.Frame, height=2)
         self.spacer1.pack(expand=0, side=TOP)
 
-        self.title = Button(self.Frame, text="T",
-                            style="F.TButton", takefocus=0)
+        self.title = Button(
+            self.Frame, text="T", style="F.TButton", takefocus=0)
         self.title.pack(expand=0, side=TOP)
-        self.title.bind("<Button-1>", lambda event:
-                        self.master.textFrame.makeLevel("title"))
+        self.title.bind(
+            "<Button-1>",
+            lambda event: self.master.textFrame.makeLevel("title"))
 
-        self.subTitle = Button(self.Frame, text="S",
-                               style="F.TButton", takefocus=0)
+        self.subTitle = Button(
+            self.Frame, text="S", style="F.TButton", takefocus=0)
         self.subTitle.pack(expand=0, side=TOP)
-        self.subTitle.bind("<Button-1>", lambda event:
-                           self.master.textFrame.makeLevel("subtitle"))
+        self.subTitle.bind(
+            "<Button-1>",
+            lambda event: self.master.textFrame.makeLevel("subtitle"))
 
-        self.notes = Button(self.Frame, text="N",
-                            style="F.TButton", takefocus=0)
+        self.notes = Button(
+            self.Frame, text="N", style="F.TButton", takefocus=0)
         self.notes.pack(expand=0, side=TOP)
-        self.notes.bind("<Button-1>", lambda event:
-                        self.master.textFrame.makeLevel("notes"))
+        self.notes.bind(
+            "<Button-1>",
+            lambda event: self.master.textFrame.makeLevel("notes"))
 
         self.spacer2 = Frame(self.Frame, height=5)
         self.spacer2.pack(expand=0, side=TOP)
 
-        self.equation = Button(self.Frame, text="E",
-                               style="F.TButton", takefocus=0)
+        self.equation = Button(
+            self.Frame, text="E", style="F.TButton", takefocus=0)
         self.equation.pack(expand=0, side=TOP)
 
         self.spacer3 = Frame(self.Frame, height=5)
@@ -193,8 +206,8 @@ class formatBar(Frame):
         self.rewriteToggle.bind(
             "<Button-1>", lambda event: self.master.textFrame.toggleRewrite())
 
-        self.settings = Button(self.Frame, text="Set",
-                               style="F.TButton", takefocus=0)
+        self.settings = Button(
+            self.Frame, text="Set", style="F.TButton", takefocus=0)
         self.settings.pack(expand=0, side=BOTTOM, padx=2, pady=4)
 
 # Text Frame
@@ -203,6 +216,7 @@ class formatBar(Frame):
 class text(Frame):
 
     def __init__(self, master, root):
+        """Initialise textFrame"""
 
         self.master = master
         self.root = root
@@ -258,8 +272,8 @@ class text(Frame):
         self.fileName = ""
         self.shortFileName = self.fileName.split("/")[-1]
 
-    # Make new lines keep the same indentation
     def newLine(self):
+        """Make new lines keep the same indentation"""
         self.tabbed = 0
 
         # Get current line
@@ -285,6 +299,7 @@ class text(Frame):
         return "break"
 
     def decreaseIndent(self, event):
+        """Decrease the line indent"""
         self.tabbed = 0
 
         # Get current line
@@ -306,6 +321,7 @@ class text(Frame):
         return "break"
 
     def increaseIndent(self, event):
+        """Increase the line indent"""
         lineNum, columnNum = self.textBox.index("insert").split(".")
 
         insertIndex = lineNum + ".0"
@@ -313,6 +329,7 @@ class text(Frame):
         self.textBox.insert(insertIndex, "\t")
 
     def makeLevel(self, level):
+        """Make the line a specific level"""
         index = self.textBox.index("insert").split(".")[0]
         lineStart = index + ".0"
         lineEnd = index + ".end"
@@ -340,30 +357,35 @@ class text(Frame):
             self.textBox.insert(deleteStart, "\t\t")
 
     def modified(self):
+        """Mark as changed"""
         self.changed = True
         self.master.titleBar.changed()
 
     def rewriteModified(self):
+        """Mark rewrite as changed"""
         self.rewriteChanged = True
         self.master.titleBar.changed()
 
     def selectText(self):
+        """Select the textbox"""
         self.selectedBox = 0
         self.textBox.focus_set()
-        if self.changed == True:
+        if self.changed:
             self.master.titleBar.changed()
         else:
             self.master.titleBar.unChanged()
 
     def selectRewrite(self):
+        """Select the rewrite box"""
         self.selectedBox = 1
         self.rewriteBox.focus_set()
-        if self.rewriteChanged == True:
+        if self.rewriteChanged:
             self.master.titleBar.changed()
         else:
             self.master.titleBar.unChanged()
 
     def showRewrite(self):
+        """Show the rewrite box"""
         self.rewriteBox.pack(expand=1, fill=BOTH, side=LEFT)
         self.master.titleBar.showRewrite()
         self.rewriteScrollbar.pack(expand=0, fill=Y, side=LEFT)
@@ -371,6 +393,7 @@ class text(Frame):
         self.selectRewrite()
 
     def hideRewrite(self):
+        """Hide the rewrite box"""
         self.rewriteBox.pack_forget()
         self.master.titleBar.hideRewrite()
         self.rewriteScrollbar.pack_forget()
@@ -378,6 +401,7 @@ class text(Frame):
         self.selectText
 
     def toggleRewrite(self):
+        """Toggle the rewrite box"""
         if self.rewriteShown:
             self.hideRewrite()
         else:
@@ -387,6 +411,7 @@ class text(Frame):
 class arrangementFrame(Frame):
 
     def __init__(self, master):
+        """Initialise arrangement frame"""
         self.master = master
 
         self.testMessage = "arrangementFrame is initialised"

@@ -21,12 +21,12 @@ You should have received a copy of the GNU General Public License along with
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
-import bindings
 
 
 class tabBar(Frame):
 
     def __init__(self, master):
+        """Initialise tabBar using its methods"""
         self.master = master
 
         self.testMessage = "tabBar is initialised"
@@ -44,7 +44,7 @@ class tabBar(Frame):
         self.add(self, "New Note")
 
     def add(self, master, title):
-        newTabNum = len(self.tabs)
+        """Add a new tab"""
         self.tabs.append(self.tab(self, title))
 
         self.switch(1, len(self.tabs) - 1)
@@ -52,10 +52,15 @@ class tabBar(Frame):
         self.tabs[self.selectedTab].changed = False
 
     def switch(self, mode, amount):
+        """Switch tabs
+        Modes:
+            0:  Add amount to tabNum
+            1:  Switch to tab amount"""
         self.lastSelectedTab = self.selectedTab
 
-        if mode == 0:  # Add amount to tabNum
-            if self.selectedTab + amount < len(self.tabs) and self.selectedTab + amount >= 0:
+        if mode == 0:
+            if (self.selectedTab + amount < len(self.tabs) and
+                    self.selectedTab + amount >= 0):
                 self.selectedTab += amount
 
             elif self.selectedTab + amount >= len(self.tabs) - 1:
@@ -64,7 +69,7 @@ class tabBar(Frame):
             elif self.selectedTab + amount < 0:
                 self.selectedTab = len(self.tabs) - 1
 
-        elif mode == 1:  # Switch to tab amount
+        elif mode == 1:
             if amount < len(self.tabs) and amount >= 0:
                 self.selectedTab = amount
 
@@ -80,6 +85,7 @@ class tabBar(Frame):
         self.master.master.updateChanged()
 
     def swapBoxContents(self, last, new):
+        """Swap the contents of the textbox"""
         textBoxContents = self.master.master.textFrame.textBox.get(1.0, "end")
         textBoxContents = textBoxContents[:-1]
         self.tabs[last].text.set(textBoxContents)
@@ -99,10 +105,12 @@ class tabBar(Frame):
         self.master.master.textFrame.changed = self.tabs[new].changed
 
     def updateFilename(self):
+        """Update the current tab's filename"""
         self.tabs[
             self.selectedTab].fileName = self.master.master.textFrame.fileName
 
     def closeCurrent(self):
+        """Close the current tab"""
         errorCheck = self.save()
 
         if errorCheck == 0:
@@ -124,6 +132,7 @@ class tabBar(Frame):
                     1.0, self.blank.get())
 
     def closeSpecific(self, tabNum):
+        """Close tab with number tabNum"""
         errorCheck = self.save()
 
         if errorCheck == 0 or errorCheck == 1:
@@ -167,9 +176,11 @@ class tabBar(Frame):
                     self.switch(1, self.selectedTab)
 
     def save(self):
+        """Save the contents of the textbox"""
         self.updateFilename()
 
-        if self.tabs[self.selectedTab].changed or self.master.master.textFrame.changed:
+        if (self.tabs[self.selectedTab].changed or
+                self.master.master.textFrame.changed):
             yesno = messagebox.askyesno(
                 title="Save note?",
                 message="The tab has been changed. Would you like to save?")
@@ -180,28 +191,32 @@ class tabBar(Frame):
                 return 0
 
         else:
-            #print(str(self.tabs[self.selectedTab].changed) + " " + str(self.master.master.textFrame.changed))
             return 0
 
     def renameCurrent(self, name):
+        """Rename the current tab"""
         self.tabs[self.selectedTab].rename(name)
 
     def change(self):
+        """Mark the current tab as changed"""
         self.tabs[self.selectedTab].change = True
 
     def resetChanged(self):
+        """Mark the current tab as unchanged"""
         self.tabs[self.selectedTab].change = False
 
     def checkFilename(self):
+        """Return the filename of the current tab"""
         return self.tabs[self.selectedTab].fileName
 
     def checkChanged(self):
-        #self.tabs[self.selectedTab].changed = self.master.master.textFrame.changed
+        """Return the change state of the current tab"""
         return self.tabs[self.selectedTab].changed
 
     class tab():
 
         def __init__(self, master, title):
+            """Initialises tab using its internal functions"""
             self.master = master
 
             self.text = StringVar()
@@ -220,24 +235,39 @@ class tabBar(Frame):
             self.titleBox.insert(0, title)
 
             self.closeButton = Button(
-                self.Frame, style="Tab.TButton", text="X", width=1, takefocus=0)
+                self.Frame,
+                style="Tab.TButton",
+                text="X",
+                width=1,
+                takefocus=0)
 
             self.bindings()
 
             self.show()
 
         def bindings(self):
-            self.title.bind("<Button-1>", lambda event:
-                            self.master.switch(1, self.findPlace()))
-            self.Frame.bind("<Button-1>", lambda event:
-                            self.master.switch(1, self.findPlace()))
-            self.closeButton.bind("<Button-1>", lambda event:
-                                  self.master.closeSpecific(self.findPlace()))
+            """Initialise tab bindings"""
+            self.title.bind(
+                "<Button-1>",
+                lambda event: self.master.switch(1, self.findPlace())
+                )
+
+            self.Frame.bind(
+                "<Button-1>",
+                lambda event: self.master.switch(1, self.findPlace())
+                )
+
+            self.closeButton.bind(
+                "<Button-1>",
+                lambda event: self.master.closeSpecific(self.findPlace())
+                )
 
         def findPlace(self):
+            """Find the number of this tab"""
             return self.master.tabs.index(self)
 
         def show(self):
+            """Make tab visible"""
             self.Frame.pack(side=LEFT, expand=0, ipadx=2,
                             ipady=2, padx=4, pady=2)
             self.title.pack(side=LEFT, expand=0,
@@ -248,26 +278,32 @@ class tabBar(Frame):
             self.select()
 
         def select(self):
+            """Make tab appear selected"""
             self.Frame.config(style="TabSelected.TFrame")
             self.title.config(style="TTS.TLabel")
 
         def deselect(self):
+            """Make tab appear deselected"""
             self.Frame.config(style="Tab.TFrame")
             self.title.config(style="TT.TLabel")
 
         def rename(self, name):
+            """Rename tab to name"""
             self.longTitle = "   " + name
             if len(name) > 16:
                 name = name[:16] + "..."
             self.title.config(text=name)
 
         def changeMade(self):
+            """Indicate change"""
             self.changed = True
 
         def changeSaved(self):
+            """Indicate no change"""
             self.changed = False
 
         def close(self):
+            """Close tab"""
             self.Frame.pack_forget()
 
             # save file
