@@ -49,6 +49,9 @@ class AppFrame(Frame):
 
         self.notesDir = getcwd() + "/notes"
 
+    def getFocus(self):
+        return self.master.focus_get()
+
     def initUI(self):
         """Initialise UI elements."""
         self.log.write("Initialising UI")

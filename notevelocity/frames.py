@@ -206,7 +206,6 @@ class formatBar(Frame):
 
         self.spacer2 = Frame(self.Frame, height=5)
         self.spacer2.pack(expand=0, side=TOP)
-
         self.equation = Button(
             self.Frame, text="E", style="F.TButton", takefocus=0)
         self.equation.pack(expand=0, side=TOP)
@@ -343,31 +342,58 @@ class text(Frame):
 
     def makeLevel(self, level):
         """Make the line a specific level"""
-        index = self.textBox.index("insert").split(".")[0]
-        lineStart = index + ".0"
-        lineEnd = index + ".end"
+        if self.master.master.getFocus() is self.textBox:
+            index = self.textBox.index("insert").split(".")[0]
+            lineStart = index + ".0"
+            lineEnd = index + ".end"
 
-        line = self.textBox.get(lineStart, lineEnd)
+            line = self.textBox.get(lineStart, lineEnd)
 
-        numberTabs = 0
+            numberTabs = 0
 
-        for char in line:
-            if char == "\t":
-                numberTabs += 1
-            else:
-                break
+            for char in line:
+                if char == "\t":
+                    numberTabs += 1
+                else:
+                    break
 
-        deleteStart = lineStart
-        deleteEnd = index + "." + str(numberTabs)
+            deleteStart = lineStart
+            deleteEnd = index + "." + str(numberTabs)
 
-        self.textBox.delete(deleteStart, deleteEnd)
+            self.textBox.delete(deleteStart, deleteEnd)
 
-        if level == "title":
-            pass
-        elif level == "subtitle":
-            self.textBox.insert(deleteStart, "\t")
-        elif level == "notes":
-            self.textBox.insert(deleteStart, "\t\t")
+            if level == "title":
+                pass
+            elif level == "subtitle":
+                self.textBox.insert(deleteStart, "\t")
+            elif level == "notes":
+                self.textBox.insert(deleteStart, "\t\t")
+        elif self.master.master.getFocus() is self.rewriteBox:
+            index = self.rewriteBox.index("insert").split(".")[0]
+            lineStart = index + ".0"
+            lineEnd = index + ".end"
+
+            line = self.rewriteBox.get(lineStart, lineEnd)
+
+            numberTabs = 0
+
+            for char in line:
+                if char == "\t":
+                    numberTabs += 1
+                else:
+                    break
+
+            deleteStart = lineStart
+            deleteEnd = index + "." + str(numberTabs)
+
+            self.rewriteBox.delete(deleteStart, deleteEnd)
+
+            if level == "title":
+                pass
+            elif level == "subtitle":
+                self.rewriteBox.insert(deleteStart, "\t")
+            elif level == "notes":
+                self.rewriteBox.insert(deleteStart, "\t\t")        
 
     def modified(self):
         """Mark as changed"""
