@@ -59,13 +59,18 @@ def init(master):
         font=buttonFont)
 
     formatButtonStyle = Style()
-    formatButtonStyle.configure("F.TButton",
+    formatButtonStyle.configure(
+        "F.TButton",
         foreground=toolbarFontColour,
-        background=toolbarButtonColour, width=3, font=buttonFont)
+        background=toolbarButtonColour,
+        width=3,
+        font=buttonFont)
 
     titleStyle = Style()
-    titleStyle.configure("T.TLabel",
-        foreground=toolbarFontColour, font=titleFont)
+    titleStyle.configure(
+        "T.TLabel",
+        foreground=toolbarFontColour,
+        font=titleFont)
 
     tabBarStyle = Style()
     tabBarStyle.configure("TabBar.TFrame", background=toolbarColour)
@@ -77,28 +82,53 @@ def init(master):
         "TabSelected.TFrame", background=tabSelectedColour)
 
     tabButtonStyle = Style()
-    tabButtonStyle.configure("Tab.TButton",
-        foreground=toolbarFontColour, background=toolbarButtonColour, font=smallButtonFont)
+    tabButtonStyle.configure(
+        "Tab.TButton",
+        foreground=toolbarFontColour,
+        background=toolbarButtonColour,
+        font=smallButtonFont)
 
     tabTitleStyle = Style()
-    tabTitleStyle.configure("TT.TLabel",
-        foreground=toolbarFontColour, background=tabColour, font=tabFont)
+    tabTitleStyle.configure(
+        "TT.TLabel",
+        foreground=toolbarFontColour,
+        background=tabColour,
+        font=tabFont)
+
     tabTitleSelectedStyle = Style()
-    tabTitleSelectedStyle.configure("TTS.TLabel",
-        foreground=toolbarFontColour, background=tabSelectedColour, font=tabFont)
+    tabTitleSelectedStyle.configure(
+        "TTS.TLabel",
+        foreground=toolbarFontColour,
+        background=tabSelectedColour,
+        font=tabFont)
 
     chIn = Style()
-    chIn.configure("CIOn.TFrame", width=20, height=20,
+    chIn.configure(
+        "CIOn.TFrame",
+        width=20,
+        height=20,
         background=changedIndicatorOn)
+
     chInOff = Style()
-    chInOff.configure("CIOff.TFrame", width=20, height=20,
+    chInOff.configure(
+        "CIOff.TFrame",
+        width=20,
+        height=20,
         background=changedIndicatorOff)
+
     chInT = Style()
-    chInT.configure("CIText.TLabel",
-        foreground=changedIndicatorText, background=changedIndicatorOn, font=tabFont)
+    chInT.configure(
+        "CIText.TLabel",
+        foreground=changedIndicatorText,
+        background=changedIndicatorOn,
+        font=tabFont)
+
     chInTOff = Style()
-    chInTOff.configure("CITextOff.TLabel",
-        foreground=changedIndicatorOff, background=changedIndicatorOff, font=tabFont)
+    chInTOff.configure(
+        "CITextOff.TLabel",
+        foreground=changedIndicatorOff,
+        background=changedIndicatorOff,
+        font=tabFont)
 
     master.textBoxBackground = textBoxBackground
     master.textBoxTextColour = textBoxTextColour

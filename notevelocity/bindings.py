@@ -65,8 +65,10 @@ def init(self, root):
     root.bind(newTabTwo, lambda event: self.tabBar.add(self, "New Note"))
     root.bind(closeTab, lambda event: self.tabBar.closeCurrent())
 
-    root.bind(makeHeading, lambda event: print("Making heading"))
-    root.bind(makeSubheading, lambda event: print("Making subheading"))
+    # Making line a specific indentation level
+    root.bind(makeHeading, lambda event: self.textFrame.makeLevel("title"))
+    root.bind(
+        makeSubheading, lambda event: self.textFrame.makeLevel("subtitle"))
 
     # Quit
     root.bind(quit, lambda event: self.quit())
