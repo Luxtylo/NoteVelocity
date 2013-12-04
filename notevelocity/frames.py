@@ -269,6 +269,7 @@ class text(Frame):
 
         # Bind Enter to newLine
         self.textBox.bind("<Return>", lambda event: self.newLine())
+        self.rewriteBox.bind("<Return>", lambda event: self.newLine())
 
         self.textBox.bind(bindings.increaseIndent, self.increaseIndent)
         self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
@@ -291,9 +292,13 @@ class text(Frame):
         """Make new lines keep the same indentation"""
         self.tabbed = 0
 
-        # Get current line
-        lineNum, columnNum = self.textBox.index("insert").split(".")
-        line = self.textBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
+        focus = self.master.master.getFocus()
+        if focus is self.textBox:
+            lineNum, columnNum = self.textBox.index("insert").split(".")
+            line = self.textBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
+        elif focus is self.rewriteBox:
+            lineNum, columnNum = self.rewriteBox.index("insert").split(".")
+            line = self.rewriteBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
 
         for char in line:
             if char == "\t":
@@ -305,11 +310,19 @@ class text(Frame):
         if self.tabbed != 0:
             insertIndex = str(int(lineNum) + 1) + ".0"
             insertTabs = "\n" + "\t" * self.tabbed
-            self.textBox.insert(insertIndex, insertTabs)
+
+            if focus is self.textBox:
+                self.textBox.insert(insertIndex, insertTabs)
+            elif focus is self.rewriteBox:
+                self.rewriteBox.insert(insertIndex, insertTabs)
 
         else:
             insertIndex = str(int(lineNum) + 1) + ".0"
-            self.textBox.insert(insertIndex, "\n")
+
+            if focus is self.textBox:
+                self.textBox.insert(insertIndex, "\n")
+            elif focus is self.rewriteBox:
+                self.rewriteBox.insert(insertIndex, "\n")
 
         return "break"
 
