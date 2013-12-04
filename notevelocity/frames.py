@@ -75,7 +75,7 @@ class titleBar(Frame):
 
         self.rewriteHide = Button(
             self.Frame,
-            text="Save",
+            text="Hide",
             style="TB.TButton",
             takefocus=0)
 
@@ -273,6 +273,9 @@ class text(Frame):
         self.textBox.bind(bindings.increaseIndent, self.increaseIndent)
         self.textBox.bind(bindings.decreaseIndent, self.decreaseIndent)
 
+        self.rewriteBox.bind(bindings.increaseIndent, self.increaseIndent)
+        self.rewriteBox.bind(bindings.decreaseIndent, self.decreaseIndent)
+
         self.textBox.bind("<<Modified>>", lambda event: self.modified())
         self.rewriteBox.bind("<<Modified>>", lambda event: self.rewriteModified())
 
@@ -316,7 +319,13 @@ class text(Frame):
 
         # Get current line
         lineNum, columnNum = self.textBox.index("insert").split(".")
-        line = self.textBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
+        line = ""
+
+        focus = self.master.master.getFocus()
+        if focus is self.textBox:
+            line = self.textBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
+        elif focus is self.rewriteBox:
+            line = self.rewriteBox.get(str(lineNum) + ".0", str(lineNum) + ".end")
 
         for char in line:
             if char == "\t":
@@ -328,17 +337,24 @@ class text(Frame):
         if self.tabbed != 0:
             deleteStart = lineNum + ".0"
             deleteEnd = lineNum + ".1"
-            self.textBox.delete(deleteStart, deleteEnd)
+            if focus is self.textBox:
+                self.textBox.delete(deleteStart, deleteEnd)
+            elif focus is self.rewriteBox:
+                self.rewriteBox.delete(deleteStart, deleteEnd)
 
         return "break"
 
     def increaseIndent(self, event):
         """Increase the line indent"""
-        lineNum, columnNum = self.textBox.index("insert").split(".")
-
-        insertIndex = lineNum + ".0"
-
-        self.textBox.insert(insertIndex, "\t")
+        focus = self.master.master.getFocus()
+        if focus is self.textBox:
+            lineNum, columnNum = self.textBox.index("insert").split(".")
+            insertIndex = lineNum + ".0"
+            self.textBox.insert(insertIndex, "\t")
+        elif focus is self.rewriteBox:
+            lineNum, columnNum = self.rewriteBox.index("insert").split(".")
+            insertIndex = lineNum + ".0"
+            self.rewriteBox.insert(insertIndex, "\t")
 
     def makeLevel(self, level):
         """Make the line a specific level"""
@@ -369,6 +385,7 @@ class text(Frame):
             elif level == "notes":
                 self.textBox.insert(deleteStart, "\t\t")
         elif self.master.master.getFocus() is self.rewriteBox:
+            print("boop")
             index = self.rewriteBox.index("insert").split(".")[0]
             lineStart = index + ".0"
             lineEnd = index + ".end"
