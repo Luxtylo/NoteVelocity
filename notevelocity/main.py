@@ -263,8 +263,8 @@ class AppFrame(Frame):
                 else:
                     return 1
             else:
-                saveLocation = self.textFrame.fileName[:-4] + "rewrite"
-
+                fileNameMinusNote = self.textFrame.fileName.split(".")[:-1]
+                saveLocation = ".".join(fileNameMinusNote) + ".rewrite"
                 fileToSave = open(saveLocation, "w+")
 
                 textContents = self.textFrame.rewriteBox.get("1.0", "end")
@@ -321,7 +321,8 @@ class AppFrame(Frame):
             print("Opened file from " + openLocation)
             self.log.write("Opened file from " + openLocation)
 
-            rewriteLocation = openLocation[:-4] + "rewrite"
+            fileNameMinusNote = openLocation.split(".")[:-1]
+            rewriteLocation = ".".join(fileNameMinusNote) + ".rewrite"
             
             if path.isfile(rewriteLocation):
                 rewriteFile = open(rewriteLocation, "r")
