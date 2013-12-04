@@ -278,6 +278,9 @@ class AppFrame(Frame):
                 self.textFrame.changed = False
                 self.tabBar.resetChanged()
                 self.indicateNoChange()
+                
+                if self.getFocus() is self.textFrame.rewriteBox:
+                    self.textFrame.showRewrite()
 
                 return 0
 
