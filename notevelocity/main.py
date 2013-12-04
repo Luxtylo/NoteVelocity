@@ -22,6 +22,7 @@ from tkinter import *
 from tkinter import filedialog
 from os import getcwd
 from os import remove
+from os import path
 import platform
 import frames
 import tabs
@@ -248,7 +249,6 @@ class AppFrame(Frame):
 
         if mode == 4:
             # Save rewrite
-            print("Saving rewrite")
 
             if not self.textFrame.changed and not self.tabBar.checkChanged:
                 print("Not changed, so not saving.")
@@ -263,15 +263,15 @@ class AppFrame(Frame):
                 else:
                     return 1
             else:
-                saveLocation = self.textFrame.fileName + ".rewrite"
+                saveLocation = self.textFrame.fileName[:-4] + "rewrite"
 
                 fileToSave = open(saveLocation, "w+")
 
                 textContents = self.textFrame.rewriteBox.get("1.0", "end")
                 fileToSave.write(textContents)
 
-                print("Saved file at " + saveLocation)
-                self.log.write("Saved file at " + saveLocation)
+                print("Saved rewrite at " + saveLocation)
+                self.log.write("Saved rewrite at " + saveLocation)
 
                 fileToSave.close()
 
@@ -320,6 +320,24 @@ class AppFrame(Frame):
 
             print("Opened file from " + openLocation)
             self.log.write("Opened file from " + openLocation)
+
+            rewriteLocation = openLocation[:-4] + "rewrite"
+            
+            if path.isfile(rewriteLocation):
+                rewriteFile = open(rewriteLocation, "r")
+
+                self.textFrame.rewriteBox.delete("1.0", "end")
+
+                lineNum = 1
+
+                for line in rewriteFile:
+                    insertLoc = str(lineNum) + ".0"
+                    self.textFrame.rewriteBox.insert(insertLoc, line)
+
+                    lineNum += 1
+
+                print("Opened rewrite from " + rewriteLocation)
+                self.log.write("Opened rewrite from " + rewriteLocation)
 
             self.textFrame.changed = False
             self.textFrame.fileName = openLocation
