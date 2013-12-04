@@ -1,23 +1,23 @@
-"""NoteVelocity - A speedy note-taking program.
+"""
+NoteVelocity - A speedy note-taking program.
 
 Copyright (C) 2013  George Bryant
 
 This program is free software: you can redistribute it and/or modify it under
     the terms of the GNU General Public License as published by the Free
-    Software Foundation, either version 3 of the License, or (at your
-    option) any later version.
+    Software Foundation, either version 3 of the License, or (at your option)
+    any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-    more details.
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
 
 You should have received a copy of the GNU General Public License along with
     this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-## Imports
 from tkinter import *
 from tkinter import filedialog
 from os import getcwd
@@ -29,11 +29,11 @@ import bindings
 import logging
 import styles
 
-## Main loop
+
 class AppFrame(Frame):
-    """Main frame for NoteVelocity"""
-    
+
     def __init__(self, master):
+        """Initialise Appframe by running other functions"""
         self.master = master
 
         self.log = logging.Log(self)
@@ -43,32 +43,39 @@ class AppFrame(Frame):
         self.initUI()
 
     def initVars(self):
-        """Initialise any necessary variables."""
-        self.files = list()
+        """Initialise necessary variables."""
+        # Probably unused
+        #self.files = list()
 
         self.notesDir = getcwd() + "/notes"
 
+    def getFocus(self):
+        return self.master.focus_get()
+
     def initUI(self):
-        """Initialise user interface - mostly from frames.py and tabs.py."""
+        """Initialise UI elements."""
         self.log.write("Initialising UI")
 
         styles.init(self)
 
-        ## Top level frames
-        try:
+        # Top level frames
+        """try:
             self.titleBar = frames.titleBar(self, root)
             self.log.write(self.titleBar.testMessage)
         except Exception as ex:
             print("titleBar was not initialised properly")
-            self.log.writeError("titleBar was not initialised properly. Error:\n" + str(ex))
-            self.quit()
+            self.log.writeError(
+                "titleBar was not initialised properly. Error:\n" + str(ex))
+            self.quit()"""
+        self.titleBar = frames.titleBar(self, root)
 
         try:
             self.formatBar = frames.formatBar(self)
             self.log.write(self.formatBar.testMessage)
         except Exception as ex:
             print("formatBar was not initialised properly")
-            self.log.writeError("formatBar was not initialised properly. Error:\n" + str(ex))
+            self.log.writeError(
+                "formatBar was not initialised properly. Error:\n" + str(ex))
             self.quit()
 
         try:
@@ -76,7 +83,9 @@ class AppFrame(Frame):
             self.log.write(self.arrangementFrame.testMessage)
         except Exception as ex:
             print("arrangementFrame was not initialised properly")
-            self.log.writeError("arrangementFrame was not initialised properly. Error:\n" + str(ex))
+            e = "arrangementFrame was not initialised properly. Error:\n"
+            e += str(ex)
+            self.log.writeError(e)
             self.quit()
 
         try:
@@ -84,7 +93,9 @@ class AppFrame(Frame):
             self.log.write(self.textFrame.testMessage)
         except Exception as ex:
             print("textFrame was not initialised properly")
-            self.log.writeError("textFrame was not initialised properly. Error:\n" + str(ex))
+            e = "textFrame was not initialised properly. Error:\n"
+            e += str(ex)
+            self.log.writeError(e)
             self.quit()
 
         try:
@@ -92,14 +103,16 @@ class AppFrame(Frame):
             self.log.write(self.tabBar.testMessage)
         except Exception as ex:
             print("tabBar was not initialised properly")
-            self.log.writeError("tabBar was not initialsed properly. Error:\n" + str(ex))
+            self.log.writeError(
+                "tabBar was not initialised properly. Error:\n" + str(ex))
             self.quit()
 
         try:
             bindings.init(self, root)
         except Exception as ex:
             print("bindings were not initialised properly")
-            self.log.writeError("bindings were not initialised properly. Error:\n" + str(ex))
+            self.log.writeError(
+                "bindings were not initialised properly. Error:\n" + str(ex))
             self.quit()
 
         self.textFrame.textBox.focus_set()
@@ -107,18 +120,17 @@ class AppFrame(Frame):
         self.log.write("All initialised\n")
 
     def saveFile(self, mode):
-        """Save file currently in the textBox.
-        
+        """Save current file.
         Modes:
-            1 - Save file
-            2 - Save file as
-            3 - Rename file
-        """
+            1:  Save file
+            2:  Save file as
+            3:  Rename file
+            4:  Save rewrite file"""
         if mode == 1:
             # Save file
             print("Saving file")
 
-            if self.textFrame.changed == False and self.tabBar.checkChanged == False:
+            if not self.textFrame.changed and not self.tabBar.checkChanged:
                 print("Not changed, so not saving.")
                 self.log.write("Not changed, so not saving")
                 return 0
@@ -143,17 +155,23 @@ class AppFrame(Frame):
                 self.tabBar.resetChanged()
                 self.indicateNoChange()
 
+                if self.textFrame.rewriteExists:
+                    self.saveFile(4)
+
                 return 0
 
         elif mode == 2:
             # Save file as
-            fileContents = self.textFrame.textBox.get("1.0", "end")
-
-            saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Save note as", filetypes = [("Note files", "*.note")])
+            saveLocation = filedialog.asksaveasfilename(
+                initialdir=self.notesDir,
+                title="Save note as",
+                filetypes=[("Note files", "*.note")])
             self.textFrame.fileName = saveLocation
             self.tabBar.updateFilename()
 
-            if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
+            returnedNothing = [None, False, "", "\n", ()]
+
+            if saveLocation in returnedNothing:
                 print("No save location selected. Cancelling")
                 self.log.write("No save location selected. Cancelling")
                 return 1
@@ -168,9 +186,11 @@ class AppFrame(Frame):
                 self.log.write("Saved file at " + saveLocation)
 
                 self.textFrame.fileName = saveLocation
-                self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
-                shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
-                self.titleBar.title.config(text = "   " + shortName)
+                self.tabBar.tabs[
+                    self.tabBar.selectedTab].fileName = saveLocation
+                shortName = saveLocation.split(
+                    self.slashChar)[-1].split(".")[-2]
+                self.titleBar.title.config(text="   " + shortName)
                 self.tabBar.renameCurrent(shortName)
 
                 fileToSave.close()
@@ -179,15 +199,20 @@ class AppFrame(Frame):
                 self.tabBar.resetChanged()
                 self.indicateNoChange()
 
+                if self.textFrame.rewriteExists:
+                    self.saveFile(4)
+
                 return 0
 
         elif mode == 3:
             # Rename
-            fileContents = self.textFrame.textBox.get("1.0", "end")
+            saveLocation = filedialog.asksaveasfilename(
+                initialdir=self.notesDir,
+                title="Rename note to", filetypes=[("Note files", "*.note")])
 
-            saveLocation = filedialog.asksaveasfilename(initialdir = self.notesDir, title = "Rename note to", filetypes = [("Note files", "*.note")])
+            returnedNothing = [None, False, "", "\n", ()]
 
-            if saveLocation is None or saveLocation is False or saveLocation is "" or saveLocation is "\n" or saveLocation == ():
+            if saveLocation in returnedNothing:
                 print("No rename location selected. Cancelling")
                 return 1
             else:
@@ -203,10 +228,50 @@ class AppFrame(Frame):
                     remove(self.textFrame.fileName)
 
                 self.textFrame.fileName = saveLocation
-                self.tabBar.tabs[self.tabBar.selectedTab].fileName = saveLocation
-                shortName = saveLocation.split(self.slashChar)[-1].split(".")[-2]
-                self.titleBar.title.config(text = "   " + shortName)
+                self.tabBar.tabs[
+                    self.tabBar.selectedTab].fileName = saveLocation
+                shortName = saveLocation.split(
+                    self.slashChar)[-1].split(".")[-2]
+                self.titleBar.title.config(text="   " + shortName)
                 self.tabBar.renameCurrent(shortName)
+
+                fileToSave.close()
+
+                self.textFrame.changed = False
+                self.tabBar.resetChanged()
+                self.indicateNoChange()
+
+                if self.textFrame.rewriteExists:
+                    self.saveFile(4)
+
+                return 0
+
+        if mode == 4:
+            # Save rewrite
+            print("Saving rewrite")
+
+            if not self.textFrame.changed and not self.tabBar.checkChanged:
+                print("Not changed, so not saving.")
+                self.log.write("Not changed, so not saving")
+                return 0
+            elif self.textFrame.fileName == "":
+                print("File has no name. Saving as")
+                self.log.write("File has no name. Saving as")
+                errorCheck = self.saveFile(2)
+                if errorCheck == 0:
+                    return self.saveFile(4)
+                else:
+                    return 1
+            else:
+                saveLocation = self.textFrame.fileName + ".rewrite"
+
+                fileToSave = open(saveLocation, "w+")
+
+                textContents = self.textFrame.rewriteBox.get("1.0", "end")
+                fileToSave.write(textContents)
+
+                print("Saved file at " + saveLocation)
+                self.log.write("Saved file at " + saveLocation)
 
                 fileToSave.close()
 
@@ -222,20 +287,26 @@ class AppFrame(Frame):
             return 0
 
     def openFile(self):
-        """Get filename and open it."""
-        openLocation = filedialog.askopenfilename(initialdir = self.notesDir, title = "Select note to open", filetypes = [("Note files", "*.note")])
+        """Open a file in a new tab"""
+        openLocation = filedialog.askopenfilename(
+            initialdir=self.notesDir,
+            title="Select note to open",
+            filetypes=[("Note files", "*.note")])
 
-        if openLocation is None or openLocation is "" or openLocation is "\n" or openLocation is False or openLocation == ():
+        returnedNothing = [None, False, "", "\n", ()]
+
+        if openLocation in returnedNothing:
             print("No open location selected")
             self.log.write("No open location selected")
         else:
             openFile = open(openLocation, "r")
 
             self.textFrame.fileName = openLocation
-            shortName = self.textFrame.fileName.split(self.slashChar)[-1].split(".")[-2]
+            shortName = self.textFrame.fileName.split(
+                self.slashChar)[-1].split(".")[-2]
             self.tabBar.add(self.tabBar, shortName)
             self.tabBar.tabs[self.tabBar.selectedTab].fileName = openLocation
-            self.titleBar.title.config(text = "   " + shortName)
+            self.titleBar.title.config(text="   " + shortName)
 
             self.textFrame.textBox.delete("1.0", "end")
 
@@ -255,28 +326,25 @@ class AppFrame(Frame):
             self.tabBar.resetChanged()
             self.indicateNoChange()
 
-    def rewriteFile(self):
-        """Currently unused file rewriting function."""
-        print("Rewriting...")
-
     def updateChanged(self):
-        """Update visual change indicator."""
-        if self.textFrame.changed == True:
+        """Update visual change indicator"""
+        if self.textFrame.changed:
             self.indicateChange()
-        elif self.textFrame.changed == False:
+        elif not self.textFrame.changed:
             self.indicateNoChange()
 
     def indicateChange(self):
-        """Visually indicate that a change has been made."""
+        """Visually indicate a change"""
         self.titleBar.changed()
 
     def indicateNoChange(self):
-        """Indicate that either no changes have been made,
-            or that changes have been saved"""
+        """Visually indicate no change"""
         self.titleBar.unChanged()
 
+        self.textFrame.hideRewrite()
+
     def quit(self):
-        """Close the program."""
+        """Quit NoteVelocity"""
         print("Closing NoteVelocity...")
         self.log.write("Closing NoteVelocity...")
         self.log.close()
@@ -286,9 +354,7 @@ class AppFrame(Frame):
         raise SystemExit
 
     def osStuff(self):
-        """Any operating system-specific stuff.
-        Currently limited to slash characters
-            Although even this is not necessary, even on Windows."""
+        """Operating system specifics"""
         self.os = platform.system()
 
         if self.os == "Windows":
@@ -298,8 +364,12 @@ class AppFrame(Frame):
         elif self.os == "Darwin":
             self.slashChar = "/"
         else:
-            self.log.writeError("System not detected as Windows, Mac or Linux. Some features may not work.")
-            print("System not detected as Windows, Mac or Linux. Some features may not work.")
+            self.log.writeError(
+                "System not detected as Windows, Mac or Linux."
+                " Some features may not work.")
+            print(
+                "System not detected as Windows, Mac or Linux."
+                " Some features may not work.")
             self.slashChar = "/"
 
 # Set root window properties
@@ -331,7 +401,7 @@ root.geometry("+%d+%d" % (windowXPos, windowYPos))
 # Make sure window is focused at startup
 root.focus_set()
 
-## Start main loop
+# Start main loop
 app = AppFrame(root)
 root.protocol("WM_DELETE_WINDOW", app.quit)
 root.mainloop()
