@@ -278,7 +278,7 @@ class AppFrame(Frame):
                 self.textFrame.changed = False
                 self.tabBar.resetChanged()
                 self.indicateNoChange()
-                
+
                 if self.getFocus() is self.textFrame.rewriteBox:
                     self.textFrame.showRewrite()
 
@@ -326,7 +326,7 @@ class AppFrame(Frame):
 
             fileNameMinusNote = openLocation.split(".")[:-1]
             rewriteLocation = ".".join(fileNameMinusNote) + ".rewrite"
-            
+
             if path.isfile(rewriteLocation):
                 rewriteFile = open(rewriteLocation, "r")
 

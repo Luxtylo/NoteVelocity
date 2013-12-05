@@ -279,11 +279,16 @@ class text(Frame):
 
         self.textBox.bind("<<Modified>>", lambda event: self.modified())
         self.rewriteBox.bind("<<Modified>>", lambda event: self.rewriteModified())
+        self.textBox.bind("<Key>", lambda event: self.updateTags())
+
+        self.initTags()
 
         self.selectedBox = 0
         self.changed = False
         self.rewriteShown = False
         self.rewriteExists = False
+        
+        self.changeCounter = 0
 
         self.fileName = ""
         self.shortFileName = self.fileName.split("/")[-1]
@@ -398,7 +403,6 @@ class text(Frame):
             elif level == "notes":
                 self.textBox.insert(deleteStart, "\t\t")
         elif self.master.master.getFocus() is self.rewriteBox:
-            print("boop")
             index = self.rewriteBox.index("insert").split(".")[0]
             lineStart = index + ".0"
             lineEnd = index + ".end"
@@ -423,12 +427,13 @@ class text(Frame):
             elif level == "subtitle":
                 self.rewriteBox.insert(deleteStart, "\t")
             elif level == "notes":
-                self.rewriteBox.insert(deleteStart, "\t\t")        
+                self.rewriteBox.insert(deleteStart, "\t\t")
 
     def modified(self):
         """Mark as changed"""
         self.changed = True
         self.master.titleBar.changed()
+        self.updateTags()
 
     def rewriteModified(self):
         """Mark as changed, and mark as rewriteExists"""
@@ -489,6 +494,57 @@ class text(Frame):
         else:
             self.showRewrite()
 
+    def initTags(self):
+        self.textBox.tag_config("title", background = "#000", foreground = "#FFF")
+        self.textBox.tag_config("subtitle", background = "#333", foreground = "#FFF")
+        self.textBox.tag_config("notes", background = "#333", foreground = "#FFF")
+
+    def updateTags(self):
+        """Update tags for self.textBox"""
+        if self.changeCounter < 4:
+            self.changeCounter += 1
+        else:
+            print("Updating tags...")
+            self.setMarks()
+            self.addTags()
+            self.changeCounter = 0
+
+    def setMarks(self):
+        """Set the marks in the textBox widget, ready for adding tags"""
+        text = self.textBox.get(1.0, "end").split("\n")
+        self.markList = list()
+        
+        lineNum = 0
+        for line in text:
+            tabs = 0
+            for char in line:
+                if char == "\t":
+                    tabs += 1
+
+            lineStr = str(lineNum)
+            startMark = lineStr + "start"
+            endMark = lineStr + "end"
+            startIndex = lineStr + ".0"
+            endIndex = lineStr + ".end"
+
+            if tabs == 0:
+                self.textBox.mark_set(startMark, startIndex)
+                self.textBox.mark_gravity(startMark, LEFT)
+
+                self.textBox.mark_set(endMark, endIndex)
+                self.textBox.mark_gravity(endMark, RIGHT)
+
+            self.markList.append((startMark, endMark, tabs))
+
+            lineNum += 1
+
+    def addTags(self):
+        for line in self.markList:
+            if line[2] == 0:
+                startIndex = self.textBox.index(line[0])
+                endIndex = self.textBox.index(line[1])
+
+                self.textBox.tag_add("title", startIndex, endIndex)
 
 class arrangementFrame(Frame):
 

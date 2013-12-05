@@ -37,11 +37,12 @@ closeTab = "<Control-w>"
 quit = "<Control-W>"
 
 decreaseIndent = "<Control-Shift-space>"
-# Or the tab key when at the start of a line
-increaseIndent = "<Control-space>"
+increaseIndent = "<Control-space>" # Or the tab key when at the start of a line
 
 makeHeading = "<Control-h>"
 makeSubheading = "<Control-H>"
+
+linkNote = "<Control-l>"
 
 # Binding (Do not edit)
 

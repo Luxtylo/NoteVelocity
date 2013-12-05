@@ -96,11 +96,11 @@ class tabBar(Frame):
 
         self.master.master.titleBar.title.config(
             text=self.tabs[self.selectedTab].longTitle)
-        
+
         # Switch rewrite boxes
         rewriteBoxContents = self.master.master.textFrame.rewriteBox.get(
-                1.0,
-                "end")
+            1.0,
+            "end")
         rewriteBoxContents = rewriteBoxContents[:-1]
         self.tabs[last].rewrite.set(rewriteBoxContents)
 
