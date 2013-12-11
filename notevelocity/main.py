@@ -30,7 +30,6 @@ import bindings
 import logging
 import styles
 
-
 class AppFrame(Frame):
 
     def __init__(self, master):
@@ -381,10 +380,13 @@ class AppFrame(Frame):
 
         if self.os == "Windows":
             self.slashChar = "\\"
+            from time import clock
         elif self.os == "Linux":
             self.slashChar = "/"
+            from time import time
         elif self.os == "Darwin":
             self.slashChar = "/"
+            from time import time
         else:
             self.log.writeError(
                 "System not detected as Windows, Mac or Linux."
@@ -393,6 +395,16 @@ class AppFrame(Frame):
                 "System not detected as Windows, Mac or Linux."
                 " Some features may not work.")
             self.slashChar = "/"
+            from time import time
+
+    def getTime(self):
+        from time import time
+        from time import clock
+
+        if self.os == "Windows":
+            return clock()
+        else:
+            return time()
 
 # Set root window properties
 root = Tk()

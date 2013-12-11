@@ -28,6 +28,9 @@ def init(master):
     smallButtonFont = ("Source Sans Pro", 8)
     titleFont = ("Source Sans Pro", 11, "bold")
     tabFont = ("Source Sans Pro", 10)
+    textTitleFont = ("Source Sans Pro", 14)
+    textSubtitleFont = ("Source Sans Pro", 12)
+    textNotesFont = ("Source Sans Pro", 10)
 
     # Colours - these values should be in hexadecimal
     toolbarColour = "#E8E8E8"
@@ -37,12 +40,27 @@ def init(master):
     tabColour = "#DDDDDD"
     tabSelectedColour = "#B8B8B8"
 
-    textBoxBackground = "#FCFCFC"
-    textBoxTextColour = "#101010"
+    textBoxBackground = "#D8D8D8"
+    textBoxTextColour = "#444444"
 
     changedIndicatorOn = "#888888"
     changedIndicatorOff = "#E8E8E8"
     changedIndicatorText = "#101010"
+
+    titleFontColour = "#000000"
+    subtitleFontColour = "#222222"
+    notesFontColour = "#444444"
+
+    # Adding attributes to master
+    master.textBoxBackground = textBoxBackground
+    master.textBoxTextColour = textBoxTextColour
+    master.titleFontColour = titleFontColour
+    master.subtitleFontColour = subtitleFontColour
+    master.notesFontColour = notesFontColour
+
+    master.textTitleFont = textTitleFont
+    master.textSubtitleFont = textSubtitleFont
+    master.textNotesFont = textNotesFont
 
     # Styles (Do not edit)
     titleBarStyle = Style()
@@ -129,6 +147,3 @@ def init(master):
         foreground=changedIndicatorOff,
         background=changedIndicatorOff,
         font=tabFont)
-
-    master.textBoxBackground = textBoxBackground
-    master.textBoxTextColour = textBoxTextColour

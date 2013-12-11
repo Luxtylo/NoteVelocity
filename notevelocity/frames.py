@@ -245,7 +245,8 @@ class text(Frame):
             borderwidth=0,
             width=1,
             bg=master.master.textBoxBackground,
-            fg=master.master.textBoxTextColour)
+            fg=master.master.notesFontColour,
+            font=master.master.textNotesFont)
         self.textBox.pack(expand=1, fill=BOTH, side=LEFT)
 
         self.scrollbar = Scrollbar(self.Frame)
@@ -257,7 +258,7 @@ class text(Frame):
             borderwidth=0,
             width=1,
             bg=master.master.textBoxBackground,
-            fg=master.master.textBoxTextColour)
+            fg=master.master.notesFontColour)
 
         self.rewriteScrollbar = Scrollbar(self.Frame)
 
@@ -292,6 +293,10 @@ class text(Frame):
 
         self.fileName = ""
         self.shortFileName = self.fileName.split("/")[-1]
+
+        self.updateTags()
+
+        self.checkChanges()
 
     def newLine(self):
         """Make new lines keep the same indentation"""
@@ -495,26 +500,40 @@ class text(Frame):
             self.showRewrite()
 
     def initTags(self):
-        self.textBox.tag_config("title", background = "#000", foreground = "#FFF")
-        self.textBox.tag_config("subtitle", background = "#333", foreground = "#FFF")
-        self.textBox.tag_config("notes", background = "#333", foreground = "#FFF")
+        """Initialise self.textBox tags"""
+        self.textBox.tag_config(
+            "title",
+            background=self.master.master.textBoxBackground,
+            foreground=self.master.master.titleFontColour,
+            font=self.master.master.textTitleFont
+            )
+        self.textBox.tag_config(
+            "subtitle",
+            background=self.master.master.textBoxBackground,
+            foreground=self.master.master.subtitleFontColour,
+            font=self.master.master.textSubtitleFont)
+        self.textBox.tag_config(
+            "notes",
+            background=self.master.master.textBoxBackground,
+            foreground=self.master.master.notesFontColour,
+            font=self.master.master.textNotesFont)
 
     def updateTags(self):
         """Update tags for self.textBox"""
         if self.changeCounter < 4:
             self.changeCounter += 1
         else:
-            print("Updating tags...")
-            self.setMarks()
+            self.getTagIndexes()
             self.addTags()
             self.changeCounter = 0
+            self.updateTime = self.master.master.getTime()
 
-    def setMarks(self):
+    def getTagIndexes(self):
         """Set the marks in the textBox widget, ready for adding tags"""
         text = self.textBox.get(1.0, "end").split("\n")
-        self.markList = list()
+        self.tagIndexList = list()
         
-        lineNum = 0
+        lineNum = 1
         for line in text:
             tabs = 0
             for char in line:
@@ -522,29 +541,31 @@ class text(Frame):
                     tabs += 1
 
             lineStr = str(lineNum)
-            startMark = lineStr + "start"
-            endMark = lineStr + "end"
             startIndex = lineStr + ".0"
             endIndex = lineStr + ".end"
 
-            if tabs == 0:
-                self.textBox.mark_set(startMark, startIndex)
-                self.textBox.mark_gravity(startMark, LEFT)
-
-                self.textBox.mark_set(endMark, endIndex)
-                self.textBox.mark_gravity(endMark, RIGHT)
-
-            self.markList.append((startMark, endMark, tabs))
+            self.tagIndexList.append((startIndex, endIndex, tabs))
 
             lineNum += 1
 
     def addTags(self):
-        for line in self.markList:
-            if line[2] == 0:
-                startIndex = self.textBox.index(line[0])
-                endIndex = self.textBox.index(line[1])
+        self.textBox.tag_delete("title", "subtitle", "notes")
+        self.initTags()
 
+        for line in self.tagIndexList:
+            startIndex = self.textBox.index(line[0])
+            endIndex = self.textBox.index(line[1])
+            if line[2] == 0:
                 self.textBox.tag_add("title", startIndex, endIndex)
+            elif line[2] == 1:
+                self.textBox.tag_add("subtitle", startIndex, endIndex)
+            elif line[2] > 1:
+                self.textBox.tag_add("notes", startIndex, endIndex)
+    
+    def checkChanges(self):
+        timeNow = self.master.master.getTime()
+        if self.changed and timeNow - 2 > self.updateTime:
+            self.updateTags()
 
 class arrangementFrame(Frame):
 
