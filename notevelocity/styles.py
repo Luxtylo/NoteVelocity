@@ -40,7 +40,7 @@ def init(master):
     tabColour = "#DDDDDD"
     tabSelectedColour = "#B8B8B8"
 
-    textBoxBackground = "#D8D8D8"
+    textBoxBackground = "#E8E8E8"
     textBoxTextColour = "#444444"
 
     changedIndicatorOn = "#888888"

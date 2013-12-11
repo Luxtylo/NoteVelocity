@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License along with
 
 from tkinter import *
 from tkinter.ttk import *
+from time import sleep
 import bindings
 
 # Title bar
@@ -241,7 +242,7 @@ class text(Frame):
 
         self.textBox = Text(self.Frame)
         self.textBox.config(
-            tabs=("0.5c", "0.75c", "0.825c"),
+            tabs=("0.25c", "0.4c", "0.4c"),
             borderwidth=0,
             width=1,
             bg=master.master.textBoxBackground,
@@ -294,8 +295,9 @@ class text(Frame):
         self.fileName = ""
         self.shortFileName = self.fileName.split("/")[-1]
 
+        self.updateTime = 0
+        self.tagsUpToDate = False
         self.updateTags()
-
         self.checkChanges()
 
     def newLine(self):
@@ -522,11 +524,13 @@ class text(Frame):
         """Update tags for self.textBox"""
         if self.changeCounter < 4:
             self.changeCounter += 1
+            self.tagsUpToDate = False
         else:
             self.getTagIndexes()
             self.addTags()
             self.changeCounter = 0
             self.updateTime = self.master.master.getTime()
+            self.tagsUpTODate = True
 
     def getTagIndexes(self):
         """Set the marks in the textBox widget, ready for adding tags"""
@@ -564,8 +568,9 @@ class text(Frame):
     
     def checkChanges(self):
         timeNow = self.master.master.getTime()
-        if self.changed and timeNow - 2 > self.updateTime:
+        if self.changed and timeNow - 2 > self.updateTime and not self.tagsUpToDate:
             self.updateTags()
+        self.textBox.after(1, self.checkChanges)
 
 class arrangementFrame(Frame):
 
