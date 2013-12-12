@@ -255,11 +255,12 @@ class text(Frame):
 
         self.rewriteBox = Text(self.Frame)
         self.rewriteBox.config(
-            tabs=("0.5c", "0.75c", "0.825c"),
+            tabs=("0.25c", "0.4c", "0.4c"),
             borderwidth=0,
             width=1,
             bg=master.master.textBoxBackground,
-            fg=master.master.notesFontColour)
+            fg=master.master.notesFontColour,
+            font=master.master.textNotesFont)
 
         self.rewriteScrollbar = Scrollbar(self.Frame)
 
@@ -282,6 +283,7 @@ class text(Frame):
         self.textBox.bind("<<Modified>>", lambda event: self.modified())
         self.rewriteBox.bind("<<Modified>>", lambda event: self.rewriteModified())
         self.textBox.bind("<Key>", lambda event: self.updateTags())
+        self.rewriteBox.bind("<Key>", lambda event: self.updateTags())
 
         self.initTags()
 
@@ -367,6 +369,8 @@ class text(Frame):
             elif focus is self.rewriteBox:
                 self.rewriteBox.delete(deleteStart, deleteEnd)
 
+        self.updateTags()
+
         return "break"
 
     def increaseIndent(self, event):
@@ -380,6 +384,8 @@ class text(Frame):
             lineNum, columnNum = self.rewriteBox.index("insert").split(".")
             insertIndex = lineNum + ".0"
             self.rewriteBox.insert(insertIndex, "\t")
+
+        self.updateTags()
 
     def makeLevel(self, level):
         """Make the line a specific level"""
@@ -436,10 +442,13 @@ class text(Frame):
             elif level == "notes":
                 self.rewriteBox.insert(deleteStart, "\t\t")
 
+            self.updateTags
+
     def modified(self):
         """Mark as changed"""
         self.changed = True
         self.master.titleBar.changed()
+        self.tagUpToDate = False
         self.updateTags()
 
     def rewriteModified(self):
@@ -447,6 +456,8 @@ class text(Frame):
         self.changed = True
         self.master.titleBar.changed()
         self.rewriteExists = True
+        self.tagsUpToDate = False
+        self.updateTags()
 
     def selectText(self):
         """Select the textbox"""
@@ -520,9 +531,26 @@ class text(Frame):
             foreground=self.master.master.notesFontColour,
             font=self.master.master.textNotesFont)
 
+        self.rewriteBox.tag_config(
+            "title",
+            background=self.master.master.textBoxBackground,
+            foreground=self.master.master.titleFontColour,
+            font=self.master.master.textTitleFont
+            )
+        self.rewriteBox.tag_config(
+            "subtitle",
+            background=self.master.master.textBoxBackground,
+            foreground=self.master.master.subtitleFontColour,
+            font=self.master.master.textSubtitleFont)
+        self.rewriteBox.tag_config(
+            "notes",
+            background=self.master.master.textBoxBackground,
+            foreground=self.master.master.notesFontColour,
+            font=self.master.master.textNotesFont)
+
     def updateTags(self):
         """Update tags for self.textBox"""
-        if self.changeCounter < 4:
+        if self.changeCounter < 2:
             self.changeCounter += 1
             self.tagsUpToDate = False
         else:
@@ -530,12 +558,17 @@ class text(Frame):
             self.addTags()
             self.changeCounter = 0
             self.updateTime = self.master.master.getTime()
-            self.tagsUpTODate = True
+            self.tagsUpToDate = True
 
     def getTagIndexes(self):
-        """Set the marks in the textBox widget, ready for adding tags"""
-        text = self.textBox.get(1.0, "end").split("\n")
-        self.tagIndexList = list()
+        """Find points in the textBox widget where tags should be added"""
+        focus = self.master.master.getFocus()
+        if focus is self.textBox:
+            text = self.textBox.get(1.0, "end").split("\n")
+            self.tagIndexList = list()
+        elif focus is self.rewriteBox:
+            text = self.rewriteBox.get(1.0, "end").split("\n")
+            self.rewriteTagIndexList = list()
         
         lineNum = 1
         for line in text:
@@ -547,24 +580,47 @@ class text(Frame):
             lineStr = str(lineNum)
             startIndex = lineStr + ".0"
             endIndex = lineStr + ".end"
-
-            self.tagIndexList.append((startIndex, endIndex, tabs))
+            
+            if focus is self.textBox:
+                self.tagIndexList.append((startIndex, endIndex, tabs))
+            elif focus is self.rewriteBox:
+                self.rewriteTagIndexList.append((startIndex, endIndex, tabs))
 
             lineNum += 1
 
     def addTags(self):
-        self.textBox.tag_delete("title", "subtitle", "notes")
+        """Add tags to the textBox from tagIndexList"""
+        focus = self.master.master.getFocus()
+        if focus is self.textBox:
+            self.textBox.tag_delete("title", "subtitle", "notes")
+        elif focus is self.rewriteBox:
+            self.textBox.tag_delete("title", "subtitle", "notes")
+
         self.initTags()
 
-        for line in self.tagIndexList:
-            startIndex = self.textBox.index(line[0])
-            endIndex = self.textBox.index(line[1])
-            if line[2] == 0:
-                self.textBox.tag_add("title", startIndex, endIndex)
-            elif line[2] == 1:
-                self.textBox.tag_add("subtitle", startIndex, endIndex)
-            elif line[2] > 1:
-                self.textBox.tag_add("notes", startIndex, endIndex)
+        if focus is self.textBox:
+            for line in self.tagIndexList:
+                startIndex = self.textBox.index(line[0])
+                endIndex = self.textBox.index(line[1])
+
+                if line[2] == 0:
+                    self.textBox.tag_add("title", startIndex, endIndex)
+                elif line[2] == 1:
+                    self.textBox.tag_add("subtitle", startIndex, endIndex)
+                elif line[2] > 1:
+                    self.textBox.tag_add("notes", startIndex, endIndex)
+
+        elif focus is self.rewriteBox:
+            for line in self.rewriteTagIndexList:
+                startIndex = self.rewriteBox.index(line[0])
+                endIndex = self.rewriteBox.index(line[1])
+
+                if line[2] == 0:
+                    self.rewriteBox.tag_add("title", startIndex, endIndex)
+                elif line[2] == 1:
+                    self.rewriteBox.tag_add("subtitle", startIndex, endIndex)
+                elif line[2] > 1:
+                    self.rewriteBox.tag_add("notes", startIndex, endIndex)
     
     def checkChanges(self):
         timeNow = self.master.master.getTime()
