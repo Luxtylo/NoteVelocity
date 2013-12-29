@@ -594,7 +594,7 @@ class text(Frame):
         if focus is self.textBox:
             self.textBox.tag_delete("title", "subtitle", "notes")
         elif focus is self.rewriteBox:
-            self.textBox.tag_delete("title", "subtitle", "notes")
+            self.rewriteBox.tag_delete("title", "subtitle", "notes")
 
         self.initTags()
 
