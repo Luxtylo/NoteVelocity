@@ -245,6 +245,7 @@ class text(Frame):
             tabs=("0.25c", "0.4c", "0.4c"),
             borderwidth=0,
             width=1,
+            wrap=WORD,
             bg=master.master.textBoxBackground,
             fg=master.master.notesFontColour,
             font=master.master.textNotesFont)
@@ -258,6 +259,7 @@ class text(Frame):
             tabs=("0.25c", "0.4c", "0.4c"),
             borderwidth=0,
             width=1,
+            wrap=WORD,
             bg=master.master.textBoxBackground,
             fg=master.master.notesFontColour,
             font=master.master.textNotesFont)
@@ -563,12 +565,12 @@ class text(Frame):
     def getTagIndexes(self):
         """Find points in the textBox widget where tags should be added"""
         focus = self.master.master.getFocus()
-        if focus is self.textBox:
-            text = self.textBox.get(1.0, "end").split("\n")
-            self.tagIndexList = list()
-        elif focus is self.rewriteBox:
+        if focus is self.rewriteBox:
             text = self.rewriteBox.get(1.0, "end").split("\n")
             self.rewriteTagIndexList = list()
+        else: #Assume focus is self.textBox
+            text = self.textBox.get(1.0, "end").split("\n")
+            self.tagIndexList = list()
         
         lineNum = 1
         for line in text:
@@ -623,10 +625,15 @@ class text(Frame):
                     self.rewriteBox.tag_add("notes", startIndex, endIndex)
     
     def checkChanges(self):
+        """Check to see whether changes have occurred"""
         timeNow = self.master.master.getTime()
         if self.changed and timeNow - 2 > self.updateTime and not self.tagsUpToDate:
             self.updateTags()
         self.textBox.after(1, self.checkChanges)
+    
+    def getLink(self):
+        """Add a link from the selection to another note"""
+        self.master.master.openLinkBox()
 
 class arrangementFrame(Frame):
 

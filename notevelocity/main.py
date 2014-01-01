@@ -26,6 +26,7 @@ from os import path
 import platform
 import frames
 import tabs
+import link
 import bindings
 import logging
 import styles
@@ -47,7 +48,7 @@ class AppFrame(Frame):
         # Probably unused
         #self.files = list()
 
-        self.notesDir = getcwd() + "/notes"
+        self.notesDir = getcwd() + self.slashChar + "notes"
 
     def getFocus(self):
         return self.master.focus_get()
@@ -59,15 +60,14 @@ class AppFrame(Frame):
         styles.init(self)
 
         # Top level frames
-        """try:
+        try:
             self.titleBar = frames.titleBar(self, root)
             self.log.write(self.titleBar.testMessage)
         except Exception as ex:
             print("titleBar was not initialised properly")
             self.log.writeError(
                 "titleBar was not initialised properly. Error:\n" + str(ex))
-            self.quit()"""
-        self.titleBar = frames.titleBar(self, root)
+            self.quit()
 
         try:
             self.formatBar = frames.formatBar(self)
@@ -405,6 +405,16 @@ class AppFrame(Frame):
             return clock()
         else:
             return time()
+
+    def openLinkBox(self):
+        self.linkBox = link.LinkBox(self)
+
+    def insertLink(self, linkLocation):
+        # Insert a link to a note at the current cursor location
+        pass
+
+    def closeLinkBox(self):
+        self.linkBox.close()
 
 # Set root window properties
 root = Tk()

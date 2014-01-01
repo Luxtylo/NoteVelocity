@@ -74,5 +74,8 @@ def init(self, root):
     # Rewrite
     root.bind(rewrite, lambda event: self.textFrame.toggleRewrite())
 
+    # Make link (Temporary)
+    root.bind(linkNote, lambda event: self.openLinkBox())
+
     # Quit
     root.bind(quit, lambda event: self.quit())
