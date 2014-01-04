@@ -100,17 +100,31 @@ class LinkBox(Toplevel):
     def showSummaries(self, noteSummaries):
         sortedSummaries = sorted(noteSummaries,
             key=lambda x: x[0])
+        noteDisplayList = list()
         notesToIgnore = list()
+
+        summaryNumber = 0
         for summ in sortedSummaries:
             # noteType will be "note" or "rewrite"
             noteType = str(summ[0]).split(".")[-1]
-            print(summ[0])
+
+            note = NoteSummary(self, summaryNumber, summ)
+
+            noteDisplayList.append(note)
+
+            summaryNumber += 1
 
 class NoteSummary():
-    def __init__(self, master, number, ):
+    def __init__(self, master, number, summary):
+        print(summary)
         self.master = master
 
-        self.testButton = Button(self.master.canvasFrame, text="Test")
+        self.name = str(summary[0]).split(".")[:-1]
+
+        x = 10
+        y = 10 + 35 * number
+
+        self.testButton = Button(self.master.canvasFrame, text=self.name)
         self.testButtonWindow = self.master.canvas.create_window(x, y,
             anchor=NW, window=self.testButton)
     
