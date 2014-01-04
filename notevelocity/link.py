@@ -30,7 +30,10 @@ class LinkBox(Toplevel):
 
         noteSummaries = self.getNoteSummaries()
 
+        self.showSummaries(noteSummaries)
+
     def initUI(self):
+        """Initialise UI elements of LinkBox"""
         self.window = Toplevel()
 
         self.button = Button(self.window,
@@ -53,15 +56,14 @@ class LinkBox(Toplevel):
         self.scrollBar.config(command=self.canvas.yview)
         self.canvas.config(yscrollcommand=self.scrollBar.set)
 
-        self.testButton = Button(self.canvasFrame, text="Test")
+        """self.testButton = Button(self.canvasFrame, text="Test")
         self.testButtonWindow = self.canvas.create_window(10, 10,
-            anchor=NW, window=self.testButton)
-
-        self.test = NoteSummary(self, 10, 40)
+            anchor=NW, window=self.testButton)"""
 
         self.window.lift()
     
     def getNoteSummaries(self):
+        """Return the titles and subtitles of notes"""
         notesDir = self.master.notesDir
         notes = listdir(notesDir)
 
@@ -72,28 +74,45 @@ class LinkBox(Toplevel):
             noteSummary = list()
 
             with open(noteLocation, "r") as noteContents:
+                lineNum = 1
                 for line in noteContents:
                     tabs = 0
                     for char in line:
                         if char == "\t":
                             tabs += 1
                     
-                    if tabs == 0:
-                        noteSummary.append(line)
-                    elif tabs == 1:
-                        noteSummary.append(line)
+                    if tabs == 0 or tabs == 1:
+                        summary = [lineNum, line]
+
+                    lineNum += 1
+                    noteSummary.append(summary)
+
+            noteType = note.split(".")[-1]
             
             noteSummaryList.append([str(note), noteSummary])
 
         return noteSummaryList
 
     def close(self):
+        """Close the window"""
         self.window.destroy()
 
+    def showSummaries(self, noteSummaries):
+        sortedSummaries = sorted(noteSummaries,
+            key=lambda x: x[0])
+        notesToIgnore = list()
+        for summ in sortedSummaries:
+            # noteType will be "note" or "rewrite"
+            noteType = str(summ[0]).split(".")[-1]
+            print(summ[0])
+
 class NoteSummary():
-    def __init__(self, master, x, y):
+    def __init__(self, master, number, ):
         self.master = master
 
         self.testButton = Button(self.master.canvasFrame, text="Test")
         self.testButtonWindow = self.master.canvas.create_window(x, y,
             anchor=NW, window=self.testButton)
+    
+    def addTitle(self):
+        pass
