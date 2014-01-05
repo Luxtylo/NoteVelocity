@@ -205,11 +205,11 @@ class formatBar(Frame):
             "<Button-1>",
             lambda event: self.master.textFrame.makeLevel("notes"))
 
-        self.spacer2 = Frame(self.Frame, height=5)
+        """self.spacer2 = Frame(self.Frame, height=5)
         self.spacer2.pack(expand=0, side=TOP)
         self.equation = Button(
             self.Frame, text="E", style="F.TButton", takefocus=0)
-        self.equation.pack(expand=0, side=TOP)
+        self.equation.pack(expand=0, side=TOP)"""
 
         self.spacer3 = Frame(self.Frame, height=5)
         self.spacer3.pack(expand=0, side=TOP)

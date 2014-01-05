@@ -26,15 +26,16 @@ class LinkBox(Toplevel):
     def __init__(self, master):
         self.master = master
 
-        self.initUI()
-
         noteSummaries = self.getNoteSummaries()
+
+        self.initUI(noteSummaries)
 
         self.showSummaries(noteSummaries)
 
-    def initUI(self):
+    def initUI(self, noteSummaries):
         """Initialise UI elements of LinkBox"""
         self.window = Toplevel()
+        self.window.geometry("400x300")
 
         self.button = Button(self.window,
             text="Close",
@@ -47,12 +48,15 @@ class LinkBox(Toplevel):
         self.canvasFrame.pack(side=TOP)
 
         self.canvas = Canvas(self.canvasFrame)
+        canvasHeight = 10 + len(noteSummaries) * 35
+        self.canvas.config(height=canvasHeight)
         self.canvas.pack(side=LEFT, fill=BOTH, expand=0)
 
         self.scrollBar = Scrollbar(self.canvasFrame,
             orient=VERTICAL)
         self.scrollBar.pack(side=RIGHT, fill=Y, expand=0)
 
+        self.canvas.config(scrollregion=self.canvas.bbox(ALL))
         self.scrollBar.config(command=self.canvas.yview)
         self.canvas.config(yscrollcommand=self.scrollBar.set)
 
@@ -103,6 +107,8 @@ class LinkBox(Toplevel):
         noteDisplayList = list()
         notesToIgnore = list()
 
+        self.summaryFrame = Frame(self.canvasFrame, width=380)
+
         summaryNumber = 0
         for summ in sortedSummaries:
             # noteType will be "note" or "rewrite"
@@ -114,19 +120,36 @@ class LinkBox(Toplevel):
 
             summaryNumber += 1
 
+        self.summaryWindow = self.canvas.create_window(1, 1,
+            anchor=NW, window=self.summaryFrame)
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))
+
 class NoteSummary():
     def __init__(self, master, number, summary):
-        print(summary)
+        #print(summary)
         self.master = master
 
         self.name = str(summary[0]).split(".")[:-1]
+        if len(self.name) > 24:
+            self.name = self.name[:21] + "..."
 
         x = 10
         y = 10 + 35 * number
 
-        self.testButton = Button(self.master.canvasFrame, text=self.name)
-        self.testButtonWindow = self.master.canvas.create_window(x, y,
-            anchor=NW, window=self.testButton)
+        self.frame = Frame(self.master.summaryFrame)
+        self.frame.pack(fill=X, expand=1, side=TOP, ipady=2)
+
+        self.label = Label(self.frame, text=self.name)
+        self.label.pack(expand=0, side=LEFT, padx=4)
+
+        self.paddingFrame = Frame(self.frame)
+        self.paddingFrame.pack(fill=BOTH, expand=1, side=LEFT)
+
+        self.expandButton = Button(self.frame, text="E", width=2)
+        self.expandButton.pack(expand=0, side=RIGHT)
+
+        """self.window = self.master.canvas.create_window(x, y,
+            anchor=NW, window=self.frame)"""
     
     def addTitle(self):
         pass
