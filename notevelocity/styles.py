@@ -51,6 +51,8 @@ def init(master):
     subtitleFontColour = "#222222"
     notesFontColour = "#444444"
 
+    testHighlightingColour = "#FF0000"
+
     # Adding attributes to master
     master.textBoxBackground = textBoxBackground
     master.textBoxTextColour = textBoxTextColour
@@ -147,3 +149,8 @@ def init(master):
         foreground=changedIndicatorOff,
         background=changedIndicatorOff,
         font=tabFont)
+
+    highlightedFrame = Style()
+    highlightedFrame.configure(
+        "HL.TFrame",
+        background=testHighlightingColour)

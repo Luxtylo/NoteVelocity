@@ -21,6 +21,7 @@ You should have received a copy of the GNU General Public License along with
 from tkinter import *
 from tkinter.ttk import *
 from os import listdir
+import styles
 
 class LinkBox(Toplevel):
     def __init__(self, master):
@@ -45,12 +46,12 @@ class LinkBox(Toplevel):
         self.canvasFrame = Frame(self.window,
             width=400,
             height=300)
-        self.canvasFrame.pack(side=TOP)
+        self.canvasFrame.pack(side=TOP, fill=BOTH, expand=1)
 
         self.canvas = Canvas(self.canvasFrame)
         canvasHeight = 10 + len(noteSummaries) * 35
         self.canvas.config(height=canvasHeight)
-        self.canvas.pack(side=LEFT, fill=BOTH, expand=0)
+        self.canvas.pack(side=LEFT, fill=BOTH, expand=1)
 
         self.scrollBar = Scrollbar(self.canvasFrame,
             orient=VERTICAL)
@@ -128,28 +129,55 @@ class NoteSummary():
     def __init__(self, master, number, summary):
         #print(summary)
         self.master = master
+        self.number = number
+        self.summary = summary
 
         self.name = str(summary[0]).split(".")[:-1]
         if len(self.name) > 24:
             self.name = self.name[:21] + "..."
+            
+        self.nOrR = str(summary[0]).split(".")[-1]
+        if self.nOrR == "note":
+            self.nOrR = "N"
+        elif self.nOrR == "rewrite":
+            self.nOrR = "R"
+        else:
+            print("Extension of " + self.name + " not right")
 
         x = 10
         y = 10 + 35 * number
 
-        self.frame = Frame(self.master.summaryFrame)
+        """self.frame = Frame(self.master.summaryFrame, width=380)
         self.frame.pack(fill=X, expand=1, side=TOP, ipady=2)
 
         self.label = Label(self.frame, text=self.name)
         self.label.pack(expand=0, side=LEFT, padx=4)
 
-        self.paddingFrame = Frame(self.frame)
+        self.paddingFrame = Frame(self.frame, width=50)
         self.paddingFrame.pack(fill=BOTH, expand=1, side=LEFT)
 
         self.expandButton = Button(self.frame, text="E", width=2)
-        self.expandButton.pack(expand=0, side=RIGHT)
+        self.expandButton.pack(expand=0, side=RIGHT)"""
+
+        self.expandButton = Button(self.master.summaryFrame,
+            text="E",
+            width=2)
+        self.linkButton = Button(self.master.summaryFrame, text="L", width=2)
+        self.label = Label(self.master.summaryFrame, text = self.name)
+        self.noteOrRewrite = Label(self.master.summaryFrame, text=self.nOrR)
+
+        self.expandButton.grid(row=number, column=0)
+        self.linkButton.grid(row=number, column=1)
+        self.label.grid(row=number, column=2, sticky=W)
+        self.noteOrRewrite.grid(row=number, column=3, sticky=E)
 
         """self.window = self.master.canvas.create_window(x, y,
             anchor=NW, window=self.frame)"""
-    
+
+        self.addRows(summary)
+
+    def addRows(self, summary):
+        pass
+
     def addTitle(self):
         pass
