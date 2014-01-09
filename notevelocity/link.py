@@ -22,7 +22,7 @@ from tkinter import *
 from tkinter.ttk import *
 
 
-def link(app):
+def link(app, box):
     """Choose the note to link to"""
     selectedNote = filedialog.askopenfilename(
         initialdir=app.notesDir,
@@ -33,7 +33,7 @@ def link(app):
 
     contents = getNoteTitles(selectedNote)
     if contents != 1:
-        getLinkLocation(app, contents, selectedNote)
+        getLinkLocation(app, contents, selectedNote, box)
     else:
         print("No note selected")
 
@@ -61,7 +61,7 @@ def getNoteTitles(noteName):
         return 1
 
 
-def getLinkLocation(app, noteContents, noteName):
+def getLinkLocation(app, noteContents, noteName, box):
     """Get a location to link to
 
     Returns:
@@ -76,7 +76,7 @@ def getLinkLocation(app, noteContents, noteName):
         """Select current note"""
         linkLocation = [noteName, None]
         linkBox.destroy()
-        app.insertLink(linkLocation)
+        app.insertLink(linkLocation, box)
 
     def back(app):
         """Go back to note selection"""
@@ -95,7 +95,7 @@ def getLinkLocation(app, noteContents, noteName):
             selectionIndex = int(listBox.curselection()[0])
             linkLocation = [noteName, noteContents[selectionIndex][2]]
             linkBox.destroy()
-            app.insertLink(linkLocation)
+            app.insertLink(linkLocation, box)
 
     linkBox = Toplevel()
     linkBox.title("Select point in note to link to")
@@ -127,13 +127,13 @@ def getLinkLocation(app, noteContents, noteName):
 
     selectNote = Button(
         bottomSection,
-        text="Select note",
+        text="Link note",
         command=selectNote)
     selectNote.pack(side=RIGHT)
 
     select = Button(
         bottomSection,
-        text="Select",
+        text="Link",
         command=lambda: ok(listBox))
     select.pack(side=RIGHT)
 

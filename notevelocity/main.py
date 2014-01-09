@@ -407,18 +407,22 @@ class AppFrame(Frame):
         else:
             return time()
 
-    def openLinkBox(self):
+    def openLinkBox(self, box):
         """Link to another note"""
-        link.link(self)
+        link.link(self, box)
 
-    def insertLink(self, linkLocation):
+    def insertLink(self, linkLocation, *box):
         """Insert a link to linkLocation"""
         if linkLocation is None:
             print("Linking cancelled.")
         elif linkLocation is False:
             print("Back to note selection window")
         else:
-            print(linkLocation)
+            box = box[0]
+            if linkLocation[1] is None:
+                self.textFrame.insertLink(box, linkLocation[0])
+            else:
+                self.textFrame.insertLink(box, linkLocation[0], linkLocation[1])
 
 # Set root window properties
 root = Tk()

@@ -287,6 +287,14 @@ class text(Frame):
         self.textBox.bind("<Key>", lambda event: self.updateTags())
         self.rewriteBox.bind("<Key>", lambda event: self.updateTags())
 
+        # Bind link shortcut to link selection
+        self.textBox.bind(
+            bindings.linkNote,
+            lambda event: self.master.master.openLinkBox("textBox"))
+        self.rewriteBox.bind(
+            bindings.linkNote,
+            lambda event: self.master.master.openLinkBox("rewriteBox"))
+
         self.initTags()
 
         self.selectedBox = 0
@@ -634,6 +642,16 @@ class text(Frame):
     def getLink(self):
         """Add a link from the selection to another note"""
         self.master.master.openLinkBox()
+
+    def insertLink(self, box, linkLocation, *line):
+        if not line:
+            print("Whole note")
+        else:
+            line = line[0]
+            print("line " + str(line))
+
+    def getSelection(self):
+        """Get the current selection range"""
 
 class arrangementFrame(Frame):
 
