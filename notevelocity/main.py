@@ -413,7 +413,12 @@ class AppFrame(Frame):
 
     def insertLink(self, linkLocation):
         """Insert a link to linkLocation"""
-        pass
+        if linkLocation is None:
+            print("Linking cancelled.")
+        elif linkLocation is False:
+            print("Back to note selection window")
+        else:
+            print(linkLocation)
 
 # Set root window properties
 root = Tk()

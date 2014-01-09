@@ -21,20 +21,22 @@ You should have received a copy of the GNU General Public License along with
 from tkinter import *
 from tkinter.ttk import *
 
+
 def link(app):
     """Choose the note to link to"""
     selectedNote = filedialog.askopenfilename(
         initialdir=app.notesDir,
         title="Select a note to link to",
-        filetypes=[("NoteVelocity files", ("*note", "*.rewrite")),
+        filetypes=[
+            ("NoteVelocity files", ("*note", "*.rewrite")),
             ("Notes", "*.note"), ("Rewrites", "*.rewrite")])
 
     contents = getNoteTitles(selectedNote)
     if contents != 1:
-        linkLocation = getLinkLocation(app, contents, selectedNote)
-    
-    if linkLocation != 1:
-        pass
+        getLinkLocation(app, contents, selectedNote)
+    else:
+        print("No note selected")
+
 
 def getNoteTitles(noteName):
     """Get the titles of the selected note"""
@@ -58,35 +60,42 @@ def getNoteTitles(noteName):
     else:
         return 1
 
+
 def getLinkLocation(app, noteContents, noteName):
     """Get a location to link to
-    
-    Returns:
-        [noteName, -1] if whole note is being linked to
-        [noteName, lineNum] if linking to a line
-        1 if exiting"""
 
-    linkLocation = 1
+    Returns:
+        [noteName, None] if whole note is being linked to
+        [noteName, lineNum] if linking to a line
+        False if going back
+        None if cancelled
+
+    Output is not directly returned, but rather calls app.insertLink"""
 
     def selectNote():
         """Select current note"""
-        linkLocation = [noteName, "-1"]
+        linkLocation = [noteName, None]
+        linkBox.destroy()
+        app.insertLink(linkLocation)
 
     def back(app):
         """Go back to note selection"""
         linkBox.destroy()
         app.openLinkBox()
-        linkLocation = 1
+        app.insertLink(False)
 
     def cancel():
         """Close the linkBox"""
         linkBox.destroy()
-        linkLocation = 1
+        app.insertLink(None)
 
     def ok(listBox):
         """Get the selected line"""
-        selectionIndex = int(listBox.curselection()[0])
-        linkLocation = [noteName, noteContents[selectionIndex][2]]
+        if listBox.curselection() != ():
+            selectionIndex = int(listBox.curselection()[0])
+            linkLocation = [noteName, noteContents[selectionIndex][2]]
+            linkBox.destroy()
+            app.insertLink(linkLocation)
 
     linkBox = Toplevel()
     linkBox.title("Select point in note to link to")
@@ -110,24 +119,26 @@ def getLinkLocation(app, noteContents, noteName):
     cancelButton = Button(bottomSection, text="Cancel", command=cancel)
     cancelButton.pack(side=RIGHT)
 
-    backButton = Button(bottomSection,
+    backButton = Button(
+        bottomSection,
         text="Back",
         command=lambda: back(app))
     backButton.pack(side=RIGHT)
 
-    selectNote = Button(bottomSection,
+    selectNote = Button(
+        bottomSection,
         text="Select note",
         command=selectNote)
     selectNote.pack(side=RIGHT)
 
-    select = Button(bottomSection,
+    select = Button(
+        bottomSection,
         text="Select",
         command=lambda: ok(listBox))
     select.pack(side=RIGHT)
 
     insertList(noteContents, listBox)
 
-    return linkLocation
 
 def insertList(noteContents, listBox):
     """Insert the note's contents into the listBox"""
