@@ -165,7 +165,7 @@ class AppFrame(Frame):
             saveLocation = filedialog.asksaveasfilename(
                 initialdir=self.notesDir,
                 title="Save note as",
-                filetypes=[("Note files", "*.note")])
+                filetypes=[("Notes", "*.note")])
             self.textFrame.fileName = saveLocation
             self.tabBar.updateFilename()
 
@@ -208,7 +208,7 @@ class AppFrame(Frame):
             # Rename
             saveLocation = filedialog.asksaveasfilename(
                 initialdir=self.notesDir,
-                title="Rename note to", filetypes=[("Note files", "*.note")])
+                title="Rename note to", filetypes=[("Notes", "*.note")])
 
             returnedNothing = [None, False, "", "\n", ()]
 
@@ -293,7 +293,7 @@ class AppFrame(Frame):
         openLocation = filedialog.askopenfilename(
             initialdir=self.notesDir,
             title="Select note to open",
-            filetypes=[("Note files", "*.note")])
+            filetypes=[("Notes", "*.note")])
 
         returnedNothing = [None, False, "", "\n", ()]
 
@@ -398,6 +398,7 @@ class AppFrame(Frame):
             from time import time
 
     def getTime(self):
+        """Get the current time"""
         from time import time
         from time import clock
 
@@ -407,14 +408,12 @@ class AppFrame(Frame):
             return time()
 
     def openLinkBox(self):
-        self.linkBox = link.LinkBox(self)
+        """Link to another note"""
+        link.link(self)
 
     def insertLink(self, linkLocation):
-        # Insert a link to a note at the current cursor location
+        """Insert a link to linkLocation"""
         pass
-
-    def closeLinkBox(self):
-        self.linkBox.close()
 
 # Set root window properties
 root = Tk()
