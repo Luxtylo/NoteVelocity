@@ -23,8 +23,6 @@ from tkinter.ttk import *
 from time import sleep
 import bindings
 
-# Title bar
-
 
 class titleBar(Frame):
 
@@ -166,8 +164,6 @@ class titleBar(Frame):
         self.rewriteSave.config(command=lambda: self.master.saveFile(4))
         self.rewriteHide.config(command=lambda: self.master.textFrame.hideRewrite())
 
-# Formatting bar
-
 
 class formatBar(Frame):
 
@@ -220,11 +216,9 @@ class formatBar(Frame):
         self.rewriteToggle.bind(
             "<Button-1>", lambda event: self.master.textFrame.toggleRewrite())
 
-        self.settings = Button(
+        """self.settings = Button(
             self.Frame, text="Set", style="F.TButton", takefocus=0)
-        self.settings.pack(expand=0, side=BOTTOM, padx=2, pady=4)
-
-# Text Frame
+        self.settings.pack(expand=0, side=BOTTOM, padx=2, pady=4)"""
 
 
 class text(Frame):
@@ -644,18 +638,46 @@ class text(Frame):
     
     def getLink(self):
         """Add a link from the selection to another note"""
-        self.master.master.openLinkBox()
+        focus = self.master.master.getFocus()
+        self.master.master.openLinkBox(focus)
 
     def insertLink(self, box, linkLocation, *line):
+        linkList = linkLocation.split(self.master.master.slashChar)
+        defaultLinkName = "".join(linkList[-1].split(".")[:-1])
+
+        selection = self.master.master.selection
+        #selectionType = "single"
+
+        if type(selection) is tuple:
+            selectionType = "range"
+        elif type(selection) is str:
+            selectionType = "single"
+        else:
+            print(type(selection), selection)
+
         if not line:
             print("Whole note")
         else:
             line = line[0]
-            print("line " + str(line))
+            if box == "textBox":
+                if selectionType == "single":
+                    self.textBox.insert(INSERT, defaultLinkName)
+                elif selectionType == "range":
+                    print("Range link successful!")
+        
+        self.master.master.selection = False
 
     def getSelection(self):
         """Get the current selection range"""
-        pass
+        box = self.master.master.getFocus()
+        try:
+            start = box.index(SEL_FIRST)
+            end = box.index(SEL_LAST)
+            return (start, end)
+        except TclError:
+            insertpos = box.index(INSERT)
+            return insertpos
+
 
 class arrangementFrame(Frame):
 

@@ -31,6 +31,9 @@ def link(app, box):
             ("NoteVelocity files", ("*note", "*.rewrite")),
             ("Notes", "*.note"), ("Rewrites", "*.rewrite")])
 
+    if not app.selection:
+        app.selection = app.textFrame.getSelection()
+
     contents = getNoteTitles(selectedNote)
     if contents != 1:
         getLinkLocation(app, contents, selectedNote, box)
@@ -118,6 +121,8 @@ def getLinkLocation(app, noteContents, noteName, box):
 
     cancelButton = Button(bottomSection, text="Cancel", command=cancel)
     cancelButton.pack(side=RIGHT)
+
+    listBox.bind("<Double-Button-1>", lambda event: ok(listBox))
 
     backButton = Button(
         bottomSection,

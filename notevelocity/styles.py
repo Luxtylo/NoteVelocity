@@ -56,7 +56,6 @@ def init(master):
     # Adding attributes to master
     master.textBoxBackground = textBoxBackground
     master.textBoxTextColour = textBoxTextColour
-    master.textBoxHighlight = textBoxHighlight
     master.titleFontColour = titleFontColour
     master.subtitleFontColour = subtitleFontColour
     master.notesFontColour = notesFontColour

@@ -45,8 +45,7 @@ class AppFrame(Frame):
 
     def initVars(self):
         """Initialise necessary variables."""
-        # Probably unused
-        #self.files = list()
+        self.selection = False
 
         self.notesDir = getcwd() + self.slashChar + "notes"
 
@@ -411,17 +410,18 @@ class AppFrame(Frame):
         """Link to another note"""
         link.link(self, box)
 
-    def insertLink(self, linkLocation, *box):
+    def insertLink(self, linkLocation, box):
         """Insert a link to linkLocation"""
         if linkLocation is None:
             print("Linking cancelled.")
         elif linkLocation is False:
             print("Back to note selection window")
         else:
-            box = box[0]
             if linkLocation[1] is None:
+                # Linking to the whole note
                 self.textFrame.insertLink(box, linkLocation[0])
             else:
+                # Linking to a specific part of the note
                 self.textFrame.insertLink(box, linkLocation[0], linkLocation[1])
 
 # Set root window properties
