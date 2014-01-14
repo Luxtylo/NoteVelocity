@@ -557,6 +557,9 @@ class text(Frame):
             background=self.master.master.textBoxBackground,
             foreground=self.master.master.notesFontColour,
             font=self.master.master.textNotesFont)
+        
+        self.textBox.tag_raise("sel")
+        self.rewriteBox.tag_raise("sel")
 
     def updateTags(self):
         """Update tags for self.textBox"""
@@ -652,6 +655,7 @@ class text(Frame):
 
     def getSelection(self):
         """Get the current selection range"""
+        pass
 
 class arrangementFrame(Frame):
 
