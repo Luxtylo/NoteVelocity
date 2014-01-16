@@ -290,6 +290,7 @@ class text(Frame):
             lambda event: self.master.master.openLinkBox("rewriteBox"))
 
         self.initTags()
+        self.startHypManagers()
 
         self.selectedBox = 0
         self.changed = False
@@ -641,8 +642,8 @@ class text(Frame):
         focus = self.master.master.getFocus()
         self.master.master.openLinkBox(focus)
 
-    def insertLink(self, box, linkLocation, *line):
-        linkList = linkLocation.split(self.master.master.slashChar)
+    def insertLink(self, box, linkLocation, line=None):
+        linkList = linkLocation.split("/")
         defaultLinkName = "".join(linkList[-1].split(".")[:-1])
 
         selection = self.master.master.selection
@@ -652,20 +653,30 @@ class text(Frame):
             selectionType = "range"
         elif type(selection) is str:
             selectionType = "single"
-        else:
-            print(type(selection), selection)
 
         if not line:
             print("Whole note")
+
         else:
-            line = line[0]
+            self.textLinks[selection] = (linkLocation, line)
             if box == "textBox":
                 if selectionType == "single":
-                    self.textBox.insert(INSERT, defaultLinkName)
+                    self.textBox.insert(
+                        INSERT,
+                        defaultLinkName,
+                        self.textHypMan.add(linkLocation, line))
+                        
                 elif selectionType == "range":
                     print("Range link successful!")
         
         self.master.master.selection = False
+
+    def openLink(self):
+        selected = self.master.master.getFocus()
+        if selected is self.textBox:
+            linkLoc = self.lastLink[0]
+            linkLine = self.lastLink[1]
+            self.master.master.openFile(linkLoc, linkLine)
 
     def getSelection(self):
         """Get the current selection range"""
@@ -678,6 +689,52 @@ class text(Frame):
             insertpos = box.index(INSERT)
             return insertpos
 
+    def startHypManagers(self):
+        class HyperlinkManager:
+            def __init__(self, text, master, app):
+                self.text = text
+                self.master = master
+
+                self.text.tag_config(
+                    "hyper",
+                    foreground=app.hyperlinkColour,
+                    underline=1)
+                
+                self.text.tag_bind("hyper", "<Enter>", self._enter)
+                self.text.tag_bind("hyper", "<Leave>", self._leave)
+                self.text.tag_bind("hyper", "<Button-1>", self._click)
+
+                self.reset()
+
+            def reset(self):
+                self.links = {}
+
+            def add(self, location, line):
+                """Add an action to the manager"""
+                tag = "hyper-%d" % len(self.links)
+                self.links[tag] = (location, line)
+                print(self.links[tag])
+                return "hyper", tag
+            
+            def _enter(self, event):
+                self.text.config(cursor="hand2")
+
+            def _leave(self, event):
+                self.text.config(cursor="")
+
+            def _click(self, event):
+                for tag in self.text.tag_names(CURRENT):
+                    if tag[:6] == "hyper-":
+                        location = self.links[tag][0]
+                        line = self.links[tag][1]
+                        self.master.lastLink = (location, line)
+                        self.master.openLink()
+                        return
+
+        self.textHypMan = HyperlinkManager(self.textBox, self, self.master.master)
+        self.textLinks = {}
+        self.rewriteHypMan = HyperlinkManager(self.rewriteBox, self, self.master.master)
+        self.rewriteLinks = {}
 
 class arrangementFrame(Frame):
 

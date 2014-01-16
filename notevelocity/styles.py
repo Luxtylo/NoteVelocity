@@ -43,6 +43,8 @@ def init(master):
     textBoxBackground = "#FCFCFC"
     textBoxTextColour = "#444444"
 
+    hyperlinkColour = "#0000FF"
+
     changedIndicatorOn = "#888888"
     changedIndicatorOff = "#E8E8E8"
     changedIndicatorText = "#101010"
@@ -59,6 +61,7 @@ def init(master):
     master.titleFontColour = titleFontColour
     master.subtitleFontColour = subtitleFontColour
     master.notesFontColour = notesFontColour
+    master.hyperlinkColour = hyperlinkColour
 
     master.textTitleFont = textTitleFont
     master.textSubtitleFont = textSubtitleFont

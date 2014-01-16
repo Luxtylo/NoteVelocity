@@ -287,12 +287,17 @@ class AppFrame(Frame):
             self.log.write("saveFile index out of range")
             return 0
 
-    def openFile(self):
+    def openFile(self, location=False, line=False):
         """Open a file in a new tab"""
-        openLocation = filedialog.askopenfilename(
-            initialdir=self.notesDir,
-            title="Select note to open",
-            filetypes=[("Notes", "*.note")])
+        if not location:
+            openLocation = filedialog.askopenfilename(
+                initialdir=self.notesDir,
+                title="Select note to open",
+                filetypes=[("Notes", "*.note")])
+        else:
+            if line:
+                gotoLine = line
+            openLocation = location
 
         returnedNothing = [None, False, "", "\n", ()]
 
