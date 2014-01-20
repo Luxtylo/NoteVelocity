@@ -50,7 +50,10 @@ class AppFrame(Frame):
         self.notesDir = getcwd() + self.slashChar + "notes"
 
     def getFocus(self):
-        return self.master.focus_get()
+        try:
+            return self.master.focus_get()
+        except:
+            return 0
 
     def initUI(self):
         """Initialise UI elements."""
@@ -289,6 +292,7 @@ class AppFrame(Frame):
 
     def openFile(self, location=False, line=False):
         """Open a file in a new tab"""
+        gotoLine = False
         if not location:
             openLocation = filedialog.askopenfilename(
                 initialdir=self.notesDir,
@@ -298,6 +302,11 @@ class AppFrame(Frame):
             if line:
                 gotoLine = line
             openLocation = location
+
+        for tab in self.tabBar.tabs:
+            if openLocation == tab.fileName:
+                tabNum = tab.findPlace()
+                self.tabBar.switch(1, tabNum)
 
         returnedNothing = [None, False, "", "\n", ()]
 
@@ -345,6 +354,14 @@ class AppFrame(Frame):
 
                 print("Opened rewrite from " + rewriteLocation)
                 self.log.write("Opened rewrite from " + rewriteLocation)
+
+            if gotoLine:
+                totalLines = int(self.textFrame.textBox.index('end').split('.')[0]) - 1
+                lineFraction = gotoLine / totalLines
+                self.textFrame.textBox.yview_moveto(lineFraction)
+
+            self.textFrame.changeCounter = 5
+            self.textFrame.updateTags()
 
             self.textFrame.changed = False
             self.textFrame.fileName = openLocation
@@ -415,7 +432,7 @@ class AppFrame(Frame):
         """Link to another note"""
         link.link(self, box)
 
-    def insertLink(self, linkLocation, box):
+    def insertLink(self, linkLocation, box=None):
         """Insert a link to linkLocation"""
         if linkLocation is None:
             print("Linking cancelled.")

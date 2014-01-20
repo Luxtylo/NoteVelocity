@@ -22,6 +22,7 @@ from tkinter import *
 from tkinter.ttk import *
 from time import sleep
 import bindings
+from copy import deepcopy
 
 
 class titleBar(Frame):
@@ -489,6 +490,8 @@ class text(Frame):
         self.rewriteScrollbar.pack(expand=0, fill=Y, side=LEFT)
         self.rewriteShown = True
         self.selectRewrite()
+        self.changeCounter = 5
+        self.updateTags(self.rewriteBox)
 
         rewriteContents = self.rewriteBox.get(1.0, "end")
         if rewriteContents == "" or rewriteContents == "\n":
@@ -556,21 +559,29 @@ class text(Frame):
         self.textBox.tag_raise("sel")
         self.rewriteBox.tag_raise("sel")
 
-    def updateTags(self):
-        """Update tags for self.textBox"""
+    def updateTags(self, box=False):
+        """Update tags for self.textBox or self.rewriteBox"""
         if self.changeCounter < 2:
             self.changeCounter += 1
             self.tagsUpToDate = False
         else:
-            self.getTagIndexes()
-            self.addTags()
+            if not box:
+                self.getTagIndexes()
+                self.addTags()
+            else:
+                self.getTagIndexes(box)
+                self.addTags(box)
             self.changeCounter = 0
             self.updateTime = self.master.master.getTime()
             self.tagsUpToDate = True
 
-    def getTagIndexes(self):
+    def getTagIndexes(self, box=False):
         """Find points in the textBox widget where tags should be added"""
-        focus = self.master.master.getFocus()
+        if not box:
+            focus = self.master.master.getFocus()
+        else:
+            focus = box
+
         if focus is self.rewriteBox:
             text = self.rewriteBox.get(1.0, "end").split("\n")
             self.rewriteTagIndexList = list()
@@ -596,9 +607,13 @@ class text(Frame):
 
             lineNum += 1
 
-    def addTags(self):
+    def addTags(self, box=False):
         """Add tags to the textBox from tagIndexList"""
-        focus = self.master.master.getFocus()
+        if not box:
+            focus = self.master.master.getFocus()
+        else:
+            focus = box
+
         if focus is self.textBox:
             self.textBox.tag_delete("title", "subtitle", "notes")
         elif focus is self.rewriteBox:
@@ -642,17 +657,24 @@ class text(Frame):
         focus = self.master.master.getFocus()
         self.master.master.openLinkBox(focus)
 
+    def updateLinks(self, textLinks, rewriteLinks):
+        """textLinks = self.textLinks
+        rewriteLinks = self.rewriteLinks"""
+        self.textLinks = deepcopy(textLinks)
+        self.rewriteLinks = deepcopy(rewriteLinks)
+
+        for link in textLinks:
+            print(link, link[0], link[1])
+            #self.insertLink("textBox", link[0], link[1])
+        for relink in rewriteLinks:
+            #self.insertLink("rewriteBox", relink[0], relink[1])
+            print(link, link[0], link[1])
+
     def insertLink(self, box, linkLocation, line=None):
         linkList = linkLocation.split("/")
         defaultLinkName = "".join(linkList[-1].split(".")[:-1])
 
         selection = self.master.master.selection
-        #selectionType = "single"
-
-        if type(selection) is tuple:
-            selectionType = "range"
-        elif type(selection) is str:
-            selectionType = "single"
 
         if not line:
             print("Whole note")
@@ -660,14 +682,31 @@ class text(Frame):
         else:
             self.textLinks[selection] = (linkLocation, line)
             if box == "textBox":
-                if selectionType == "single":
+                if type(selection) is str:
                     self.textBox.insert(
                         INSERT,
                         defaultLinkName,
                         self.textHypMan.add(linkLocation, line))
                         
-                elif selectionType == "range":
-                    print("Range link successful!")
+                elif type(selection) is tuple:
+                    startIndex = selection[0]
+                    endIndex = selection[1]
+                    hyper, tag = self.textHypMan.add(linkLocation, line)
+                    self.textBox.tag_add(hyper, startIndex, endIndex)
+                    self.textBox.tag_add(tag, startIndex, endIndex)
+            elif box == "rewriteBox":
+                if type(selection) is str:
+                    self.rewriteBox.insert(
+                        INSERT,
+                        defaultLinkName,
+                        self.rewriteHypMan.add(linkLocation, line))
+                        
+                elif type(selection) is tuple:
+                    startIndex = selection[0]
+                    endIndex = selection[1]
+                    hyper, tag = self.rewriteHypMan.add(linkLocation, line)
+                    self.rewriteBox.tag_add(hyper, startIndex, endIndex)
+                    self.rewriteBox.tag_add(tag, startIndex, endIndex)
         
         self.master.master.selection = False
 
@@ -713,7 +752,6 @@ class text(Frame):
                 """Add an action to the manager"""
                 tag = "hyper-%d" % len(self.links)
                 self.links[tag] = (location, line)
-                print(self.links[tag])
                 return "hyper", tag
             
             def _enter(self, event):

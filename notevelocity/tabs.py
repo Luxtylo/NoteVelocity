@@ -21,6 +21,7 @@ You should have received a copy of the GNU General Public License along with
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
+from copy import deepcopy
 
 
 class tabBar(Frame):
@@ -116,6 +117,20 @@ class tabBar(Frame):
         self.master.master.textFrame.changed = self.tabs[new].changed
 
         self.tabs[last].rewriteExists = self.master.master.textFrame.rewriteExists
+
+        self.updateLinks(last, new)
+
+    def updateLinks(self, last, new):
+        if len(self.tabs) > 1:
+            self.tabs[last].textLinks = deepcopy(self.master.master.textFrame.textLinks)
+            #self.master.master.textFrame.textLinks = self.tabs[new].textLinks
+
+            self.tabs[last].rewriteLinks = deepcopy(self.master.master.textFrame.rewriteLinks)
+            #self.master.master.textFrame.rewriteLinks = self.tabs[new].rewriteLinks
+
+            self.master.master.textFrame.updateLinks(
+                self.tabs[new].textLinks,
+                self.tabs[new].rewriteLinks)
 
     def updateFilename(self):
         """Update the current tab's filename"""
@@ -249,6 +264,9 @@ class tabBar(Frame):
             self.rewrite = StringVar()
             self.rewrite.set("")
             self.rewrite.trace("w", lambda *args: self.changeMade())
+
+            self.textLinks = {}
+            self.rewriteLinks = {}
 
             self.rewriteExists = False
 
