@@ -664,13 +664,14 @@ class text(Frame):
         self.rewriteLinks = deepcopy(rewriteLinks)
 
         for link in textLinks:
-            print(link, link[0], link[1])
-            #self.insertLink("textBox", link[0], link[1])
+            (linkLocation, linkLine) = self.textHypMan.links[link]
+            self.insertLink("textBox", linkLocation, linkLine, False)
         for relink in rewriteLinks:
             #self.insertLink("rewriteBox", relink[0], relink[1])
-            print(link, link[0], link[1])
+            pass
 
-    def insertLink(self, box, linkLocation, line=None):
+    def insertLink(self, box, linkLocation, line=None, add=True):
+        """Insert a link into box"""
         linkList = linkLocation.split("/")
         defaultLinkName = "".join(linkList[-1].split(".")[:-1])
 
@@ -680,35 +681,43 @@ class text(Frame):
             print("Whole note")
 
         else:
-            self.textLinks[selection] = (linkLocation, line)
             if box == "textBox":
+                self.textLinks[selection] = (linkLocation, line)
                 if type(selection) is str:
                     self.textBox.insert(
                         INSERT,
                         defaultLinkName,
-                        self.textHypMan.add(linkLocation, line))
+                        self.getLinkTag(box, linkLocation, line, add))
                         
                 elif type(selection) is tuple:
                     startIndex = selection[0]
                     endIndex = selection[1]
-                    hyper, tag = self.textHypMan.add(linkLocation, line)
+                    hyper, tag = self.getLinkTag(box, linkLocation, line, add)
                     self.textBox.tag_add(hyper, startIndex, endIndex)
                     self.textBox.tag_add(tag, startIndex, endIndex)
             elif box == "rewriteBox":
+                self.rewriteLinks[selection] = (linkLocation, line)
                 if type(selection) is str:
                     self.rewriteBox.insert(
                         INSERT,
                         defaultLinkName,
-                        self.rewriteHypMan.add(linkLocation, line))
+                        self.getLinkTag(box, linkLocation, line, add))
                         
                 elif type(selection) is tuple:
                     startIndex = selection[0]
                     endIndex = selection[1]
-                    hyper, tag = self.rewriteHypMan.add(linkLocation, line)
+                    hyper, tag = self.getLinkTag(box, linkLocation, line, add)
                     self.rewriteBox.tag_add(hyper, startIndex, endIndex)
                     self.rewriteBox.tag_add(tag, startIndex, endIndex)
         
         self.master.master.selection = False
+
+    def getLinkTag(self, box, linkLocation, line, add):
+        if add:
+            if box == "textBox":
+                return self.textHypMan.add(linkLocation, line)
+            elif box == "rewriteBox":
+                return self.rewriteHypMan.add(linkLocation, line)
 
     def openLink(self):
         selected = self.master.master.getFocus()
@@ -768,6 +777,9 @@ class text(Frame):
                         self.master.lastLink = (location, line)
                         self.master.openLink()
                         return
+            
+            def replace(self, newLinks):
+                self.links = newLinks
 
         self.textHypMan = HyperlinkManager(self.textBox, self, self.master.master)
         self.textLinks = {}

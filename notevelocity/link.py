@@ -130,11 +130,11 @@ def getLinkLocation(app, noteContents, noteName, box):
         command=lambda: back(app))
     backButton.pack(side=RIGHT)
 
-    selectNote = Button(
+    """selectNote = Button(
         bottomSection,
         text="Link note",
         command=selectNote)
-    selectNote.pack(side=RIGHT)
+    selectNote.pack(side=RIGHT)"""
 
     select = Button(
         bottomSection,

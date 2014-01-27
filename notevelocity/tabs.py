@@ -122,11 +122,16 @@ class tabBar(Frame):
 
     def updateLinks(self, last, new):
         if len(self.tabs) > 1:
-            self.tabs[last].textLinks = deepcopy(self.master.master.textFrame.textLinks)
+            self.tabs[last].textLinks = deepcopy(self.master.master.textFrame.textHypMan.links)
             #self.master.master.textFrame.textLinks = self.tabs[new].textLinks
 
-            self.tabs[last].rewriteLinks = deepcopy(self.master.master.textFrame.rewriteLinks)
+            self.tabs[last].rewriteLinks = deepcopy(self.master.master.textFrame.rewriteHypMan.links)
             #self.master.master.textFrame.rewriteLinks = self.tabs[new].rewriteLinks
+
+            self.master.master.textFrame.textHypMan.replace(
+                self.tabs[new].textLinks)
+            self.master.master.textFrame.rewriteHypMan.replace(
+                self.tabs[new].rewriteLinks)
 
             self.master.master.textFrame.updateLinks(
                 self.tabs[new].textLinks,

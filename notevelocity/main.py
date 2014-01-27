@@ -360,6 +360,9 @@ class AppFrame(Frame):
                 lineFraction = gotoLine / totalLines
                 self.textFrame.textBox.yview_moveto(lineFraction)
 
+                insertPos = "%d.%s" % (gotoLine, "end")
+                self.textFrame.textBox.mark_set("insert", insertPos)
+
             self.textFrame.changeCounter = 5
             self.textFrame.updateTags()
 
