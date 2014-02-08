@@ -571,6 +571,7 @@ class text(Frame):
             else:
                 self.getTagIndexes(box)
                 self.addTags(box)
+            self.updateLinks(self.textLinks, self.rewriteLinks)
             self.changeCounter = 0
             self.updateTime = self.master.master.getTime()
             self.tagsUpToDate = True
@@ -677,38 +678,35 @@ class text(Frame):
 
         selection = self.master.master.selection
 
-        if not line:
-            print("Whole note")
+        if box == "textBox":
+            self.textLinks[selection] = (linkLocation, line)
+            if type(selection) is str:
+                self.textBox.insert(
+                    INSERT,
+                    defaultLinkName,
+                    self.getLinkTag(box, linkLocation, line, add))
+                    
+            elif type(selection) is tuple:
+                startIndex = selection[0]
+                endIndex = selection[1]
+                hyper, tag = self.getLinkTag(box, linkLocation, line, add)
+                self.textBox.tag_add(hyper, startIndex, endIndex)
+                self.textBox.tag_add(tag, startIndex, endIndex)
 
-        else:
-            if box == "textBox":
-                self.textLinks[selection] = (linkLocation, line)
-                if type(selection) is str:
-                    self.textBox.insert(
-                        INSERT,
-                        defaultLinkName,
-                        self.getLinkTag(box, linkLocation, line, add))
-                        
-                elif type(selection) is tuple:
-                    startIndex = selection[0]
-                    endIndex = selection[1]
-                    hyper, tag = self.getLinkTag(box, linkLocation, line, add)
-                    self.textBox.tag_add(hyper, startIndex, endIndex)
-                    self.textBox.tag_add(tag, startIndex, endIndex)
-            elif box == "rewriteBox":
-                self.rewriteLinks[selection] = (linkLocation, line)
-                if type(selection) is str:
-                    self.rewriteBox.insert(
-                        INSERT,
-                        defaultLinkName,
-                        self.getLinkTag(box, linkLocation, line, add))
-                        
-                elif type(selection) is tuple:
-                    startIndex = selection[0]
-                    endIndex = selection[1]
-                    hyper, tag = self.getLinkTag(box, linkLocation, line, add)
-                    self.rewriteBox.tag_add(hyper, startIndex, endIndex)
-                    self.rewriteBox.tag_add(tag, startIndex, endIndex)
+        elif box == "rewriteBox":
+            self.rewriteLinks[selection] = (linkLocation, line)
+            if type(selection) is str:
+                self.rewriteBox.insert(
+                    INSERT,
+                    defaultLinkName,
+                    self.getLinkTag(box, linkLocation, line, add))
+                    
+            elif type(selection) is tuple:
+                startIndex = selection[0]
+                endIndex = selection[1]
+                hyper, tag = self.getLinkTag(box, linkLocation, line, add)
+                self.rewriteBox.tag_add(hyper, startIndex, endIndex)
+                self.rewriteBox.tag_add(tag, startIndex, endIndex)
         
         self.master.master.selection = False
 
