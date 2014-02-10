@@ -39,6 +39,7 @@ def link(app, box):
         getLinkLocation(app, contents, selectedNote, box)
     else:
         print("No note selected")
+        app.log.write("No note selected")
 
 
 def getNoteTitles(noteName):
