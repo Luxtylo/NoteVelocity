@@ -1,0 +1,84 @@
+Using NoteVelocity
+	Background
+		NoteVelocity is not a typical note-taking program.
+		As an extended project, it works in ways which are supported by research
+		These are not necessarily the ways in which the user wants it to work.
+	
+	Structure of notes
+		As you can see from the formatting of this note, there is a certain way notes in NoteVelocity are structured:
+			Titles have no indentation
+			Subtitles are indented only once
+			Notes are indented more than once
+
+		Structuring your notes in this way will allow you to show a heirarchy of points in your notes
+			It also allows the note formatting to work. Notice that titles are larger and bolder than subtitles
+
+		Indenting and de-indenting
+			Indenting
+				The keyboard shortcut to indent the current line depends on where you are in the line
+				If you are at the start of the line, you can simply use the "Tab" key
+				If you are elsewhere in the line, the shortcut "Ctrl-Space" can be used
+			De-indenting
+				If at the start of the line, you can simply use the "Backspace" key to de-indent
+				If you are elsewhere, the shortcut "Ctrl-Shift-Space" will de-indent the current line
+			Making line have a specific indentation level
+				There are keyboard shortcuts available for making the current line a title or subtitle
+				To make the current line a title, use the shortcut "Ctrl-H"
+				To make the current line a subtitle, use the shortcut "Ctrl-Shift-H"
+				The T (Title), S (Subtitle) and N (Notes) buttons in the formatting bar on the left can be used for this
+		
+	File Operations
+		File operations are the functions to manage notes included in NoteVelocity. These are:
+			Save
+			Save As
+			Rename
+			Open
+			Rewrite
+			These are available in the title bar at the top of the window
+		Currently only the Save and Open buttons will be visible
+		
+		If you roll your mouse over the two buttons but hold down the "Control" key, the buttons will change to Rename and Rewrite
+		If you do the same with the "Shift" key held, Save will change to Save As
+		This provides a fast way to get to this functionality without a maze of buttons
+
+		The rewrite functionality will be explained in the next section
+		All other functionalities should work as standard
+		
+	Rewrites
+		Rewriting and summarising notes to revise them is an important part of note-taking for learning
+		To make this easy, NoteVelocity has a Rewrites feature
+			Accessible using the formatting bar's R button, the shortcut "Ctrl-Shift-R" or holding control and clicking "Open"
+			Pressing any of these will toggle the Rewrites box to appear at the right of the page
+		In the Rewrites box the current note can be summarised, and it will be saved with the current note
+	
+	Linking
+		Notes can be linked together - this allows you to easily link together notes for improved recall
+		Please note that the linking functionality is currently broken by switching tabs, severely limiting its usefulness.
+		
+		Pressing "Ctrl-L" will bring up a standard "Open" dialog box. Selecting a note will bring up the link box
+		The link box contains a scrollable container which has all the titles and subtitles of the selected note in it.
+		Double-clicking on a title or subtitle will insert it into the previously selected text box
+		
+		A link appears blue and underlined, and the mouse cursor will change when hovering over it
+		Upon clicking the link it should open in a new tab
+		
+	Keyboard shortcuts
+		Save - "Ctrl-S"
+		Save As - "Ctrl-Shift-S"
+		Rename - "Ctrl-R"
+		Open - "Ctrl-O"
+
+		Rewrite - "Ctrl-Shift-R"
+		Next tab - "Ctrl-D"
+		Previous tab - "Ctrl-Shift-D"
+		New tab - "Ctrl-T" or "Ctrl-N"
+		Close tab - "Ctrl-W"
+		Quit - "Ctrl-Shift-W"
+
+		Increase indent - "Ctrl-Space"
+		Decrease indent - "Ctrl-Shift-Space"
+		
+		Make title - "Ctrl-H"
+		Make subtitle - "Ctrl-Shift-Space"
+		
+		Create link - "Ctrl-L"
