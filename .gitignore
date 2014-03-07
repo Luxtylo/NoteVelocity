@@ -11,3 +11,4 @@ Test.*
 *.pyc
 *.swp
 __pycache__
+notevelocity/build/
