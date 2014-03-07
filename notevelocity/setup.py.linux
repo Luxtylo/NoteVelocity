@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+from cx_Freeze import setup, Executable
+
+# Dependencies are automatically detected, but it might need
+# fine tuning.
+buildOptions = dict(packages = ["os", "sys", "tkinter"], excludes = [])
+
+import sys
+base = 'Win32GUI' if sys.platform=='win32' else None
+
+executables = [
+    Executable('main.py', base=base, targetName = 'NoteVelocity')
+]
+
+setup(name='NoteVelocity',
+      version = '0.5',
+      description = 'A speedy note-taking and revision program',
+      options = dict(build_exe = buildOptions),
+      executables = executables)
